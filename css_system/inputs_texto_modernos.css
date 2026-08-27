@@ -1,0 +1,100 @@
+/*
+ * Inputs de texto del sistema con acabado inspirado en iOS.
+ * Los filtros compactos de tabla y campos especiales conservan su diseño propio.
+ */
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3) {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 0;
+    height: 38px;
+    min-height: 38px;
+    padding: 0 12px !important;
+    border: 1px solid #c7d2df !important;
+    border-radius: 10px !important;
+    color: #1d2939 !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%) !important;
+    font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 36px;
+    text-align: left;
+    caret-color: #007aff;
+    outline: none !important;
+    box-sizing: border-box;
+    box-shadow:
+        inset 0 1px 1px rgba(15, 23, 42, .03),
+        0 1px 2px rgba(15, 23, 42, .05) !important;
+    transition:
+        border-color .16s ease,
+        background-color .16s ease,
+        box-shadow .16s ease,
+        transform .12s ease;
+}
+
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3):hover:not(:disabled):not([readonly]) {
+    border-color: #aebdcd !important;
+    background: #fff !important;
+}
+
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3):focus {
+    border-color: #007aff !important;
+    background: #fff !important;
+    font-weight: 500 !important;
+    box-shadow:
+        0 0 0 4px rgba(0, 122, 255, .14),
+        inset 0 1px 1px rgba(15, 23, 42, .02) !important;
+}
+
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3)::placeholder {
+    color: #98a2b3;
+    font-weight: 400;
+    opacity: 1;
+}
+
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3):disabled,
+input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3)[readonly],
+input.inputTextDisable[type="text"] {
+    border-color: #d0d8e2 !important;
+    color: #667085 !important;
+    background: linear-gradient(180deg, #f4f6f9 0%, #edf1f5 100%) !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, .04) !important;
+    cursor: default;
+}
+
+input[type="text"]:disabled {
+    -webkit-text-fill-color: #667085;
+    opacity: 1;
+}
+
+input[type="text"]::selection {
+    color: #172033;
+    background: rgba(0, 122, 255, .22);
+}
+
+body.dark input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3),
+body.modo-oscuro input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3) {
+    border-color: #475569 !important;
+    color: #e5edf8 !important;
+    background: linear-gradient(180deg, #1e293b 0%, #182235 100%) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, .03) !important;
+}
+
+body.dark input[type="text"]:disabled,
+body.dark input.inputTextDisable[type="text"],
+body.modo-oscuro input[type="text"]:disabled,
+body.modo-oscuro input.inputTextDisable[type="text"] {
+    border-color: #3b4759 !important;
+    color: #9eabbc !important;
+    -webkit-text-fill-color: #9eabbc;
+    background: #202b3b !important;
+}
+
+@media (max-width: 768px) {
+    input[type="text"]:not(.inputfiltro):not(.inputText1):not(.inputText1_2):not(.inputText1_3) {
+        height: 40px;
+        min-height: 40px;
+        padding: 0 11px !important;
+        font-size: 16px !important;
+        line-height: 38px;
+    }
+}

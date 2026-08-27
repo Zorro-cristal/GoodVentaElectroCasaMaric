@@ -1,0 +1,218 @@
+/* Encabezado comun de formularios, basado en el patron visual de ElimSA2. */
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) {
+    width: 100% !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe6ef !important;
+    border-radius: 0 !important;
+    background: linear-gradient(135deg, #ffffff, #f8fafc) !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) > tbody,
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) > tbody > tr {
+    height: 100% !important;
+}
+
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) td {
+    padding: 0 4px !important;
+    border: 0 !important;
+    background: transparent !important;
+    vertical-align: middle !important;
+}
+
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) td:first-child {
+    height: 57px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    min-width: 0;
+    text-align: left !important;
+}
+
+.tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) td:first-child::before {
+    content: "\2630";
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #2563eb;
+    background: #cfe8ff;
+    font-size: 23px;
+    font-weight: 900;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, .08);
+}
+
+.tableMenuZ.gv-form-title-modern .pTituloB {
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #1f2937 !important;
+    font-family: "Merriweather Sans", Arial, sans-serif;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    line-height: 1.1 !important;
+    overflow-wrap: anywhere;
+}
+
+.tableMenuZ.gv-form-title-modern .pTituloB b {
+    color: #2563eb !important;
+    font-size: inherit !important;
+    font-weight: 900 !important;
+}
+
+.tableMenuZ.gv-form-title-modern .pTituloB::after {
+    content: attr(data-gv-subtitle);
+    display: block;
+    margin-top: 4px;
+    color: #526173;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.tableMenuZ.gv-form-title-modern .iconoBtn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px;
+    padding: 8px !important;
+    border: 1px solid #dfe6ef !important;
+    border-radius: 14px !important;
+    background: #fff !important;
+    object-fit: contain;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, .09);
+}
+
+.tableMenuZ.gv-form-title-modern .iconoBtn:hover,
+.tableMenuZ.gv-form-title-modern .iconoBtn:focus-visible {
+    border-color: #93b4e8 !important;
+    background: #eff6ff !important;
+    outline: 3px solid rgba(37, 99, 235, .16);
+    transform: translateY(-1px);
+}
+
+.tableMenuZ.gv-form-title-compact:not(.abm-estandar-header) {
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 12px !important;
+}
+
+.tableMenuZ.gv-form-title-compact:not(.abm-estandar-header) td:first-child { height: 57px; gap: 9px; }
+.tableMenuZ.gv-form-title-compact:not(.abm-estandar-header) td:first-child::before { width: 38px; height: 38px; min-width: 38px; border-radius: 11px; font-size: 20px; }
+.tableMenuZ.gv-form-title-compact .pTituloB { font-size: 17px !important; }
+.tableMenuZ.gv-form-title-compact .pTituloB::after { font-size: 10px; margin-top: 2px; }
+.tableMenuZ.gv-form-title-compact .iconoBtn { width: 35px !important; height: 35px !important; min-width: 35px; padding: 6px !important; border-radius: 10px !important; }
+
+body.dark .tableMenuZ.gv-form-title-modern:not(.abm-estandar-header),
+body.modo-oscuro .tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) {
+    border-bottom-color: #334155 !important;
+    background: linear-gradient(135deg, #182235, #111827) !important;
+}
+body.dark .tableMenuZ.gv-form-title-modern .pTituloB,
+body.modo-oscuro .tableMenuZ.gv-form-title-modern .pTituloB { color: #eef4ff !important; }
+body.dark .tableMenuZ.gv-form-title-modern .pTituloB::after,
+body.modo-oscuro .tableMenuZ.gv-form-title-modern .pTituloB::after { color: #aab6c8; }
+
+/* Listados que reconstruyen su cabecera desde JavaScript (Clientes y Productos). */
+.gv-custom-form-title-modern {
+    width: 100% !important;
+    min-height: 58px !important;
+    flex: 0 0 58px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px;
+    padding: 0 12px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe6ef !important;
+    color: #1f2937 !important;
+    background: linear-gradient(135deg, #fff, #f8fafc) !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+}
+.gv-custom-form-title-modern > :first-child { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.gv-custom-form-title-modern > :first-child::before { content: "\2630"; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 42px; width: 42px; height: 42px; border-radius: 12px; color: #2563eb; background: #cfe8ff; font-size: 23px; font-weight: 900; box-shadow: 0 6px 16px rgba(15, 23, 42, .08); }
+.gv-custom-form-title-modern .pTituloB { margin: 0 !important; padding: 0 !important; color: #1f2937 !important; font-size: 20px !important; font-weight: 900 !important; line-height: 1.1 !important; }
+.gv-custom-form-title-modern .pTituloB b { color: #2563eb !important; font-size: inherit !important; font-weight: 900 !important; }
+.gv-custom-form-title-modern .pTituloB::after { content: attr(data-gv-subtitle); display: block; margin-top: 4px; color: #526173; font-size: 12px; font-weight: 600; line-height: 1.25; }
+.gv-custom-form-title-modern .catalogo-header-right,
+.gv-custom-form-title-modern .productos-header-actions { display: flex; align-items: center; gap: 8px; }
+.gv-custom-form-title-modern .btn-icon,
+.gv-custom-form-title-modern .producto-icon { width: 42px !important; height: 42px !important; min-width: 42px; padding: 8px !important; border: 1px solid #dfe6ef !important; border-radius: 14px !important; background: #fff !important; box-shadow: 0 6px 16px rgba(15, 23, 42, .09); }
+.gv-custom-form-title-modern .btn-icon img,
+.gv-custom-form-title-modern .producto-icon img { width: 21px; height: 21px; object-fit: contain; }
+body.dark .gv-custom-form-title-modern,
+body.modo-oscuro .gv-custom-form-title-modern { border-bottom-color: #334155 !important; background: linear-gradient(135deg, #182235, #111827) !important; }
+body.dark .gv-custom-form-title-modern .pTituloB,
+body.modo-oscuro .gv-custom-form-title-modern .pTituloB { color: #eef4ff !important; }
+
+/* Color canonico para titulos de tablas; las filas de filtros no reciben esta clase. */
+.gv-table-title-color {
+    background: #1f5f7f !important;
+    background-color: #1f5f7f !important;
+    color: #fff !important;
+    border-color: #174d69 !important;
+    box-shadow: none !important;
+}
+.gv-table-title-color > tbody > tr > td,
+.gv-table-title-color > tbody > tr > th,
+table > thead.gv-table-title-color > tr > td,
+table > thead.gv-table-title-color > tr > th {
+    color: #fff !important;
+    background: #1f5f7f !important;
+    background-color: #1f5f7f !important;
+    border-color: rgba(255, 255, 255, .5) !important;
+}
+.gv-table-title-color .td_registro,
+.gv-table-title-color .td_registro_2 {
+    color: #fff !important;
+    background: #1f5f7f !important;
+    background-color: #1f5f7f !important;
+    height: 42px;
+    padding: 3px 5px !important;
+    line-height: 1.1;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+.gv-table-title-color > tbody > tr > td,
+.gv-table-title-color > tbody > tr > th,
+table > thead.gv-table-title-color > tr > td,
+table > thead.gv-table-title-color > tr > th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+.gv-table-title-color .abm-estandar-ordenable:hover,
+.gv-table-title-color .abm-core-ordenable:hover,
+.gv-table-title-color .columna-ordenable:hover,
+.gv-table-title-color .producto-columna-orden:hover {
+    color: #fff !important;
+    background: #174d69 !important;
+    background-color: #174d69 !important;
+}
+.gv-table-title-color .abm-estandar-indicador,
+.gv-table-title-color .abm-core-indicador,
+.gv-table-title-color .columna-ordenable span,
+.gv-table-title-color .producto-columna-orden span { color: #80b7ff !important; }
+
+@media (max-width: 850px) {
+    .tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) { padding: 0 10px !important; }
+    .tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) td:first-child { gap: 8px; }
+    .tableMenuZ.gv-form-title-modern:not(.abm-estandar-header) td:first-child::before { width: 40px; height: 40px; min-width: 40px; border-radius: 12px; font-size: 21px; }
+    .tableMenuZ.gv-form-title-modern .pTituloB { font-size: 17px !important; }
+    .tableMenuZ.gv-form-title-modern .pTituloB::after { font-size: 10px; }
+    .tableMenuZ.gv-form-title-modern .iconoBtn { width: 36px !important; height: 36px !important; min-width: 36px; padding: 7px !important; border-radius: 11px !important; }
+    .gv-custom-form-title-modern { min-height: 62px !important; flex-basis: 62px; padding: 0 10px !important; gap: 8px; }
+    .gv-custom-form-title-modern > :first-child { gap: 8px; }
+    .gv-custom-form-title-modern > :first-child::before { flex-basis: 40px; width: 40px; height: 40px; border-radius: 12px; font-size: 21px; }
+    .gv-custom-form-title-modern .pTituloB { font-size: 17px !important; }
+    .gv-custom-form-title-modern .pTituloB::after { font-size: 10px; }
+    .gv-custom-form-title-modern .btn-icon,
+    .gv-custom-form-title-modern .producto-icon { width: 36px !important; height: 36px !important; min-width: 36px; padding: 7px !important; border-radius: 11px !important; }
+}

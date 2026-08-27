@@ -1,0 +1,633 @@
+/* Estructura canonica compartida por los formularios ABM legacy. */
+.abm-estandar {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    width: 100% !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+    color: #344054;
+    background: #f4f7fb;
+}
+
+/*
+ * Los ABM legacy alternan entre la vista de listado (...1) y la vista de
+ * carga/edicion (...2) escribiendo display:none en el atributo style. El
+ * layout flex compartido no debe anular ese estado o ambas vistas terminan
+ * ocupando la pantalla al mismo tiempo.
+ */
+.abm-estandar[hidden],
+.abm-estandar[style*="display:none"],
+.abm-estandar[style*="display: none"] {
+    display: none !important;
+}
+
+/* Mantiene continua la cadena de altura en los ABM legacy con wrappers intermedios. */
+.abm-estandar .abm-estandar-marco-flex {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
+}
+
+.abm-estandar .abm-estandar-header {
+    flex: 0 0 58px;
+    width: 100% !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe6ef !important;
+    border-radius: 0 !important;
+    color: #1f2937;
+    background: linear-gradient(135deg, #fff, #f8fafc) !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+}
+
+.abm-estandar .abm-estandar-header tbody,
+.abm-estandar .abm-estandar-header tr { height: 100% !important; }
+.abm-estandar .abm-estandar-header td { padding: 0 4px !important; border: 0 !important; background: transparent !important; vertical-align: middle; }
+.abm-estandar .abm-estandar-header td:first-child { display: flex; align-items: center; gap: 10px; height: 57px; min-width: 0; }
+.abm-estandar .abm-estandar-header td:first-child::before { content: "\2630"; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 42px; width: 42px; height: 42px; border-radius: 12px; color: #2563eb; background: #cfe8ff; font-size: 23px; font-weight: 900; box-shadow: 0 6px 16px rgba(15, 23, 42, .08); }
+.abm-estandar .abm-estandar-header .pTituloB { margin: 0 !important; padding: 0 !important; color: #1f2937 !important; font-size: 20px !important; font-weight: 900 !important; line-height: 1.1 !important; }
+.abm-estandar .abm-estandar-header .pTituloB b { color: #2563eb !important; font-size: inherit !important; font-weight: 900 !important; }
+.abm-estandar .abm-estandar-header .pTituloB::after { content: "Consulta, filtros y seleccion de registros"; display: block; margin-top: 4px; color: #526173; font-size: 12px; font-weight: 600; line-height: 1.25; }
+.abm-estandar .abm-estandar-header .iconoBtn { width: 42px; height: 42px; padding: 8px; border: 1px solid #dfe6ef; border-radius: 14px; background: #fff; object-fit: contain; box-shadow: 0 6px 16px rgba(15, 23, 42, .09); }
+.abm-estandar > center { display: flex; flex: 1 1 auto; flex-direction: column; width: 100%; min-height: 0; overflow: hidden; }
+
+.abm-estandar .abm-estandar-contenido {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    min-height: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #fff;
+}
+
+.abm-estandar-toolbar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #e1e7ef;
+    background: #fff;
+}
+.abm-auxiliar-toolbar { width: 100% !important; margin: 0 !important; box-sizing: border-box; }
+.abm-auxiliar-toolbar + .tableCabeceraRegistro,
+.abm-auxiliar-toolbar + .divScrollhideen { margin-top: 0 !important; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado { height: 100vh !important; overflow: hidden !important; background: #f4f7fb !important; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado > div { width: 100%; height: calc(100vh - 58px); align-items: stretch !important; overflow: hidden; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado .gv-cuentas-cobrar-listado { display: flex; flex: 1 1 auto; flex-direction: column; width: 100% !important; min-height: 0; margin: 0 !important; padding: 0 14px 10px; border-radius: 0; box-sizing: border-box; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado #TableScroollCuentasACobrar1 { display: flex; flex: 0 0 auto; flex-direction: column; min-height: 0; overflow-x: auto !important; overflow-y: hidden !important; border: 1px solid #dfe6ef; border-radius: 10px 10px 0 0; background: #fff; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado #TableScroollCuentasACobrar2 { display: flex; flex: 1 1 auto; min-height: 0; overflow: auto !important; border: 1px solid #dfe6ef; border-top: 0; border-radius: 0 0 10px 10px; background: #fff; }
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado #table_cuentas_a_cobrar,
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado .div_cuerpo_table { flex: 1 1 auto; min-height: 0; height: auto !important; }
+#divCuentasAcobrar .cuenta-cliente-identidad { display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%; }
+#divCuentasAcobrar .cuenta-cliente-identidad__nombre { min-width:0;font-weight:700;line-height:1.2; }
+#divCuentasAcobrar .cuenta-cliente-calificacion { flex:0 0 auto;padding:2px 7px;border:1px solid rgba(15,23,42,.14);border-radius:999px;color:#172033;background:#e7edf5;font-size:9px;font-weight:850;line-height:1.25;letter-spacing:.02em;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.45); }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT A"] { background:#00ff00; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT B"] { background:#66ff33; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT C"] { background:#ccff33; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT D"] { background:#ffff00; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT E"] { background:#ffcc33; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT F"] { background:#ff9900; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT G"] { background:#ff6600; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT H"] { background:#ff3300; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT I"] { color:#fff;background:#ff0000; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT J"] { color:#fff;background:#cc0000; }
+#divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="CAT K"] { color:#fff;background:#990000; }
+#divCuentasAcobrar .cuenta-cliente-progreso { width:calc(100% - 12px);max-width:235px;margin:7px auto 2px; }
+#divCuentasAcobrar .cuenta-cliente-progreso__fila { display:flex;align-items:center;gap:7px;width:100%; }
+#divCuentasAcobrar .cuenta-cliente-progreso__pista { position:relative;display:block;flex:1 1 auto;min-width:0;height:10px;aspect-ratio:auto;overflow:hidden;padding:0;border:1px solid #aeb4ba;border-radius:999px;background:#ededed;animation:none;box-sizing:border-box;box-shadow:inset 0 1px 2px rgba(0,0,0,.13); }
+#divCuentasAcobrar .cuenta-cliente-progreso__pista::before,
+#divCuentasAcobrar .cuenta-cliente-progreso__pista::after { display:none!important;content:none!important; }
+#divCuentasAcobrar .cuenta-cliente-progreso__barra { display:block;height:100%;border-radius:999px 0 0 999px;background:#0a84d6;transition:width .25s ease; }
+#divCuentasAcobrar .cuenta-cliente-progreso__barra[style*="100%"] { border-radius:999px; }
+#divCuentasAcobrar .cuenta-cliente-progreso__porcentaje { flex:0 0 34px;min-width:34px;color:#334155;font-size:11px;font-weight:800;line-height:1;text-align:right;white-space:nowrap; }
+body.dark #divCuentasAcobrar .cuenta-cliente-progreso__pista,
+body.modo-oscuro #divCuentasAcobrar .cuenta-cliente-progreso__pista { border-color:#68717c;background:#39424d; }
+body.dark #divCuentasAcobrar .cuenta-cliente-progreso__barra,
+body.modo-oscuro #divCuentasAcobrar .cuenta-cliente-progreso__barra { background:#2997e8; }
+body.dark #divCuentasAcobrar .cuenta-cliente-progreso__porcentaje,
+body.modo-oscuro #divCuentasAcobrar .cuenta-cliente-progreso__porcentaje { color:#d4dbe5; }
+body.dark #divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="SIN REGISTRO"],
+body.modo-oscuro #divCuentasAcobrar .cuenta-cliente-calificacion[data-calificacion="SIN REGISTRO"] { border-color:#536174;color:#d4dbe5;background:#334155;box-shadow:none; }
+
+#divArqueo.gv-cobros-realizados-unificado { height: 100vh !important; overflow: hidden !important; background: #f4f7fb !important; }
+#divArqueo.gv-cobros-realizados-unificado > .divPrincipalrepor { position: relative !important; display: flex; flex-direction: column; width: 100% !important; height: 100vh !important; min-height: 0 !important; overflow: hidden !important; }
+#divArqueo.gv-cobros-realizados-unificado .header-arqueo { flex: 0 0 58px; min-height: 58px; padding: 4px 12px; border-bottom: 1px solid #dfe6ef; background: #fff !important; box-sizing: border-box; }
+#divArqueo.gv-cobros-realizados-unificado .header-title { display: flex; align-items: center; gap: 12px; text-align: left; }
+#divArqueo.gv-cobros-realizados-unificado .header-actions { display: flex; align-items: center; gap: 8px; }
+#divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn { width: 42px !important; height: 42px !important; min-width: 42px; margin-left: 0 !important; padding: 8px !important; border: 1px solid #dfe6ef !important; border-radius: 14px !important; background: #fff !important; object-fit: contain; box-sizing: border-box; box-shadow: 0 6px 16px rgba(15, 23, 42, .09); }
+#divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:hover,
+#divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:focus-visible { border-color: #93b4e8 !important; background: #eff6ff !important; outline: 3px solid rgba(37, 99, 235, .16); transform: translateY(-1px); opacity: 1; }
+#divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-icono { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; color: #2563eb; background: #dbeeff; font-size: 25px; line-height: 1; }
+#divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-contenido { display: flex; flex-direction: column; gap: 2px; }
+#divArqueo.gv-cobros-realizados-unificado .header-text { color: #172033 !important; font-size: 22px; font-weight: 750; line-height: 1.05; }
+#divArqueo.gv-cobros-realizados-unificado .header-text strong { color: #2563eb !important; }
+#divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-contenido small { color: #475569; font-size: 11px; font-weight: 500; line-height: 1.1; }
+#divArqueo.gv-cobros-realizados-unificado > .divPrincipalrepor > center { display: flex; flex: 1 1 auto; flex-direction: column; width: 100%; min-height: 0; overflow: hidden; }
+#divArqueo.gv-cobros-realizados-unificado > .divPrincipalrepor > center > br { display: none; }
+#divArqueo.gv-cobros-realizados-unificado > .divPrincipalrepor > center > div:not(.filtros-container) { display: flex; flex: 1 1 auto; flex-direction: column; width: 100% !important; min-height: 0; overflow: hidden !important; }
+#divArqueo.gv-cobros-realizados-unificado .gv-cobros-realizados-listado { display: flex; flex: 1 1 auto; flex-direction: column; width: 100% !important; min-height: 0; margin: 0 !important; padding: 0 10px; border: 0; border-radius: 0; box-sizing: border-box; }
+#divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo1 { display: flex; flex: 0 0 auto; flex-direction: column; min-height: 0; overflow-x: auto !important; overflow-y: hidden !important; border: 1px solid #dfe6ef; border-radius: 10px 10px 0 0; background: #fff; }
+#divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo2 { display: flex; flex: 1 1 auto; min-height: 0; overflow: auto !important; border: 1px solid #dfe6ef; border-top: 0; border-radius: 0 0 10px 10px; background: #fff; }
+#divArqueo.gv-cobros-realizados-unificado #tdTituloImpreArqueo,
+#divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo1 > table,
+#divArqueo.gv-cobros-realizados-unificado #table_arqeo { width: 100% !important; min-width: 1200px; }
+#divArqueo.gv-cobros-realizados-unificado #table_arqeo { flex: 1 1 auto; height: auto !important; min-height: 100%; }
+#divArqueo.gv-cobros-realizados-unificado .resumen-container { flex: 0 0 auto; width: 100% !important; margin: 0 !important; padding: 5px 10px; border-radius: 0; box-sizing: border-box; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-datos-ocultos { display: none !important; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-accion-ubicacion,
+#divArqueo.gv-cobros-realizados-unificado .cobros-accion-eliminar { margin-top: 0 !important; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 58px;
+    padding: 5px 10px;
+    border-top: 1px solid #dbe5f0;
+    background: rgba(248, 251, 255, .94);
+    box-sizing: border-box;
+}
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos[hidden] { display: none !important; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__metricas { display: grid; grid-template-columns: repeat(2, minmax(130px, 1fr)); gap: 6px; min-width: 330px; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global { display: grid; align-content: center; gap: 1px; min-height: 46px; padding: 5px 9px; border: 1px solid rgba(148, 163, 184, .34); border-radius: 10px; background: rgba(255, 255, 255, .9); box-shadow: 0 3px 10px rgba(15, 23, 42, .06); box-sizing: border-box; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global span { color: #64748b; font-size: 9px; font-weight: 750; letter-spacing: .01em; text-transform: uppercase; white-space: nowrap; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global strong { overflow: hidden; color: #172033; font-size: 14px; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global--total strong { color: #2563eb; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__lista { display: flex; align-items: stretch; gap: 6px; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: 1px 1px 2px; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo { display: flex; flex: 0 0 auto; flex-direction: column; justify-content: center; min-width: 190px; max-width: 310px; padding: 5px 8px; border: 1px solid rgba(148, 163, 184, .34); border-radius: 10px; background: rgba(255, 255, 255, .9); box-shadow: 0 3px 10px rgba(15, 23, 42, .06); box-sizing: border-box; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__metodo { overflow: hidden; color: #172033; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__registros { color: #64748b; font-size: 9px; white-space: nowrap; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__monto { color: #2563eb; font-size: 14px; line-height: 1.25; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__detalle { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: thin; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__etiqueta { padding: 1px 5px; border-radius: 999px; color: #475569; background: #eef3f8; font-size: 9px; white-space: nowrap; }
+#divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__vacio { color: #64748b; font-size: 11px; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos { border-color: #334155; background: rgba(20, 28, 39, .95); }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__metodo,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__metodo { color: #e2e8f0; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global { border-color: rgba(100, 116, 139, .42); background: rgba(30, 41, 55, .92); box-shadow: none; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global span,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global span { color: #aab7c7; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global strong,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global strong { color: #e2e8f0; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global--total strong,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-global--total strong { color: #82b1ff; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo { border-color: rgba(100, 116, 139, .42); background: rgba(30, 41, 55, .92); box-shadow: none; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__registros,
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__vacio,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__registros,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__vacio { color: #aab7c7; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__monto,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__monto { color: #82b1ff; }
+body.dark #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__etiqueta,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo__etiqueta { color: #cbd5e1; background: #263548; }
+@media (max-width: 760px) {
+    #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos { grid-template-columns: 1fr; gap: 3px; }
+    #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__metricas { grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
+    #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipo { min-width: 175px; }
+}
+@media (max-width: 480px) {
+    #divArqueo.gv-cobros-realizados-unificado .cobros-resumen-tipos__metricas { grid-template-columns: 1fr; }
+}
+#divArqueo.gv-cobros-realizados-unificado .abm-auxiliar-toolbar { gap: 8px; padding: 6px 10px; }
+#divArqueo.gv-cobros-realizados-unificado .abm-estandar-busqueda-general,
+#divArqueo.gv-cobros-realizados-unificado .abm-estandar-btn { height: 36px; }
+#divArqueo.gv-cobros-realizados-unificado .abm-auxiliar-chips { min-height: 28px; gap: 4px; padding: 3px 10px; }
+#divArqueo.gv-cobros-realizados-unificado .abm-auxiliar-chips .abm-estandar-chip { padding: 3px 8px; font-size: 11px; }
+#divArqueo.gv-cobros-realizados-unificado #tdTituloImpreArqueo .td_registro { height: 42px; padding: 3px 5px !important; line-height: 1.1; }
+
+.abm-estandar-busqueda,
+.abm-estandar-acciones { display: flex; align-items: center; gap: 8px; }
+.abm-estandar-busqueda { flex: 1 1 520px; max-width: 700px; }
+
+.abm-estandar-busqueda-general {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #cfd8e3;
+    border-radius: 7px;
+    background: #fff;
+    outline: none;
+}
+
+.abm-estandar-busqueda-general:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
+.abm-estandar-btn { min-width: 94px; height: 36px; padding: 0 14px; border: 0; border-radius: 7px; font-weight: 700; cursor: pointer; }
+.abm-estandar-btn.primario { color: #fff; background: #2563eb; }
+.abm-estandar-btn.advertencia { color: #fff; background: #d97706; }
+.abm-estandar-btn.oscuro { color: #fff; background: #475467; }
+.abm-estandar-btn.claro { color: #344054; border: 1px solid #cfd8e3; background: #fff; }
+.abm-estandar-btn.secundario { color: #344054; background: #eef2f6; }
+.abm-estandar-btn:hover { filter: brightness(.96); }
+.abm-estandar-btn:focus-visible { outline: 3px solid rgba(37, 99, 235, .25); outline-offset: 2px; }
+
+.abm-estandar-chips {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 28px;
+    padding: 3px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f8fafc;
+}
+
+.abm-estandar-chip { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; color: #334155; background: #e8eef8; font-size: 11px; font-weight: 650; }
+.abm-estandar-chip.vacio { color: #667085; background: #eef2f6; }
+.abm-estandar-tabla-cabecera { position: sticky; z-index: 3; top: 0; flex: 0 0 auto; min-width: 900px; margin: 0 !important; border-radius: 0 !important; }
+.abm-estandar-tabla-cuerpo { flex: 1 1 auto; width: 100%; min-height: 0; overflow: auto !important; background: #fff; }
+.abm-estandar .abm-estandar-contenido > .divScrollhideen {
+    flex: 0 0 auto;
+    width: 100% !important;
+    min-height: 0;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+.abm-estandar .abm-estandar-contenido > .divTablesScrool,
+.abm-estandar .abm-estandar-marco-flex.divTablesScrool {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+}
+.abm-estandar .abm-estandar-marco-flex.divTablesScrool > .abm-estandar-tabla-cuerpo {
+    flex: 1 1 auto;
+    height: auto !important;
+    min-height: 100%;
+}
+.abm-estandar-tabla-cuerpo,
+.divTablesScrool,
+.div_cuerpo_table {
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+.abm-estandar-contenido > .abm-estandar-tabla-cuerpo,
+.abm-estandar-centro > .abm-estandar-tabla-cuerpo {
+    height: 0;
+}
+.abm-estandar-tabla-cuerpo > table { width: 100% !important; min-width: 900px; table-layout: fixed; border-collapse: collapse; }
+.abm-estandar-tabla-cuerpo td { padding: 8px; border-color: #e7edf3 !important; color: #344054; font-size: 12px; }
+.abm-estandar-tabla-cuerpo table:hover td { background: #f0f7fb; }
+
+/* Selector de clientes: ocupa el alto real del equipo y mantiene visible
+ * la accion de seleccionar aun en pantallas de poca altura. */
+#divVistaCliente > #tdEfectoVistaCliente,
+#divVistaCliente > #tdEfectoVistaCliente > .divAbms {
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+#divVistaCliente > #tdEfectoVistaCliente > .divAbms {
+    display: flex;
+    flex-direction: column;
+}
+#divVistaCliente > #tdEfectoVistaCliente > .divAbms > .tableMenuZ {
+    flex: 0 0 auto;
+}
+#divVistaCliente > #tdEfectoVistaCliente > .divAbms > br {
+    display: none;
+}
+#divVistaCliente .divAbms > .divMenuf {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: calc(100% - 16px) !important;
+    min-height: 0;
+    margin: 10px 8px 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
+}
+#divVistaCliente .buscar_cliente {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr);
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+#divVistaCliente .buscar_cliente > div {
+    min-width: 0;
+    min-height: 0;
+}
+#divVistaCliente .buscar_cliente > div:first-child {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#divVistaCliente #table_vista_cliente {
+    flex: 1 1 auto;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+}
+#divVistaCliente .buscar_cliente > div:nth-child(2) {
+    overflow: auto;
+}
+#divVistaCliente .divAbms > .divMenuf > br {
+    display: none;
+}
+#divVistaCliente .divAbms > .divMenuf > center {
+    flex: 0 0 auto;
+    padding: 7px 10px 9px;
+    border-top: 1px solid #dfe6ef;
+    background: #fff;
+}
+#divVistaCliente .divAbms > .divMenuf > center .btn2 {
+    min-height: 38px;
+    margin: 0 !important;
+}
+@media (max-width: 900px) {
+    #divVistaCliente .buscar_cliente {
+        grid-template-columns: minmax(720px, 1fr);
+        overflow: auto;
+    }
+    #divVistaCliente .buscar_cliente > div:nth-child(2) {
+        min-height: 430px;
+    }
+}
+
+.abm-estandar-ordenable,
+.abm-core-ordenable { cursor: pointer; user-select: none; transition: background-color .16s ease, color .16s ease; }
+.abm-estandar-ordenable:hover,
+.abm-core-ordenable:hover { background: #dceaf3 !important; }
+.abm-estandar-ordenable:focus-visible,
+.abm-core-ordenable:focus-visible { outline: 2px solid #60a5fa; outline-offset: -3px; }
+.abm-estandar-indicador,
+.abm-core-indicador { display: inline-block; margin-left: 6px; color: #2563eb; font-size: 10px; }
+
+.abm-estandar-columnas { position: relative; }
+.abm-estandar-menu-columnas { display: none; position: absolute; z-index: 12020; top: calc(100% + 6px); right: 0; grid-template-columns: 1fr 1fr; gap: 8px; width: 290px; max-height: 340px; padding: 12px; overflow: auto; border: 1px solid #d8e2ee; border-radius: 10px; background: #fff; box-shadow: 0 18px 42px rgba(15, 23, 42, .20); }
+.abm-estandar-menu-columnas.activo { display: grid; }
+.abm-estandar-menu-columnas label { display: flex; align-items: center; gap: 7px; margin: 0; color: #344054; font-size: 12px; cursor: pointer; }
+.abm-estandar-menu-columnas input { width: 17px; height: 17px; accent-color: #2563eb; }
+
+/* El selector de columnas debe superar encabezados sticky y formularios flotantes.
+ * La clase se aplica temporalmente por JS solo mientras el panel esta abierto. */
+.abm-columnas-capa-activa:not(.selector-columnas-panel):not(.abm-estandar-menu-columnas) { overflow: visible !important; }
+.abm-estandar-toolbar.abm-columnas-capa-activa,
+.abm-estandar-acciones.abm-columnas-capa-activa,
+.abm-estandar-columnas.abm-columnas-capa-activa,
+.productos-toolbar.abm-columnas-capa-activa,
+.productos-toolbar-actions.abm-columnas-capa-activa,
+.catalogo-toolbar.abm-columnas-capa-activa,
+.catalogo-toolbar-actions.abm-columnas-capa-activa,
+.hv-toolbar.abm-columnas-capa-activa,
+.hv-actions.abm-columnas-capa-activa {
+    position: relative !important;
+    z-index: 2147483638 !important;
+}
+.selector-columnas-panel.activo.abm-columnas-capa-activa,
+.abm-estandar-menu-columnas.activo.abm-columnas-capa-activa {
+    z-index: 2147483640 !important;
+}
+
+.abm-estandar-modal { display: none; position: fixed; z-index: 12000; inset: 0; width: 100vw; height: 100vh; height: 100dvh; min-height: 100%; overflow: hidden; }
+.abm-estandar-modal.activo { display: block; }
+.abm-estandar-modal-overlay { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(15, 23, 42, .52); backdrop-filter: blur(3px); }
+.abm-estandar-modal-box { position: absolute; top: 50%; left: 50%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(760px, 94vw); max-height: 90vh; overflow: hidden; transform: translate(-50%, -50%); border-radius: 14px; background: #fff; box-shadow: 0 30px 80px rgba(0, 0, 0, .28); }
+.abm-estandar-modal-box > header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; color: #fff; background: #266091; }
+.abm-estandar-modal-box h3 { margin: 0; font-size: 19px; }
+.abm-estandar-cerrar { width: 36px; height: 36px; border: 0; border-radius: 8px; color: #fff; background: rgba(255, 255, 255, .14); font-size: 24px; cursor: pointer; }
+.abm-estandar-modal-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; overflow: auto; background: #f8fafc; }
+.abm-estandar-modal-body .abm-estandar-filtros-originales { width: 100% !important; margin-bottom: 10px; }
+.abm-estandar-modal-body .td_registro { padding: 6px !important; background: transparent !important; }
+.abm-estandar-modal-body input:not([type="checkbox"]):not([type="radio"]),
+.abm-estandar-modal-body select,
+.abm-estandar-modal-body textarea { width: 100% !important; min-width: 0 !important; height: 38px; border: 1px solid #cfd8e3; border-radius: 7px; background: #fff; }
+.abm-estandar-modal-box > footer { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid #e5e7eb; }
+.abm-estandar-origen-filtro-oculto { display: none !important; }
+.abm-estandar-origen-vacio { display: none !important; }
+.abm-estandar-filtro-grupo { display: flex; min-width: 0; flex-direction: column; gap: 6px; }
+.abm-estandar-filtro-grupo > label { margin: 0; color: #374151; font-size: 12px; font-weight: 700; text-align: left; }
+.abm-estandar-filtro-grupo input:not([type="checkbox"]):not([type="radio"]),
+.abm-estandar-filtro-grupo select,
+.abm-estandar-filtro-grupo textarea { display: block; width: 100% !important; min-width: 0 !important; height: 40px !important; margin: 0 !important; padding: 0 11px; color: #344054 !important; border: 1px solid #cfd8e3 !important; border-radius: 7px !important; background: #fff !important; box-shadow: none !important; }
+.abm-estandar-filtro-grupo textarea { min-height: 82px; padding-top: 9px; resize: vertical; }
+.abm-estandar-filtro-grupo input:focus,
+.abm-estandar-filtro-grupo select:focus,
+.abm-estandar-filtro-grupo textarea:focus { border-color: #2563eb !important; outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important; }
+.abm-estandar-filtro-opcion { align-self: end; min-height: 40px; padding: 9px 11px; border: 1px solid #d8e0ea; border-radius: 7px; background: #fff; }
+.abm-estandar-filtro-opcion label { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+.abm-estandar-filtro-opcion input { width: 17px; height: 17px; margin: 0; accent-color: #2563eb; }
+body.abm-modal-abierto { overflow: hidden !important; }
+
+/* Los modales propios usan la misma caja, scroll y acciones que el modal compartido. */
+#modalFiltrosCliente .modal-filtros-box,
+#modalFiltrosProductoListado .productos-modal-box { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(760px, 94vw) !important; max-height: 90vh; overflow: hidden !important; }
+#modalFiltrosCliente .modal-filtros-body,
+#modalFiltrosProductoListado .productos-modal-body { overflow: auto; }
+#modalFiltrosCliente .modal-filtros-header,
+#modalFiltrosProductoListado .productos-modal-box > header { min-height: 60px; padding: 12px 18px; background: #266091; }
+#modalFiltrosProductoListado .productos-modal-box > header button { width: 36px; height: 36px; border-radius: 8px; color: #fff; background: rgba(255, 255, 255, .14); font-size: 24px; cursor: pointer; }
+#modalFiltrosCliente .modal-filtros-footer,
+#modalFiltrosProductoListado .productos-modal-box > footer { min-height: 62px; padding: 12px 18px; background: #fff; }
+.abm-estandar-footer { flex: 0 0 auto; width: 100% !important; margin: auto 0 0 !important; padding: 9px 14px !important; border-top: 1px solid #e1e7ef; background: #fff !important; }
+.abm-estandar-centro { display: flex; flex: 1 1 auto; flex-direction: column; width: 100%; min-height: 0; overflow: hidden; }
+.abm-estandar-metas .abm-estandar-resumen { color: #475467; font-weight: 700; }
+.abm-estandar-metas .abm-estandar-resultados-tarjetas { min-height: 260px; }
+.abm-estandar-metas .abm-estandar-modal-body .analyse2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.abm-estandar-metas .abm-estandar-modal-body .sales { margin: 0 !important; box-shadow: none !important; }
+.abm-estandar-metas .abm-estandar-modal-body .sales:last-child { display: none; }
+
+/* Informes: mismo contrato visual y de altura que Listado de Clientes. */
+.informe-estandar {
+    isolation: isolate;
+}
+/* Respeta el estado cerrado inicial de las ventanas legacy. Al abrirlas, el
+   JavaScript elimina/cambia display:none y recuperan el layout flex normal. */
+.informe-estandar[style*="display:none"],
+.informe-estandar[style*="display: none"] {
+    display: none !important;
+}
+.informe-estandar .informe-estandar-shell {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background: #f4f7fb;
+    box-sizing: border-box;
+}
+.informe-estandar .informe-estandar-centro,
+.informe-estandar .informe-estandar-shell > center {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+.informe-estandar .informe-estandar-listado {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-sizing: border-box;
+}
+.informe-estandar .informe-estandar-listado > center,
+.informe-estandar-multiple .informe-estandar-listado center {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+.informe-estandar .informe-estandar-vista {
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+.informe-estandar .informe-estandar-vista:not([style*="display:none"]):not([style*="display: none"]) {
+    display: flex;
+}
+.informe-estandar .informe-estandar-vista[style*="display:none"],
+.informe-estandar .informe-estandar-vista[style*="display: none"] {
+    display: none !important;
+}
+.informe-estandar .informe-estandar-tabla-cabecera {
+    flex: 0 0 auto;
+    width: 100% !important;
+    min-width: 900px;
+    margin: 0 !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+.informe-estandar .informe-estandar-tabla-cuerpo {
+    flex: 1 1 auto;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: auto !important;
+    border: 1px solid #dfe6ef !important;
+    border-top: 0 !important;
+    border-radius: 0 0 10px 10px;
+    background: #fff !important;
+    box-sizing: border-box;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+.informe-estandar .informe-estandar-tabla-cuerpo > table {
+    width: 100% !important;
+    min-width: 900px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+.informe-estandar .informe-estandar-footer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 58px;
+    margin: auto 0 0 !important;
+    padding: 6px 12px !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 0 !important;
+    border-top: 1px solid #e1e7ef !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-sizing: border-box;
+}
+.informe-estandar .informe-estandar-footer > table,
+.informe-estandar table.informe-estandar-footer {
+    width: 100% !important;
+    margin: 0 !important;
+}
+.informe-estandar .informe-estandar-origen-vacio,
+.abm-estandar-accion-original-oculta {
+    display: none !important;
+}
+.abm-estandar-columnas-grupo {
+    grid-column: 1 / -1;
+    margin: 5px -4px 0;
+    padding: 7px 4px 4px;
+    color: #1f3f5b;
+    border-top: 1px solid #e1e7ef;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+.informe-estandar .tableCabeceraRegistro .td_registro {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+.informe-estandar .informe-estandar-tabla-cabecera .td_registro,
+.informe-estandar .informe-estandar-tabla-cabecera th {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, .42) !important;
+    background: #1f607f !important;
+    font-weight: 800 !important;
+}
+.informe-estandar .informe-estandar-tabla-cabecera .abm-estandar-ordenable:hover,
+.informe-estandar .informe-estandar-tabla-cabecera .abm-core-ordenable:hover {
+    color: #fff !important;
+    background: #194f69 !important;
+}
+.informe-estandar-especial > .informe-estandar-centro,
+.informe-estandar-especial > div:not(.abm-estandar-modal):not(.selector-columnas-panel) {
+    min-height: 0;
+}
+
+@media (max-width: 850px) {
+    .informe-estandar .informe-estandar-listado { padding: 0 6px !important; }
+    .informe-estandar .informe-estandar-footer { min-height: 54px; padding: 5px 8px !important; }
+    .informe-estandar .informe-estandar-tabla-cabecera,
+    .informe-estandar .informe-estandar-tabla-cuerpo > table { min-width: 760px; }
+}
+
+@media (max-width: 850px) {
+    .abm-estandar .abm-estandar-header { padding: 0 10px !important; }
+    .abm-estandar .abm-estandar-header td:first-child { gap: 8px; }
+    .abm-estandar .abm-estandar-header td:first-child::before { flex-basis: 40px; width: 40px; height: 40px; border-radius: 12px; font-size: 21px; }
+    .abm-estandar .abm-estandar-header .pTituloB { font-size: 17px !important; }
+    .abm-estandar .abm-estandar-header .pTituloB::after { font-size: 10px; }
+    .abm-estandar .abm-estandar-header .iconoBtn { width: 36px; height: 36px; padding: 7px; border-radius: 11px; }
+    #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn { width: 36px !important; height: 36px !important; min-width: 36px; padding: 7px !important; border-radius: 11px !important; }
+    .abm-estandar-toolbar { align-items: stretch; flex-direction: column; }
+    .abm-estandar-busqueda, .abm-estandar-acciones { width: 100%; max-width: none; }
+    .abm-estandar-busqueda { flex-basis: auto; }
+    .abm-estandar-acciones { overflow-x: auto; }
+    .abm-estandar-menu-columnas { right: auto; left: 0; grid-template-columns: 1fr; width: 250px; }
+    .abm-estandar-modal-body { grid-template-columns: 1fr; }
+    .abm-estandar-modal-box { width: min(94vw, 620px); max-height: 94vh; }
+    .abm-estandar-metas .abm-estandar-modal-body .analyse2 { grid-template-columns: 1fr; }
+    #modalFiltrosCliente .modal-filtros-body,
+    #modalFiltrosProductoListado .productos-modal-body { grid-template-columns: 1fr; }
+    #modalFiltrosCliente .modal-filtros-box,
+    #modalFiltrosProductoListado .productos-modal-box { width: 94vw !important; max-height: 94vh; }
+}

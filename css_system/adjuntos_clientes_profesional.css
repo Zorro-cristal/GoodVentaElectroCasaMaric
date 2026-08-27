@@ -1,0 +1,647 @@
+/*
+ * Adjuntos de clientes: Imágenes y documentos PDF.
+ * Capa visual aislada; conserva los IDs y eventos del flujo existente.
+ */
+
+#divAbmCargarFotosClientePrincipal,
+#divAbmCargarArchivosCliente {
+    --assets-primary: #236cf3;
+    --assets-primary-dark: #164fbf;
+    --assets-ink: #15233b;
+    --assets-muted: #66758f;
+    --assets-line: rgba(130, 154, 190, .24);
+    position: fixed !important;
+    z-index: 2147481200 !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    overflow: auto !important;
+    background:
+        radial-gradient(circle at 4% 2%, rgba(85, 195, 255, .20), transparent 31%),
+        radial-gradient(circle at 96% 8%, rgba(139, 125, 255, .16), transparent 34%),
+        linear-gradient(145deg, #edf7ff, #f4f7fc 54%, #eef0ff) !important;
+}
+
+#divAbmCargarFotosClientePrincipal > center,
+#divAbmCargarArchivosCliente > center {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+}
+
+.gv-client-assets-shell {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100% !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    padding: 7px !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.gv-client-assets-header {
+    flex: 0 0 auto;
+    width: 100% !important;
+    min-height: 68px;
+    margin: 0 !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .90) !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, .70) !important;
+    box-shadow: 0 10px 28px rgba(51, 83, 128, .10), inset 0 1px 0 #fff !important;
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    backdrop-filter: blur(24px) saturate(150%);
+}
+
+.gv-client-assets-header td {
+    padding: 8px 6px !important;
+    vertical-align: middle !important;
+}
+
+.gv-client-assets-header td:first-child {
+    padding-left: 20px !important;
+}
+
+.gv-client-assets-header .pTituloB {
+    margin: 0 !important;
+    color: var(--assets-ink) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif !important;
+    font-size: 24px !important;
+    font-weight: 780 !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.025em;
+}
+
+.gv-client-assets-subtitle {
+    display: block;
+    margin-top: 4px;
+    color: var(--assets-muted);
+    font-size: 12px;
+    font-weight: 550;
+}
+
+.gv-client-assets-header .iconoBtn {
+    box-sizing: border-box !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    padding: 9px !important;
+    border: 1px solid rgba(255, 255, 255, .92) !important;
+    border-radius: 13px !important;
+    background: rgba(255, 255, 255, .82) !important;
+    box-shadow: 0 7px 18px rgba(45, 72, 111, .10) !important;
+    object-fit: contain;
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.gv-client-assets-header .iconoBtn:hover {
+    box-shadow: 0 10px 22px rgba(35, 91, 168, .17) !important;
+    transform: translateY(-2px);
+}
+
+.gv-client-assets-shell > .divMenuf {
+    flex: 1 1 auto;
+    width: 100% !important;
+    min-height: 0;
+    margin: 7px 0 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.gv-client-assets-shell > .divMenuf > table,
+.gv-client-assets-shell > .divMenuf > table > tbody,
+.gv-client-assets-shell > .divMenuf > table > tbody > tr,
+.gv-client-assets-shell > .divMenuf > table > tbody > tr > td,
+.gv-client-assets-shell > .divMenuf > table > tbody > tr > td > center {
+    display: block;
+    box-sizing: border-box;
+    width: 100% !important;
+    min-height: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.gv-client-assets-content {
+    display: grid !important;
+    grid-template-columns: minmax(310px, .82fr) minmax(480px, 1.18fr);
+    gap: 9px;
+    box-sizing: border-box;
+    width: 100% !important;
+    min-height: calc(100vh - 89px);
+    min-height: calc(100dvh - 89px);
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: stretch;
+}
+
+.gv-client-assets-editor,
+.gv-client-assets-list {
+    box-sizing: border-box;
+    float: none !important;
+    width: auto !important;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 14px !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .90) !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, .68) !important;
+    box-shadow: 0 12px 30px rgba(50, 80, 122, .10), inset 0 1px 0 rgba(255, 255, 255, .96) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(22px) saturate(145%);
+}
+
+.gv-client-assets-editor {
+    align-self: start;
+}
+
+.gv-client-assets-editor br,
+.gv-client-assets-list br {
+    display: none;
+}
+
+.gv-client-assets-dropzone {
+    width: 100% !important;
+    height: 154px !important;
+    margin: 0 0 12px !important;
+    border: 2px dashed rgba(42, 111, 229, .35) !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 17px !important;
+    background: linear-gradient(145deg, rgba(236, 247, 255, .96), rgba(242, 241, 255, .88)) !important;
+    box-shadow: inset 0 1px 0 #fff !important;
+    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.gv-client-assets-dropzone:hover {
+    border-color: rgba(35, 108, 243, .68) !important;
+    background: linear-gradient(145deg, rgba(229, 244, 255, 1), rgba(237, 238, 255, .96)) !important;
+    transform: translateY(-1px);
+}
+
+.gv-client-assets-dropzone td {
+    height: 150px;
+    padding: 0 !important;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc,
+.gv-client-assets-dropzone .text_cargar_doc_2 {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100% !important;
+    min-height: 146px;
+    gap: 3px;
+    padding: 72px 16px 12px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    color: var(--assets-primary-dark) !important;
+    background-repeat: no-repeat !important;
+    background-position: center 19px !important;
+    background-size: 48px 48px !important;
+    font-size: 14px !important;
+    font-weight: 760 !important;
+    cursor: pointer;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc[style*="display: none"],
+.gv-client-assets-dropzone .text_cargar_doc[style*="display:none"],
+.gv-client-assets-dropzone .text_cargar_doc_2[style*="display: none"],
+.gv-client-assets-dropzone .text_cargar_doc_2[style*="display:none"] {
+    display: none !important;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc strong,
+.gv-client-assets-dropzone .text_cargar_doc_2 strong {
+    display: block;
+    color: #153f82;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 1.2;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc small,
+.gv-client-assets-dropzone .text_cargar_doc_2 small {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #52647d;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc em,
+.gv-client-assets-dropzone .text_cargar_doc_2 em {
+    display: inline-flex;
+    min-height: 24px;
+    margin-top: 3px;
+    padding: 4px 10px;
+    align-items: center;
+    border: 1px solid rgba(37, 99, 235, .20);
+    border-radius: 999px;
+    color: #2563eb;
+    background: rgba(255, 255, 255, .70);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc_2 {
+    color: #17623f !important;
+    background-color: rgba(229, 250, 239, .94) !important;
+    box-shadow: inset 0 0 0 1px rgba(32, 160, 99, .18) !important;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc_2 strong {
+    color: #137249;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc_2 small {
+    color: #355f4e;
+}
+
+.gv-client-assets-dropzone .text_cargar_doc_2 em {
+    color: #137249;
+    border-color: rgba(19, 114, 73, .20);
+}
+
+.gv-client-assets-editor-images .text_cargar_doc,
+.gv-client-assets-editor-images .text_cargar_doc_2 {
+    background-image: url('/GoodVentaElectroCasaMaric/iconos/imagenes.png') !important;
+}
+
+.gv-client-assets-editor-pdf .text_cargar_doc,
+.gv-client-assets-editor-pdf .text_cargar_doc_2 {
+    background-image: url('/GoodVentaElectroCasaMaric/iconos/pdf.png') !important;
+}
+
+.gv-client-assets-editor > table:not(.gv-client-assets-dropzone) {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Formulario de carga: conserva el HTML legado, pero elimina la apariencia
+   de tablas anidadas y organiza los controles como una grilla responsive. */
+.gv-client-assets-editor > table:nth-of-type(2) {
+    margin-top: 12px !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(2) > tbody > tr > td {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    align-items: end;
+    gap: 7px 10px;
+    padding: 0 !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(2) .pTitulo5 {
+    grid-column: 1 / -1;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) > tbody > tr {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.35fr) minmax(170px, .65fr);
+    align-items: start;
+    gap: 12px;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) > tbody > tr > td {
+    display: block !important;
+    width: auto !important;
+    padding: 0 !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) table,
+.gv-client-assets-editor > table:nth-of-type(3) tbody,
+.gv-client-assets-editor > table:nth-of-type(3) tr {
+    width: 100% !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) table td {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 112px;
+    align-items: end;
+    gap: 7px 9px;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) table .pTitulo5 {
+    grid-column: 1 / -1;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) > tbody > tr > td:last-child table td {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.gv-client-assets-editor .pTitulo5 {
+    margin: 0 0 5px !important;
+    color: #34425a !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+}
+
+.gv-client-assets-editor input[type="text"],
+.gv-client-assets-editor input[type="date"],
+.gv-client-assets-editor select {
+    box-sizing: border-box !important;
+    min-height: 42px !important;
+    padding: 8px 12px !important;
+    border: 1px solid #cfdae9 !important;
+    border-radius: 12px !important;
+    color: #26364e !important;
+    background: rgba(255, 255, 255, .88) !important;
+    box-shadow: inset 0 1px 2px rgba(28, 53, 87, .035) !important;
+    font-size: 13px !important;
+}
+
+.gv-client-assets-editor input[type="text"]:focus,
+.gv-client-assets-editor input[type="date"]:focus,
+.gv-client-assets-editor select:focus {
+    border-color: #5d9dff !important;
+    outline: 3px solid rgba(35, 108, 243, .13) !important;
+}
+
+.gv-client-assets-editor input:disabled {
+    color: #596a84 !important;
+    background: #eef3f9 !important;
+    opacity: 1 !important;
+}
+
+.gv-client-assets-editor #inptNombreClientesFotoPrincipal,
+.gv-client-assets-editor #inptNombreClientesArchivosCliente {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.gv-client-assets-editor #vercerrarVistaCliente {
+    width: 150px !important;
+    min-height: 42px;
+    margin: 0 !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #ef9300, #dc7000) !important;
+    box-shadow: 0 9px 20px rgba(222, 112, 0, .22) !important;
+}
+
+.gv-client-assets-editor #inptDescripcionCargarFotosClientesPrincipal,
+.gv-client-assets-editor #inptDescripcionCargarArchivosCliente {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.gv-client-assets-editor input[type="button"],
+.gv-client-assets-list input[type="button"] {
+    min-height: 40px;
+    padding: 8px 15px !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 7px 16px rgba(34, 75, 128, .12) !important;
+    font-size: 13px !important;
+    font-weight: 720 !important;
+}
+
+.gv-client-assets-editor > table:nth-of-type(3) input[type="button"] {
+    width: 112px !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #53637a, #394960) !important;
+    box-shadow: 0 8px 18px rgba(42, 57, 78, .16) !important;
+}
+
+.gv-client-assets-editor #btnAddImagenPrincipal,
+.gv-client-assets-editor #btnAddArchivosCliente {
+    width: 100% !important;
+    min-height: 44px !important;
+    margin-top: 10px !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #278ef0, #176ddd) !important;
+    box-shadow: 0 10px 22px rgba(32, 111, 222, .2) !important;
+}
+
+.gv-client-assets-editor #btnAddImagenPrincipal[style*="d5d3d3"],
+.gv-client-assets-editor #btnAddArchivosCliente[style*="d5d3d3"] {
+    color: #78869a !important;
+    background: #e6ebf2 !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+}
+
+.gv-client-assets-list {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.gv-client-assets-list .tableCabeceraRegistro {
+    flex: 0 0 auto;
+    width: 100% !important;
+    overflow: hidden;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 13px 13px 0 0 !important;
+    background: linear-gradient(135deg, #24678c, #367fa2) !important;
+}
+
+.gv-client-assets-list .tableCabeceraRegistro .td_registro {
+    height: 44px !important;
+    padding: 8px !important;
+    border-color: rgba(255, 255, 255, .28) !important;
+    color: #fff !important;
+    background: transparent !important;
+    font-size: 12px !important;
+    font-weight: 760 !important;
+    text-align: center !important;
+}
+
+.gv-client-assets-list .div_cuerpo_table {
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    width: 100% !important;
+    min-height: 380px !important;
+    height: calc(100vh - 430px) !important;
+    height: calc(100dvh - 430px) !important;
+    overflow: auto !important;
+    border: 1px solid #d8e1ed !important;
+    border-top: 0 !important;
+    border-radius: 0 0 13px 13px !important;
+    background: rgba(255, 255, 255, .76) !important;
+}
+
+.gv-client-assets-preview {
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 190px;
+    margin-top: 10px;
+    padding: 9px;
+    overflow: hidden;
+    border: 1px solid #d8e1ed;
+    border-radius: 13px;
+    background: rgba(248, 251, 255, .92);
+}
+
+.gv-client-assets-preview-title {
+    margin-bottom: 7px;
+    color: #34425a;
+    font-size: 12px;
+    font-weight: 760;
+    text-align: left;
+}
+
+.gv-client-assets-preview-empty {
+    display: flex;
+    min-height: 145px;
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px dashed #c7d3e2;
+    border-radius: 10px;
+    color: #687991;
+    font-size: 12px;
+    text-align: center;
+}
+
+.gv-client-assets-preview iframe,
+.gv-client-assets-preview img {
+    width: 100%;
+    height: 220px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.gv-client-assets-preview img {
+    object-fit: contain;
+}
+
+.gv-client-assets-list #btnEliminarImagenPrincipal,
+.gv-client-assets-list #btnEliminarArchivosCliente {
+    margin: 10px 5px 0 0 !important;
+}
+
+.gv-client-assets-list #btnVerImagenClientePrincipal,
+.gv-client-assets-list #btnVerArchivosCliente {
+    margin-top: 10px !important;
+}
+
+#divAbmCargarFotosClientePrincipal .gv-client-assets-content > input[value="Ver Galeria"] {
+    position: fixed;
+    z-index: 2;
+    right: 32px;
+    bottom: 24px;
+    width: auto !important;
+    min-height: 42px;
+    padding: 9px 18px !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #236cf3, #1758ce) !important;
+    box-shadow: 0 10px 24px rgba(27, 85, 190, .24) !important;
+    font-weight: 740 !important;
+}
+
+body.dark #divAbmCargarFotosClientePrincipal,
+body.dark #divAbmCargarArchivosCliente,
+body.modo-oscuro #divAbmCargarFotosClientePrincipal,
+body.modo-oscuro #divAbmCargarArchivosCliente {
+    --assets-ink: #e8edf5;
+    --assets-muted: #acb8ca;
+    background:
+        radial-gradient(circle at 4% 2%, rgba(35, 125, 185, .16), transparent 32%),
+        radial-gradient(circle at 96% 8%, rgba(87, 75, 160, .14), transparent 35%),
+        linear-gradient(145deg, #171e27, #1d2530 55%, #181e29) !important;
+}
+
+body.dark .gv-client-assets-header,
+body.dark .gv-client-assets-editor,
+body.dark .gv-client-assets-list,
+body.modo-oscuro .gv-client-assets-header,
+body.modo-oscuro .gv-client-assets-editor,
+body.modo-oscuro .gv-client-assets-list {
+    border-color: rgba(148, 165, 188, .18) !important;
+    background: rgba(38, 47, 60, .72) !important;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+body.dark .gv-client-assets-editor .pTitulo5,
+body.modo-oscuro .gv-client-assets-editor .pTitulo5 {
+    color: #dce4ef !important;
+}
+
+body.dark .gv-client-assets-editor input[type="text"],
+body.dark .gv-client-assets-editor input[type="date"],
+body.dark .gv-client-assets-editor select,
+body.modo-oscuro .gv-client-assets-editor input[type="text"],
+body.modo-oscuro .gv-client-assets-editor input[type="date"],
+body.modo-oscuro .gv-client-assets-editor select {
+    border-color: #495668 !important;
+    color: #dce5f1 !important;
+    background: #242d39 !important;
+}
+
+@media (max-width: 900px) {
+    .gv-client-assets-content {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .gv-client-assets-list .div_cuerpo_table {
+        height: 420px !important;
+    }
+
+    #divAbmCargarFotosClientePrincipal .gv-client-assets-content > input[value="Ver Galeria"] {
+        position: static;
+        width: 100% !important;
+        margin-top: 9px;
+    }
+}
+
+@media (max-width: 560px) {
+    .gv-client-assets-shell { padding: 4px !important; }
+    .gv-client-assets-header { min-height: 61px; border-radius: 16px !important; }
+    .gv-client-assets-header td:first-child { padding-left: 12px !important; }
+    .gv-client-assets-header .pTituloB { font-size: 19px !important; }
+    .gv-client-assets-subtitle { font-size: 10.5px; }
+    .gv-client-assets-header .iconoBtn { width: 36px !important; height: 36px !important; min-width: 36px !important; padding: 7px !important; }
+    .gv-client-assets-editor,
+    .gv-client-assets-list { padding: 9px !important; border-radius: 15px !important; }
+    .gv-client-assets-editor > table:nth-of-type(2) > tbody > tr > td,
+    .gv-client-assets-editor > table:nth-of-type(3) > tbody > tr,
+    .gv-client-assets-editor > table:nth-of-type(3) table td {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+    .gv-client-assets-editor #inptNombreClientesFotoPrincipal,
+    .gv-client-assets-editor #inptNombreClientesArchivosCliente,
+    .gv-client-assets-editor #inptDescripcionCargarFotosClientesPrincipal,
+    .gv-client-assets-editor #inptDescripcionCargarArchivosCliente { width: 100% !important; }
+    .gv-client-assets-editor #vercerrarVistaCliente,
+    .gv-client-assets-editor > table:nth-of-type(3) input[type="button"] {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .gv-client-assets-dropzone { height: 130px !important; }
+    .gv-client-assets-dropzone td { height: 126px; }
+    .gv-client-assets-dropzone .text_cargar_doc,
+    .gv-client-assets-dropzone .text_cargar_doc_2 { min-height: 122px; padding-top: 64px !important; background-position-y: 14px !important; }
+}

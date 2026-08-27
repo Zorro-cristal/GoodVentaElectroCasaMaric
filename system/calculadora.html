@@ -1,0 +1,35 @@
+<!-- Botón para abrir el modal -->
+<button onclick="document.getElementById('modalCalculo').style.display='flex'">Calcular Precio</button>
+
+<!-- Modal -->
+
+
+<!-- Estilos -->
+<style>
+  .input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+</style>
+
+<!-- Script -->
+<script>
+function calcular() {
+  let precioBase = parseFloat(document.getElementById('precioBase').value) || 0;
+  let descuento = parseFloat(document.getElementById('descuentoContado').value) || 0;
+  let interes = parseFloat(document.getElementById('interesCredito').value) || 0;
+  let cuotas = parseInt(document.getElementById('cuotas').value) || 1;
+
+  let precioContado = precioBase - (precioBase * descuento / 100);
+  let precioCredito = precioBase + (precioBase * interes / 100);
+  let precioCuota = precioCredito / cuotas;
+
+  document.getElementById('precioContado').innerText = precioContado.toLocaleString();
+  document.getElementById('precioCredito').innerText = precioCredito.toLocaleString();
+  document.getElementById('precioCuota').innerText = precioCuota.toLocaleString();
+}
+</script>

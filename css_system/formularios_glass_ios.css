@@ -1,0 +1,1134 @@
+/*
+ * Glassmorphism iOS compartido para formularios GoodVenta.
+ * Solo cambia presentacion: conserva el layout, los ids y los hooks legacy.
+ */
+
+:root {
+    --gv-ios-fondo: rgba(231, 239, 249, .70);
+    --gv-ios-superficie: rgba(255, 255, 255, .64);
+    --gv-ios-superficie-fuerte: rgba(255, 255, 255, .82);
+    --gv-ios-superficie-suave: rgba(246, 249, 253, .56);
+    --gv-ios-control: rgba(255, 255, 255, .72);
+    --gv-ios-borde: rgba(255, 255, 255, .78);
+    --gv-ios-borde-control: rgba(137, 153, 175, .30);
+    --gv-ios-texto: #202a3a;
+    --gv-ios-muted: #667389;
+    --gv-ios-azul: #007aff;
+    --gv-ios-tabla: rgba(24, 91, 126, .94);
+    --gv-ios-sombra: 0 18px 46px rgba(42, 61, 91, .13);
+    --gv-ios-sombra-suave: 0 8px 22px rgba(45, 64, 94, .09);
+}
+
+body.dark,
+body.modo-oscuro {
+    --gv-ios-fondo: rgba(21, 27, 35, .78);
+    --gv-ios-superficie: rgba(34, 42, 52, .68);
+    --gv-ios-superficie-fuerte: rgba(41, 50, 62, .84);
+    --gv-ios-superficie-suave: rgba(43, 52, 64, .56);
+    --gv-ios-control: rgba(24, 30, 39, .70);
+    --gv-ios-borde: rgba(130, 147, 169, .21);
+    --gv-ios-borde-control: rgba(149, 164, 184, .26);
+    --gv-ios-texto: #e2e8f0;
+    --gv-ios-muted: #aab5c4;
+    --gv-ios-tabla: rgba(25, 66, 88, .94);
+    --gv-ios-sombra: 0 20px 50px rgba(0, 0, 0, .28);
+    --gv-ios-sombra-suave: 0 9px 24px rgba(0, 0, 0, .18);
+}
+
+/* Ventanas y fondos de primer nivel. */
+.principal2:not(#divAbmVenta),
+.principalMenu:not(#principalMenub),
+.principalMenu2:not(#principalMenub) {
+    color: var(--gv-ios-texto) !important;
+    background:
+        radial-gradient(circle at 9% 8%, rgba(0, 122, 255, .17), transparent 29%),
+        radial-gradient(circle at 93% 3%, rgba(90, 200, 250, .16), transparent 27%),
+        linear-gradient(145deg, var(--gv-ios-fondo), rgba(243, 247, 252, .72)) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    backdrop-filter: blur(22px) saturate(150%);
+}
+
+body.dark .principal2:not(#divAbmVenta),
+body.dark .principalMenu:not(#principalMenub),
+body.dark .principalMenu2:not(#principalMenub),
+body.modo-oscuro .principal2:not(#divAbmVenta),
+body.modo-oscuro .principalMenu:not(#principalMenub),
+body.modo-oscuro .principalMenu2:not(#principalMenub) {
+    background:
+        radial-gradient(circle at 9% 8%, rgba(10, 132, 255, .14), transparent 30%),
+        radial-gradient(circle at 93% 3%, rgba(50, 173, 230, .10), transparent 28%),
+        linear-gradient(145deg, rgba(20, 25, 33, .88), var(--gv-ios-fondo)) !important;
+}
+
+.abm-estandar,
+.informe-estandar,
+.informe-estandar .informe-estandar-shell,
+.divPrincipalrepor,
+.divAbms,
+#divAbmCliente1.clientes-container,
+#divAbmProducto1.productos-container,
+#divHistorialVenta.hv-moderno,
+#divCuentasAcobrar.gv-cuentas-cobrar-unificado,
+#divArqueo.gv-cobros-realizados-unificado {
+    color: var(--gv-ios-texto) !important;
+    background: transparent !important;
+}
+
+/* Cajas de carga/edicion y paneles internos legacy. */
+.divAbms_b,
+.principal2:not(#divAbmVenta) .divMenuf,
+.divPrincipalrepor .divMenuf,
+.abm-card,
+.divVentana,
+.divVentana1,
+.divVentana2,
+.divAbm,
+.divDetalles,
+.solicitud-productos-lanzador {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde) !important;
+    background: var(--gv-ios-superficie) !important;
+    box-shadow: var(--gv-ios-sombra-suave), inset 0 1px 0 rgba(255, 255, 255, .60) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(155%);
+    backdrop-filter: blur(22px) saturate(155%);
+}
+
+.divAbms_b,
+.abm-card,
+.divVentana,
+.divVentana1,
+.divVentana2,
+.divAbm,
+.divDetalles {
+    border: 1px solid var(--gv-ios-borde) !important;
+    border-radius: 22px !important;
+    box-shadow: var(--gv-ios-sombra), inset 0 1px 0 rgba(255, 255, 255, .64) !important;
+}
+
+.principal2:not(#divAbmVenta) .divMenuf,
+.divPrincipalrepor .divMenuf {
+    border: 1px solid var(--gv-ios-borde) !important;
+    border-radius: 16px !important;
+}
+
+/* Paneles hermanos: misma altura dentro de una misma fila. */
+.row > [class*="col-"] > .divMenuf {
+    width: 100% !important;
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+/* Edicion de clientes: aprovecha el ancho completo sin perder responsividad. */
+#divAbmCliente2 .clientes-form-container {
+    width: 100%;
+    max-width: none;
+    padding: 8px 10px 12px;
+}
+
+#divAbmCliente2 .clientes-form-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 10px;
+    margin: 0 !important;
+}
+
+#divAbmCliente2 .clientes-form-grid > [class*="col-"] {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+    padding: 0 !important;
+}
+
+@media (min-width: 768px) {
+    #divAbmCliente2 .clientes-form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1280px) {
+    #divAbmCliente2 .clientes-form-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Solicitud de credito: misma composicion visual que Datos de Clientes. */
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles {
+    width: calc(100% - 20px) !important;
+    max-width: none;
+    margin: 10px auto 14px !important;
+    gap: 10px;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .gv-panel-uniforme {
+    padding: 15px !important;
+    text-align: left;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .gv-panel-uniforme > table {
+    width: 100% !important;
+    margin: 0 0 9px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .gv-panel-uniforme > table > tbody > tr > td {
+    min-width: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .gv-panel-uniforme > table > tbody > tr > td + td {
+    padding-left: 10px;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .pTituloC {
+    margin: 0 0 5px !important;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles input:not([type="button"]):not([type="file"]),
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles select,
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles textarea {
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles input:not([type="button"]):not([type="file"]),
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles select {
+    height: 36px !important;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles textarea {
+    min-height: 68px;
+    resize: vertical;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .solicitud-campo-con-accion {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 7px;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .solicitud-campo-con-accion .pTituloC {
+    grid-column: 1 / -1;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles .btn4 {
+    width: auto !important;
+    min-width: 86px;
+    height: 36px !important;
+    padding: 0 14px !important;
+}
+
+#divAbmSolicitudCredito2 .solicitud-credito-datos-paneles #table_vista_archivos_garante {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Utilidad para formularios legacy armados con tablas. */
+.gv-paneles-uniformes {
+    --gv-paneles-columnas: 4;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(var(--gv-paneles-columnas), minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+    box-sizing: border-box;
+    border-collapse: separate !important;
+}
+
+.gv-paneles-uniformes--3 {
+    --gv-paneles-columnas: 3;
+}
+
+.gv-paneles-uniformes--2 {
+    --gv-paneles-columnas: 2;
+}
+
+.gv-paneles-uniformes > tbody,
+.gv-paneles-uniformes > tbody > tr {
+    display: contents !important;
+}
+
+.gv-paneles-uniformes > tbody > tr > td {
+    width: auto !important;
+    min-width: 0;
+    height: auto !important;
+    display: flex;
+    align-items: stretch;
+    padding: 0 !important;
+    vertical-align: top !important;
+}
+
+.gv-paneles-uniformes > tbody > tr > td > .divMenuf,
+.gv-paneles-uniformes .gv-panel-uniforme {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100%;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+/* Cabeceras de formulario, incluidas las que se normalizan desde JS. */
+.tableMenuZ.gv-form-title-modern:not(.venta-header),
+.abm-estandar .abm-estandar-header,
+.gv-custom-form-title-modern,
+#divArqueo .header-arqueo,
+#divHistorialVenta .hv-header,
+#divAbmCliente1 .catalogo-header,
+#divAbmProducto1 .productos-header,
+.divAbms_b > .tableMenuZ {
+    border-color: var(--gv-ios-borde) !important;
+    background: var(--gv-ios-superficie-fuerte) !important;
+    box-shadow: 0 10px 28px rgba(43, 61, 88, .10), inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(165%);
+    backdrop-filter: blur(24px) saturate(165%);
+}
+
+.divAbms_b > .tableMenuZ {
+    overflow: hidden;
+    border-radius: 22px 22px 0 0 !important;
+}
+
+.tableMenuZ.gv-form-title-modern .pTituloB,
+.abm-estandar .abm-estandar-header .pTituloB,
+.gv-custom-form-title-modern .pTituloB,
+#divArqueo .header-text,
+#divHistorialVenta .hv-header .pTituloB {
+    color: var(--gv-ios-texto) !important;
+}
+
+.tableMenuZ.gv-form-title-modern .pTituloB::after,
+.abm-estandar .abm-estandar-header .pTituloB::after,
+.gv-custom-form-title-modern .pTituloB::after,
+#divArqueo .gv-cobros-titulo-contenido small,
+#divHistorialVenta .hv-header .pTituloB::after {
+    color: var(--gv-ios-muted) !important;
+}
+
+.tableMenuZ.gv-form-title-modern td:first-child::before,
+.abm-estandar .abm-estandar-header td:first-child::before,
+.gv-custom-form-title-modern > :first-child::before,
+#divArqueo .gv-cobros-titulo-icono {
+    border: 1px solid rgba(255, 255, 255, .64);
+    background: rgba(202, 230, 255, .68) !important;
+    box-shadow: 0 8px 20px rgba(30, 91, 145, .13), inset 0 1px 0 rgba(255, 255, 255, .74) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+body.dark .tableMenuZ.gv-form-title-modern td:first-child::before,
+body.dark .abm-estandar .abm-estandar-header td:first-child::before,
+body.dark .gv-custom-form-title-modern > :first-child::before,
+body.dark #divArqueo .gv-cobros-titulo-icono,
+body.modo-oscuro .tableMenuZ.gv-form-title-modern td:first-child::before,
+body.modo-oscuro .abm-estandar .abm-estandar-header td:first-child::before,
+body.modo-oscuro .gv-custom-form-title-modern > :first-child::before,
+body.modo-oscuro #divArqueo .gv-cobros-titulo-icono {
+    border-color: rgba(102, 169, 245, .24);
+    background: rgba(34, 93, 145, .48) !important;
+}
+
+/* Botones de cabecera con cristal individual. */
+.tableMenuZ.gv-form-title-modern .iconoBtn,
+.abm-estandar .abm-estandar-header .iconoBtn,
+.gv-custom-form-title-modern .btn-icon,
+.gv-custom-form-title-modern .producto-icon,
+#divArqueo .header-actions .iconoBtn,
+.principal2:not(#divAbmVenta) > .iconoBtn {
+    border-color: var(--gv-ios-borde) !important;
+    background: var(--gv-ios-superficie-fuerte) !important;
+    box-shadow: 0 8px 20px rgba(42, 61, 88, .11), inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(145%);
+    backdrop-filter: blur(14px) saturate(145%);
+}
+
+.tableMenuZ.gv-form-title-modern .iconoBtn:hover,
+.abm-estandar .abm-estandar-header .iconoBtn:hover,
+.gv-custom-form-title-modern .btn-icon:hover,
+.gv-custom-form-title-modern .producto-icon:hover,
+#divArqueo .header-actions .iconoBtn:hover {
+    border-color: rgba(0, 122, 255, .30) !important;
+    background: rgba(255, 255, 255, .94) !important;
+    box-shadow: 0 12px 26px rgba(30, 72, 119, .16) !important;
+    transform: translateY(-2px);
+}
+
+body.dark .tableMenuZ.gv-form-title-modern .iconoBtn:hover,
+body.dark .abm-estandar .abm-estandar-header .iconoBtn:hover,
+body.dark .gv-custom-form-title-modern .btn-icon:hover,
+body.dark .gv-custom-form-title-modern .producto-icon:hover,
+body.dark #divArqueo .header-actions .iconoBtn:hover,
+body.modo-oscuro .tableMenuZ.gv-form-title-modern .iconoBtn:hover,
+body.modo-oscuro .abm-estandar .abm-estandar-header .iconoBtn:hover,
+body.modo-oscuro .gv-custom-form-title-modern .btn-icon:hover,
+body.modo-oscuro .gv-custom-form-title-modern .producto-icon:hover,
+body.modo-oscuro #divArqueo .header-actions .iconoBtn:hover {
+    background: rgba(57, 69, 84, .92) !important;
+}
+
+/* Barras de busqueda, chips, tabs y pies. */
+.abm-estandar-contenido,
+.abm-estandar-toolbar,
+.abm-estandar-chips,
+.abm-estandar-footer,
+.informe-estandar .informe-estandar-listado,
+#divAbmCliente1 .catalogo-toolbar,
+#divAbmCliente1 .catalogo-filtros-activos,
+#divAbmCliente1 .catalogo-proceso,
+#divAbmCliente1 .clientes-footer-moderno,
+#divAbmProducto1 .productos-toolbar,
+#divAbmProducto1 .productos-chips,
+#divAbmProducto1 .productos-proceso,
+#divAbmProducto1 .productos-footer,
+#divHistorialVenta .hv-panel,
+#divHistorialVenta .hv-toolbar,
+#divHistorialVenta .hv-chips,
+#divHistorialVenta .hv-tabs,
+#divHistorialVenta .hv-footer,
+#divArqueo .resumen-container {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde-control) !important;
+    background: var(--gv-ios-superficie-suave) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .38) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+}
+
+.abm-estandar-chip,
+.chip-filtro,
+.producto-chip,
+#divHistorialVenta .hv-chip,
+.cliente-faja {
+    color: var(--gv-ios-texto) !important;
+    border: 1px solid rgba(122, 155, 193, .16);
+    background: rgba(220, 234, 250, .62) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .48);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+body.dark .abm-estandar-chip,
+body.dark .chip-filtro,
+body.dark .producto-chip,
+body.dark #divHistorialVenta .hv-chip,
+body.dark .cliente-faja,
+body.modo-oscuro .abm-estandar-chip,
+body.modo-oscuro .chip-filtro,
+body.modo-oscuro .producto-chip,
+body.modo-oscuro #divHistorialVenta .hv-chip,
+body.modo-oscuro .cliente-faja {
+    border-color: rgba(121, 145, 175, .18);
+    background: rgba(60, 75, 94, .55) !important;
+}
+
+/* Inputs, selects y textareas dentro de formularios. */
+.principal2:not(#divAbmVenta) input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="image"]):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.principal2:not(#divAbmVenta) select,
+.principal2:not(#divAbmVenta) textarea,
+.abm-estandar-busqueda-general,
+#divAbmCliente1 .catalogo-selectBuscador,
+#divAbmProducto1 .productos-search input,
+#divHistorialVenta .hv-search input {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde-control) !important;
+    background: var(--gv-ios-control) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .68), 0 3px 10px rgba(45, 64, 94, .05) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+.principal2:not(#divAbmVenta) input:focus,
+.principal2:not(#divAbmVenta) select:focus,
+.principal2:not(#divAbmVenta) textarea:focus,
+.abm-estandar-busqueda-general:focus,
+#divAbmCliente1 .catalogo-selectBuscador:focus,
+#divAbmProducto1 .productos-search input:focus,
+#divHistorialVenta .hv-search input:focus {
+    border-color: rgba(0, 122, 255, .62) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, .12), inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+}
+
+.principal2:not(#divAbmVenta) input:disabled,
+.principal2:not(#divAbmVenta) select:disabled,
+.principal2:not(#divAbmVenta) textarea:disabled,
+.principal2:not(#divAbmVenta) input[readonly] {
+    color: var(--gv-ios-muted) !important;
+    border-color: rgba(138, 153, 174, .18) !important;
+    background: rgba(225, 232, 241, .66) !important;
+}
+
+body.dark .principal2:not(#divAbmVenta) input:disabled,
+body.dark .principal2:not(#divAbmVenta) select:disabled,
+body.dark .principal2:not(#divAbmVenta) textarea:disabled,
+body.dark .principal2:not(#divAbmVenta) input[readonly],
+body.modo-oscuro .principal2:not(#divAbmVenta) input:disabled,
+body.modo-oscuro .principal2:not(#divAbmVenta) select:disabled,
+body.modo-oscuro .principal2:not(#divAbmVenta) textarea:disabled,
+body.modo-oscuro .principal2:not(#divAbmVenta) input[readonly] {
+    background: rgba(55, 66, 80, .68) !important;
+}
+
+/* Botones: mantiene colores semanticos y agrega volumen de cristal. */
+.principal2:not(#divAbmVenta) .btn1,
+.principal2:not(#divAbmVenta) .btn2,
+.principal2:not(#divAbmVenta) .btn3,
+.principal2:not(#divAbmVenta) .btn4,
+.principal2:not(#divAbmVenta) .btn5,
+.principal2:not(#divAbmVenta) .btnappA,
+.abm-estandar-btn,
+.btn-catalogo,
+.producto-btn,
+#divHistorialVenta .hv-btn {
+    border: 1px solid rgba(255, 255, 255, .22) !important;
+    border-radius: 11px !important;
+    box-shadow: 0 7px 17px rgba(34, 63, 98, .16), inset 0 1px 0 rgba(255, 255, 255, .20) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition: transform .16s ease, box-shadow .16s ease, filter .16s ease !important;
+}
+
+.principal2:not(#divAbmVenta) .btn1:hover,
+.principal2:not(#divAbmVenta) .btn2:hover,
+.principal2:not(#divAbmVenta) .btn3:hover,
+.principal2:not(#divAbmVenta) .btn4:hover,
+.principal2:not(#divAbmVenta) .btn5:hover,
+.principal2:not(#divAbmVenta) .btnappA:hover,
+.abm-estandar-btn:hover,
+.btn-catalogo:hover,
+.producto-btn:hover,
+#divHistorialVenta .hv-btn:hover {
+    box-shadow: 0 10px 23px rgba(30, 62, 101, .21), inset 0 1px 0 rgba(255, 255, 255, .24) !important;
+    filter: brightness(1.02);
+    transform: translateY(-2px);
+}
+
+.abm-estandar-btn.claro,
+.abm-estandar-btn.secundario,
+.btn-catalogo.btn-light,
+.producto-btn.claro,
+#divHistorialVenta .hv-btn-light {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde-control) !important;
+    background: var(--gv-ios-superficie-fuerte) !important;
+}
+
+/* Encabezados y cuerpos de tablas. */
+.gv-table-title-color,
+.tableCabeceraRegistro.gv-table-title-color,
+.tableCabeceraRegistro2.gv-table-title-color,
+.tbTituloColor.gv-table-title-color,
+thead.gv-table-title-color {
+    border-color: rgba(255, 255, 255, .20) !important;
+    background: linear-gradient(135deg, var(--gv-ios-tabla), rgba(33, 102, 139, .90)) !important;
+    box-shadow: 0 7px 18px rgba(18, 74, 105, .14), inset 0 1px 0 rgba(255, 255, 255, .14) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+}
+
+.gv-table-title-color > tbody > tr > td,
+.gv-table-title-color > tbody > tr > th,
+table > thead.gv-table-title-color > tr > td,
+table > thead.gv-table-title-color > tr > th,
+.gv-table-title-color .td_registro,
+.gv-table-title-color .td_registro_2 {
+    background: transparent !important;
+}
+
+.abm-estandar-tabla-cuerpo,
+.informe-estandar .informe-estandar-tabla-cuerpo,
+.principal2:not(#divAbmVenta) .div_cuerpo_table,
+#divAbmCliente1 .table-head-wrapper,
+#divAbmCliente1 .clientes-table-body,
+#divAbmProducto1 .productos-tabla-wrap,
+#divAbmProducto1 .productos-precios,
+#divHistorialVenta #TableScroollHistorialVenta2,
+#divHistorialVenta #table_historial_venta,
+#divHistorialVenta #table_historial_venta_pagos,
+#divHistorialVenta #table_historial_venta_detalle,
+#divCuentasAcobrar #TableScroollCuentasACobrar1,
+#divCuentasAcobrar #TableScroollCuentasACobrar2,
+#divArqueo #TableScroollArqeo1,
+#divArqueo #TableScroollArqeo2 {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde-control) !important;
+    background: rgba(255, 255, 255, .48) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .52) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+}
+
+body.dark .abm-estandar-tabla-cuerpo,
+body.dark .informe-estandar .informe-estandar-tabla-cuerpo,
+body.dark .principal2:not(#divAbmVenta) .div_cuerpo_table,
+body.dark #divAbmCliente1 .table-head-wrapper,
+body.dark #divAbmProducto1 .productos-tabla-wrap,
+body.dark #divHistorialVenta #TableScroollHistorialVenta2,
+body.dark #divCuentasAcobrar #TableScroollCuentasACobrar2,
+body.dark #divArqueo #TableScroollArqeo2,
+body.modo-oscuro .abm-estandar-tabla-cuerpo,
+body.modo-oscuro .informe-estandar .informe-estandar-tabla-cuerpo,
+body.modo-oscuro .principal2:not(#divAbmVenta) .div_cuerpo_table,
+body.modo-oscuro #divAbmCliente1 .table-head-wrapper,
+body.modo-oscuro #divAbmProducto1 .productos-tabla-wrap,
+body.modo-oscuro #divHistorialVenta #TableScroollHistorialVenta2,
+body.modo-oscuro #divCuentasAcobrar #TableScroollCuentasACobrar2,
+body.modo-oscuro #divArqueo #TableScroollArqeo2 {
+    background: rgba(25, 31, 40, .56) !important;
+}
+
+.principal2:not(#divAbmVenta) .tableRegistroSearch td,
+.abm-estandar-tabla-cuerpo td,
+.informe-estandar-tabla-cuerpo td,
+.listado-cliente-fila td[data-columna],
+.producto-fila td[data-columna],
+#divHistorialVenta #table_historial_venta td {
+    color: var(--gv-ios-texto) !important;
+    border-color: rgba(139, 156, 178, .18) !important;
+    background: rgba(255, 255, 255, .34) !important;
+}
+
+.principal2:not(#divAbmVenta) .tableRegistroSearch:hover td,
+.abm-estandar-tabla-cuerpo table:hover td,
+.informe-estandar-tabla-cuerpo table:hover td,
+.listado-cliente-fila:hover td[data-columna],
+.producto-fila:hover td[data-columna],
+#divHistorialVenta #table_historial_venta table:hover td {
+    background: rgba(0, 122, 255, .075) !important;
+}
+
+.principal2:not(#divAbmVenta) .tableRegistroSelec td,
+.abm-estandar-tabla-cuerpo .tableRegistroSelec td,
+.informe-estandar-tabla-cuerpo .tableRegistroSelec td {
+    color: var(--gv-ios-texto) !important;
+    background: rgba(0, 122, 255, .16) !important;
+}
+
+body.dark .principal2:not(#divAbmVenta) .tableRegistroSearch td,
+body.dark .abm-estandar-tabla-cuerpo td,
+body.dark .informe-estandar-tabla-cuerpo td,
+body.dark .listado-cliente-fila td[data-columna],
+body.dark .producto-fila td[data-columna],
+body.dark #divHistorialVenta #table_historial_venta td,
+body.modo-oscuro .principal2:not(#divAbmVenta) .tableRegistroSearch td,
+body.modo-oscuro .abm-estandar-tabla-cuerpo td,
+body.modo-oscuro .informe-estandar-tabla-cuerpo td,
+body.modo-oscuro .listado-cliente-fila td[data-columna],
+body.modo-oscuro .producto-fila td[data-columna],
+body.modo-oscuro #divHistorialVenta #table_historial_venta td {
+    background: rgba(32, 39, 49, .48) !important;
+}
+
+body.dark .principal2:not(#divAbmVenta) .tableRegistroSearch:hover td,
+body.dark .abm-estandar-tabla-cuerpo table:hover td,
+body.dark .informe-estandar-tabla-cuerpo table:hover td,
+body.dark .listado-cliente-fila:hover td[data-columna],
+body.dark .producto-fila:hover td[data-columna],
+body.dark #divHistorialVenta #table_historial_venta table:hover td,
+body.modo-oscuro .principal2:not(#divAbmVenta) .tableRegistroSearch:hover td,
+body.modo-oscuro .abm-estandar-tabla-cuerpo table:hover td,
+body.modo-oscuro .informe-estandar-tabla-cuerpo table:hover td,
+body.modo-oscuro .listado-cliente-fila:hover td[data-columna],
+body.modo-oscuro .producto-fila:hover td[data-columna],
+body.modo-oscuro #divHistorialVenta #table_historial_venta table:hover td {
+    background: rgba(48, 65, 82, .72) !important;
+}
+
+/* Modales de filtros, columnas, Bootstrap y productos de solicitud. */
+.abm-estandar-modal-overlay,
+.modal-filtros-overlay,
+.productos-modal-overlay,
+.hv-modal-overlay,
+.solicitud-productos-modal__fondo,
+.modal-overlay {
+    background: rgba(24, 34, 49, .34) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+    backdrop-filter: blur(12px) saturate(125%);
+}
+
+.abm-estandar-modal-box,
+.modal-filtros-box,
+.productos-modal-box,
+.hv-modal-box,
+.modal-content,
+.modal-contenido,
+.solicitud-productos-modal__dialogo,
+.abm-estandar-menu-columnas,
+.selector-columnas-panel,
+.panel-columnas-clientes,
+.productos-columnas-panel,
+#divHistorialVenta .hv-columnas {
+    color: var(--gv-ios-texto) !important;
+    border: 1px solid var(--gv-ios-borde) !important;
+    border-radius: 20px !important;
+    background: var(--gv-ios-superficie-fuerte) !important;
+    box-shadow: 0 30px 80px rgba(18, 31, 49, .28), inset 0 1px 0 rgba(255, 255, 255, .62) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(170%);
+    backdrop-filter: blur(30px) saturate(170%);
+}
+
+.abm-estandar-modal-box > header,
+.modal-filtros-header,
+.productos-modal-box > header,
+.hv-modal-box > header,
+.modal-header,
+.solicitud-productos-modal__cabecera {
+    border-color: rgba(255, 255, 255, .20) !important;
+    background: linear-gradient(135deg, rgba(25, 91, 128, .94), rgba(47, 75, 126, .90)) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+}
+
+.abm-estandar-modal-body,
+.modal-filtros-body,
+.productos-modal-body,
+.hv-modal-grid,
+.modal-body,
+.solicitud-productos-modal__cuerpo,
+.solicitud-productos-modal__contenido.divMenuf {
+    color: var(--gv-ios-texto) !important;
+    background: var(--gv-ios-superficie-suave) !important;
+}
+
+.abm-estandar-modal-box > footer,
+.modal-filtros-footer,
+.productos-modal-box > footer,
+.hv-modal-box > footer,
+.modal-footer,
+.solicitud-productos-modal__pie {
+    border-color: var(--gv-ios-borde-control) !important;
+    background: var(--gv-ios-superficie-fuerte) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(145%);
+    backdrop-filter: blur(18px) saturate(145%);
+}
+
+.abm-estandar-filtro-opcion,
+.hv-checks,
+.solicitud-productos-resumen__vacio,
+.solicitud-productos-resumen__item,
+.solicitud-producto__bloque {
+    color: var(--gv-ios-texto) !important;
+    border-color: var(--gv-ios-borde-control) !important;
+    background: var(--gv-ios-control) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45) !important;
+}
+
+/* Dropdowns y selectores de columnas como popovers de iOS. */
+.abm-estandar-menu-columnas label,
+.selector-columnas-panel label,
+.panel-columnas-clientes label,
+.productos-columnas-panel label,
+#divHistorialVenta .hv-columnas label,
+.abm-estandar-filtro-grupo > label,
+.filtro-grupo > label,
+.hv-field,
+.solicitud-productos-modal label {
+    color: var(--gv-ios-texto) !important;
+}
+
+/* Fallback para navegadores sin backdrop-filter. */
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+    .principal2:not(#divAbmVenta) { background: #e9f0f8 !important; }
+    .divAbms_b,
+    .principal2:not(#divAbmVenta) .divMenuf,
+    .abm-estandar-modal-box,
+    .modal-filtros-box,
+    .productos-modal-box,
+    .hv-modal-box,
+    .modal-content { background: #f8fafc !important; }
+
+    body.dark .principal2:not(#divAbmVenta),
+    body.modo-oscuro .principal2:not(#divAbmVenta) { background: #171c24 !important; }
+
+    body.dark .divAbms_b,
+    body.dark .principal2:not(#divAbmVenta) .divMenuf,
+    body.dark .abm-estandar-modal-box,
+    body.dark .modal-filtros-box,
+    body.dark .productos-modal-box,
+    body.dark .hv-modal-box,
+    body.dark .modal-content,
+    body.modo-oscuro .divAbms_b,
+    body.modo-oscuro .principal2:not(#divAbmVenta) .divMenuf,
+    body.modo-oscuro .abm-estandar-modal-box,
+    body.modo-oscuro .modal-filtros-box,
+    body.modo-oscuro .productos-modal-box,
+    body.modo-oscuro .hv-modal-box,
+    body.modo-oscuro .modal-content { background: #252d38 !important; }
+}
+
+@media (max-width: 760px) {
+    .divAbms_b,
+    .abm-estandar-modal-box,
+    .modal-filtros-box,
+    .productos-modal-box,
+    .hv-modal-box,
+    .solicitud-productos-modal__dialogo {
+        width: min(96vw, 760px) !important;
+        max-height: 94vh !important;
+        border-radius: 17px !important;
+    }
+
+    .principal2:not(#divAbmVenta) .divMenuf,
+    .divPrincipalrepor .divMenuf { border-radius: 13px !important; }
+
+    .gv-paneles-uniformes {
+        --gv-paneles-columnas: 1;
+        gap: 8px;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 1200px) {
+    .gv-paneles-uniformes--4,
+    .gv-paneles-uniformes--3 {
+        --gv-paneles-columnas: 2;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .principal2:not(#divAbmVenta) .btn1,
+    .principal2:not(#divAbmVenta) .btn2,
+    .principal2:not(#divAbmVenta) .btn3,
+    .principal2:not(#divAbmVenta) .btn4,
+    .principal2:not(#divAbmVenta) .btn5,
+    .abm-estandar-btn,
+    .btn-catalogo,
+    .producto-btn,
+    #divHistorialVenta .hv-btn,
+    .iconoBtn { transition: none !important; }
+}
+
+/* Contraste canonico de los titulos principales cuando el sistema esta en modo claro. */
+body:not(.dark):not(.modo-oscuro) .tableMenuZ.gv-form-title-modern .pTituloB,
+body:not(.dark):not(.modo-oscuro) .abm-estandar .abm-estandar-header .pTituloB,
+body:not(.dark):not(.modo-oscuro) .gv-custom-form-title-modern .pTituloB,
+body:not(.dark):not(.modo-oscuro) #divAbmCliente1 .catalogo-header-left .pTituloB,
+body:not(.dark):not(.modo-oscuro) #divAbmProducto1 .productos-header .pTituloB,
+body:not(.dark):not(.modo-oscuro) #divHistorialVenta .hv-header .pTituloB,
+body:not(.dark):not(.modo-oscuro) #divArqueo .header-text {
+    color: #202a3a !important;
+}
+
+body:not(.dark):not(.modo-oscuro) .tableMenuZ.gv-form-title-modern .pTituloB b,
+body:not(.dark):not(.modo-oscuro) .abm-estandar .abm-estandar-header .pTituloB b,
+body:not(.dark):not(.modo-oscuro) .gv-custom-form-title-modern .pTituloB b,
+body:not(.dark):not(.modo-oscuro) #divAbmCliente1 .catalogo-header-left .pTituloB b,
+body:not(.dark):not(.modo-oscuro) #divAbmProducto1 .productos-header .pTituloB b,
+body:not(.dark):not(.modo-oscuro) #divHistorialVenta .hv-header .pTituloB b {
+    color: #2563eb !important;
+}
+
+body:not(.dark):not(.modo-oscuro) .tableMenuZ.gv-form-title-modern .pTituloB::after,
+body:not(.dark):not(.modo-oscuro) .abm-estandar .abm-estandar-header .pTituloB::after,
+body:not(.dark):not(.modo-oscuro) .gv-custom-form-title-modern .pTituloB::after,
+body:not(.dark):not(.modo-oscuro) #divHistorialVenta .hv-header .pTituloB::after,
+body:not(.dark):not(.modo-oscuro) #divArqueo .gv-cobros-titulo-contenido small {
+    color: #5f6f84 !important;
+}
+
+/* Formulario de geolocalizacion de clientes */
+#divGeoLocalizacion.geo-formulario {
+    overflow: hidden !important;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(59, 130, 246, .16), transparent 30%),
+        radial-gradient(circle at 92% 92%, rgba(45, 212, 191, .13), transparent 32%),
+        #edf4fb !important;
+}
+
+#divGeoLocalizacion.geo-formulario > center {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+#divGeoLocalizacion .geo-formulario-shell {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+}
+
+#divGeoLocalizacion .geo-formulario-header {
+    flex: 0 0 70px;
+    min-height: 70px;
+    background: rgba(255, 255, 255, .86) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .25);
+    box-shadow: 0 8px 26px rgba(15, 23, 42, .07);
+    backdrop-filter: blur(20px) saturate(145%);
+    -webkit-backdrop-filter: blur(20px) saturate(145%);
+}
+
+#divGeoLocalizacion .geo-formulario-header .pTituloB {
+    margin: 0 !important;
+    padding-left: 16px !important;
+    color: #202a3a !important;
+}
+
+#divGeoLocalizacion .geo-formulario-header .pTituloB b {
+    color: #2563eb !important;
+}
+
+#divGeoLocalizacion .geo-formulario-workspace {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 12px;
+    overflow: hidden;
+}
+
+#divGeoLocalizacion .geo-formulario-layout,
+#divGeoLocalizacion .geo-formulario-layout > tbody {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#divGeoLocalizacion .geo-formulario-layout > tbody > tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1.78fr) minmax(500px, 1fr);
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+#divGeoLocalizacion .geo-formulario-layout > tbody > tr > td {
+    display: block;
+    width: auto !important;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    vertical-align: top;
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-col > center {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-card,
+#divGeoLocalizacion .geo-formulario-datos-card {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0;
+    margin: 0 !important;
+    box-sizing: border-box;
+    overflow: hidden !important;
+    border: 1px solid rgba(255, 255, 255, .9) !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, .82) !important;
+    box-shadow: 0 18px 45px rgba(32, 53, 84, .13) !important;
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-header {
+    flex: 0 0 56px;
+    width: 100%;
+    height: 56px !important;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #fff !important;
+    background: linear-gradient(135deg, #147bc1, #289cf0) !important;
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-header label {
+    color: #fff !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+#divGeoLocalizacion .geo-formulario-mapa-header .iconoBtn {
+    width: 38px !important;
+    height: 38px !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+}
+
+#divGeoLocalizacion #map {
+    position: relative !important;
+    inset: auto !important;
+    flex: 1 1 auto;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 300px;
+}
+
+#divGeoLocalizacion .mapboxgl-ctrl-geocoder {
+    width: min(360px, calc(100% - 32px)) !important;
+    max-width: 360px !important;
+    border: 1px solid #d5dfeb;
+    border-radius: 13px !important;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, .15) !important;
+}
+
+#divGeoLocalizacion .geo-formulario-datos-card {
+    display: flex;
+    flex-direction: column;
+    padding: 14px !important;
+}
+
+#divGeoLocalizacion .geo-formulario-datos-card > table {
+    flex: 0 0 auto;
+    margin: 0 0 6px;
+}
+
+#divGeoLocalizacion .geo-formulario-datos-card .pTituloC {
+    margin: 0 0 5px !important;
+    color: #344054 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+#divGeoLocalizacion .geo-formulario-input {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 10px 13px !important;
+    border: 1px solid #d5dfeb !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, .92) !important;
+    color: #1f2937 !important;
+    box-shadow: 0 5px 14px rgba(15, 23, 42, .05) !important;
+}
+
+#divGeoLocalizacion .geo-formulario-input:focus {
+    border-color: #2b7cff !important;
+    box-shadow: 0 0 0 4px rgba(43, 124, 255, .14) !important;
+}
+
+#divGeoLocalizacion .geo-formulario-btn-guardar {
+    width: auto !important;
+    min-width: 170px;
+    height: 44px !important;
+    padding: 0 22px !important;
+    margin: 2px auto 8px !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #176fc5, #249ce8) !important;
+    box-shadow: 0 10px 22px rgba(23, 111, 197, .22) !important;
+}
+
+#divGeoLocalizacion .geo-formulario-historial {
+    flex: 1 1 360px;
+    height: auto;
+    min-height: 360px;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 4px;
+    border: 1px solid #d9e3ee;
+    border-radius: 14px;
+    background: rgba(248, 251, 255, .92);
+}
+
+#divGeoLocalizacion .geo-formulario-tabla-header {
+    flex: 0 0 52px;
+    overflow: hidden;
+    border-radius: 13px 13px 0 0;
+}
+
+#divGeoLocalizacion .geo-formulario-tabla-body {
+    flex: 1 1 auto;
+    height: auto !important;
+    min-height: 0;
+    overflow: auto !important;
+    background: rgba(255, 255, 255, .72);
+}
+
+#divGeoLocalizacion .geo-formulario-acciones {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-top: 10px;
+    border-spacing: 7px 0;
+}
+
+#divGeoLocalizacion .geo-formulario-acciones td {
+    padding: 0;
+}
+
+#divGeoLocalizacion .geo-formulario-btn-secundario,
+#divGeoLocalizacion .geo-formulario-btn-eliminar {
+    width: 100% !important;
+    height: 42px !important;
+    border-radius: 11px !important;
+    font-weight: 700 !important;
+}
+
+#divGeoLocalizacion .geo-formulario-btn-secundario {
+    color: #fff !important;
+    background: #40536e !important;
+}
+
+#divGeoLocalizacion .geo-formulario-btn-eliminar {
+    color: #fff !important;
+    background: #d9485f !important;
+}
+
+body.dark #divGeoLocalizacion.geo-formulario,
+body.modo-oscuro #divGeoLocalizacion.geo-formulario {
+    background: #171c24 !important;
+}
+
+body.dark #divGeoLocalizacion .geo-formulario-header,
+body.dark #divGeoLocalizacion .geo-formulario-mapa-card,
+body.dark #divGeoLocalizacion .geo-formulario-datos-card,
+body.modo-oscuro #divGeoLocalizacion .geo-formulario-header,
+body.modo-oscuro #divGeoLocalizacion .geo-formulario-mapa-card,
+body.modo-oscuro #divGeoLocalizacion .geo-formulario-datos-card {
+    background: rgba(37, 45, 56, .94) !important;
+    border-color: #3a4656 !important;
+}
+
+body.dark #divGeoLocalizacion .geo-formulario-datos-card .pTituloC,
+body.modo-oscuro #divGeoLocalizacion .geo-formulario-datos-card .pTituloC {
+    color: #d7dee8 !important;
+}
+
+@media (max-width: 980px) {
+    #divGeoLocalizacion.geo-formulario {
+        overflow: auto !important;
+    }
+
+    #divGeoLocalizacion .geo-formulario-workspace {
+        overflow: visible;
+    }
+
+    #divGeoLocalizacion .geo-formulario-layout > tbody > tr {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    #divGeoLocalizacion .geo-formulario-layout > tbody > tr > td {
+        height: auto;
+    }
+
+    #divGeoLocalizacion .geo-formulario-mapa-card {
+        height: 55vh !important;
+        min-height: 420px;
+    }
+
+    #divGeoLocalizacion .geo-formulario-datos-card {
+        min-height: 560px;
+    }
+}
+
+@media (min-width: 981px) and (max-width: 1300px) {
+    #divGeoLocalizacion .geo-formulario-layout > tbody > tr {
+        grid-template-columns: minmax(0, 1.25fr) minmax(440px, 1fr);
+    }
+}

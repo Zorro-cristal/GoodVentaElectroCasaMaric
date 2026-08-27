@@ -1,0 +1,723 @@
+/* Historial de Compras: misma estructura visual y comportamiento que Historial de Ventas. */
+#divHistorialCompra.hc-moderno {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    color: #1f2937;
+    background: #f4f7fb !important;
+}
+
+#divHistorialCompra .hc-header {
+    flex: 0 0 58px;
+    width: 100% !important;
+    height: 58px;
+    margin: 0;
+    padding: 0 12px;
+    border: 0 !important;
+    border-bottom: 1px solid #dfe6ef !important;
+    background: #fff !important;
+    box-sizing: border-box;
+}
+
+#divHistorialCompra .hc-header tbody,
+#divHistorialCompra .hc-header tr {
+    height: 100%;
+}
+
+#divHistorialCompra .hc-header td {
+    border: 0 !important;
+    background: transparent !important;
+}
+
+#divHistorialCompra .hc-header .pTituloB {
+    margin: 0;
+    color: #1f2937 !important;
+    font-size: 20px !important;
+    font-weight: 900;
+}
+
+#divHistorialCompra .hc-header .pTituloB b {
+    color: #2563eb !important;
+    font-size: inherit !important;
+}
+
+#divHistorialCompra .hc-header .pTituloB::after {
+    content: "Consulta, filtros y seleccion de compras";
+    display: block;
+    margin-top: 3px;
+    color: #526173;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+#divHistorialCompra .hc-shell {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#divHistorialCompra .hc-panel {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0;
+    margin: 0 !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+#divHistorialCompra .hc-filtro-superior-antiguo,
+#divHistorialCompra .hc-filtros-antiguos,
+#divHistorialCompra .hc-opciones-antiguas,
+#divHistorialCompra .hc-celda-imprimir-antigua,
+#divHistorialCompra .abm-auxiliar-toolbar,
+#divHistorialCompra .abm-auxiliar-chips,
+#divHistorialCompra .abm-auxiliar-modal,
+#divFiltrosHistorialCompras.hc-modal-antiguo {
+    display: none !important;
+}
+
+#divHistorialCompra .hc-barra {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #e1e7ef;
+    background: #fff;
+}
+
+#divHistorialCompra .hc-busqueda {
+    display: flex;
+    flex: 1 1 560px;
+    max-width: 760px;
+    gap: 8px;
+}
+
+#divHistorialCompra .hc-busqueda-input {
+    flex: 1;
+    min-width: 180px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #cfd8e3;
+    border-radius: 8px;
+    color: #344054;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+#divHistorialCompra .hc-acciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#divHistorialCompra .hc-btn,
+#modalFiltrosHistorialComprasModerno .hc-btn {
+    height: 36px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 7px;
+    color: #fff;
+    background: #475467;
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+#divHistorialCompra .hc-btn:focus-visible,
+#modalFiltrosHistorialComprasModerno button:focus-visible,
+#modalFiltrosHistorialComprasModerno input:focus-visible,
+#modalFiltrosHistorialComprasModerno select:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .28);
+    outline-offset: 2px;
+}
+
+#divHistorialCompra .hc-btn-principal,
+#modalFiltrosHistorialComprasModerno .hc-btn-principal {
+    background: #2563eb;
+}
+
+#divHistorialCompra .hc-btn-filtro {
+    background: #d97706;
+}
+
+#divHistorialCompra .hc-btn-claro,
+#modalFiltrosHistorialComprasModerno .hc-btn-claro {
+    color: #344054;
+    border: 1px solid #cfd8e3;
+    background: #fff;
+}
+
+#divHistorialCompra .hc-chips {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 28px;
+    padding: 3px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f8fafc;
+    box-sizing: border-box;
+}
+
+#divHistorialCompra .hc-chip {
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: #334155;
+    background: #e8eef8;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#divHistorialCompra .hc-chip-vacio {
+    color: #667085;
+    background: #eef2f6;
+}
+
+#divHistorialCompra .hc-pestanas {
+    display: block;
+    flex: 0 0 auto;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 4px 10px;
+    border-bottom: 1px solid #e1e7ef;
+    background: #fff;
+    table-layout: auto;
+}
+
+#divHistorialCompra .hc-pestanas > tbody,
+#divHistorialCompra .hc-pestanas > tbody > tr {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+#divHistorialCompra .hc-pestanas td {
+    display: block;
+    width: auto !important;
+}
+
+#divHistorialCompra .hc-pestanas input {
+    width: auto !important;
+    height: 34px;
+    margin: 2px;
+    padding: 0 14px;
+    border: 1px solid #cfd8e3;
+    border-radius: 7px;
+    color: #344054;
+    background: #eef2f6;
+    font-weight: 700;
+}
+
+#divHistorialCompra .hc-pestanas input[style*="background-color"] {
+    border-color: #d97706 !important;
+    color: #fff !important;
+    background: #d97706 !important;
+}
+
+#divHistorialCompra .hc-listado {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#divHistorialCompra #TableScroollHistorialCompra1 {
+    display: none !important;
+}
+
+#divHistorialCompra #TableScroollHistorialCompra2 {
+    display: block;
+    flex: 1 1 auto;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0;
+    overflow: auto !important;
+    border: 1px solid #dfe6ef;
+    background: #fff;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    box-sizing: border-box;
+}
+
+#divHistorialCompra .hc-cabecera-tabla {
+    position: sticky;
+    z-index: 4;
+    top: 0;
+    width: 100% !important;
+    min-width: 1100px;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    table-layout: fixed;
+}
+
+#divHistorialCompra .hc-cabecera-tabla .td_registro {
+    height: 42px;
+    padding: 4px 6px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    cursor: pointer;
+    user-select: none;
+}
+
+#divHistorialCompra .hc-cabecera-tabla .td_registro:hover {
+    background: #245f7d !important;
+}
+
+#divHistorialCompra #table_historial_compra {
+    display: block;
+    width: 100% !important;
+    min-width: 1100px;
+    min-height: calc(100% - 42px);
+    height: auto !important;
+    overflow: visible !important;
+    border: 0 !important;
+}
+
+#divHistorialCompra #table_historial_compra > table,
+#divHistorialCompra #table_historial_compra > div > table {
+    width: 100% !important;
+    min-width: 1100px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+#divHistorialCompra #table_historial_compra td {
+    padding: 7px 6px;
+    border-color: #e4eaf1 !important;
+    color: #344054;
+    font-size: 11px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#divHistorialCompra #table_historial_compra table:hover td {
+    background: #f0f7fb;
+}
+
+#divHistorialCompra .hc-progreso {
+    flex: 0 0 auto;
+    width: 100% !important;
+    height: 48px !important;
+    margin: 0 !important;
+    border-top: 1px solid #e1e7ef;
+    background: #fff;
+}
+
+#divHistorialCompra .hc-progreso .divprogreso1 {
+    height: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 999px;
+    background: #e9f2ff;
+    box-shadow: inset 0 1px 3px rgba(37, 99, 235, .13);
+}
+
+#divHistorialCompra .hc-progreso .divprogreso2 {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #2563eb 0%, #1597f2 55%, #14d9dc 100%);
+}
+
+#divHistorialCompra .hc-pie {
+    flex: 0 0 auto;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 7px 10px 8px;
+    overflow-x: auto;
+    border-top: 1px solid #e1e7ef;
+    background: #fff;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+}
+
+#divHistorialCompra .hc-pie tbody,
+#divHistorialCompra .hc-pie tr {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(112px, 1fr)) minmax(390px, 2.4fr);
+    align-items: end;
+    gap: 8px;
+    width: 100%;
+    min-width: 1120px;
+}
+
+#divHistorialCompra .hc-pie td {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 4px;
+    width: auto !important;
+    min-width: 0;
+    border: 0 !important;
+}
+
+#divHistorialCompra .hc-pie .pTituloC {
+    margin: 0;
+    color: #475467;
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+#divHistorialCompra .hc-pie input[type="text"] {
+    width: 100% !important;
+    min-width: 0;
+    height: 35px !important;
+    margin: 0;
+    padding: 0 10px;
+    border: 1px solid #d2dce8;
+    border-radius: 7px;
+    color: #526173;
+    background: #f4f7fb;
+    font-weight: 750;
+    text-align: right;
+    box-sizing: border-box;
+}
+
+#divHistorialCompra .hc-pie-metrica:first-child input {
+    text-align: center;
+}
+
+#divHistorialCompra .hc-pie-seleccion-controles {
+    display: grid;
+    grid-template-columns: minmax(110px, 1fr) auto auto;
+    gap: 7px;
+    min-width: 0;
+}
+
+#divHistorialCompra .hc-pie-seleccion input[type="text"] {
+    text-align: center;
+}
+
+#divHistorialCompra .hc-pie input[type="button"] {
+    width: auto !important;
+    min-width: 112px;
+    height: 35px !important;
+    margin: 0;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 7px;
+    color: #fff;
+    background: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#divHistorialCompra .hc-pie #btnAuditoriaCompras {
+    color: #475467;
+    border: 1px solid #d4dce6;
+    background: #eef2f6 !important;
+}
+
+#divHistorialCompra .hc-listado > br,
+#divHistorialCompra .hc-pestana-secundaria > br {
+    display: none;
+}
+
+#divHistorialCompra .hc-pestana-secundaria {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100% !important;
+    min-height: 0;
+    margin: 0 !important;
+    overflow: hidden;
+    background: #fff !important;
+}
+
+#divHistorialCompra .hc-pestana-secundaria > .tableCabeceraRegistro {
+    flex: 0 0 auto;
+    width: 100% !important;
+    margin: 0;
+    border-radius: 0 !important;
+}
+
+#divHistorialCompra .hc-pestana-secundaria > .div_cuerpo_table {
+    flex: 1 1 auto;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+    border: 1px solid #dfe6ef;
+    background: #fff;
+    scrollbar-gutter: stable;
+}
+
+#divHistorialCompra .hc-pestana-pagos > table:last-of-type {
+    flex: 0 0 auto;
+    width: 100% !important;
+    margin: 0;
+    padding: 5px 10px;
+    border-top: 1px solid #e1e7ef;
+    background: #fff;
+}
+
+#divHistorialCompra .hc-columnas {
+    position: absolute;
+    z-index: 12020;
+    top: 100px;
+    right: 12px;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    width: 310px;
+    max-height: 370px;
+    padding: 12px;
+    overflow: auto;
+    border: 1px solid #d8e2ee;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, .20);
+}
+
+#divHistorialCompra .hc-columnas.activo {
+    display: grid;
+}
+
+#divHistorialCompra .hc-columnas label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #344054;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+#modalFiltrosHistorialComprasModerno {
+    position: fixed;
+    inset: 0;
+    z-index: 13000;
+    display: none;
+}
+
+#modalFiltrosHistorialComprasModerno.activo {
+    display: block;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-modal-fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .58);
+    backdrop-filter: blur(3px);
+}
+
+#modalFiltrosHistorialComprasModerno .hc-modal-caja {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: min(900px, 95vw);
+    max-height: 90vh;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .30);
+}
+
+#modalFiltrosHistorialComprasModerno header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    color: #fff;
+    background: #266091;
+}
+
+#modalFiltrosHistorialComprasModerno header h3 {
+    margin: 0;
+    font-size: 19px;
+}
+
+#modalFiltrosHistorialComprasModerno header button {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    background: rgba(255, 255, 255, .15);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-modal-grilla {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px;
+    overflow: auto;
+    background: #f8fafc;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-checks {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    grid-column: 1 / -1;
+    padding: 8px 10px;
+    border: 1px solid #d8e2ee;
+    border-radius: 8px;
+    background: #fff;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-checks label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#modalFiltrosHistorialComprasModerno .hc-campo input,
+#modalFiltrosHistorialComprasModerno .hc-campo select {
+    width: 100%;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #cfd8e3;
+    border-radius: 7px;
+    color: #344054;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+#modalFiltrosHistorialComprasModerno footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+body.dark #divHistorialCompra.hc-moderno,
+body.modo-oscuro #divHistorialCompra.hc-moderno {
+    color: #cbd1da;
+    background: #1b1f25 !important;
+}
+
+body.dark #divHistorialCompra .hc-header,
+body.dark #divHistorialCompra .hc-panel,
+body.dark #divHistorialCompra .hc-barra,
+body.dark #divHistorialCompra .hc-pestanas,
+body.dark #divHistorialCompra .hc-pie,
+body.modo-oscuro #divHistorialCompra .hc-header,
+body.modo-oscuro #divHistorialCompra .hc-panel,
+body.modo-oscuro #divHistorialCompra .hc-barra,
+body.modo-oscuro #divHistorialCompra .hc-pestanas,
+body.modo-oscuro #divHistorialCompra .hc-pie {
+    color: #cbd1da !important;
+    border-color: #343b46 !important;
+    background: #232830 !important;
+}
+
+body.dark #divHistorialCompra .hc-header .pTituloB,
+body.modo-oscuro #divHistorialCompra .hc-header .pTituloB {
+    color: #cbd1da !important;
+}
+
+body.dark #divHistorialCompra .hc-chips,
+body.modo-oscuro #divHistorialCompra .hc-chips {
+    border-color: #343b46;
+    background: #1d2229;
+}
+
+body.dark #divHistorialCompra .hc-chip,
+body.modo-oscuro #divHistorialCompra .hc-chip {
+    color: #c7ced7;
+    background: #2c3440;
+}
+
+body.dark #divHistorialCompra #TableScroollHistorialCompra2,
+body.dark #divHistorialCompra #table_historial_compra,
+body.dark #divHistorialCompra .hc-pestana-secundaria,
+body.dark #divHistorialCompra .hc-pestana-secundaria > .div_cuerpo_table,
+body.modo-oscuro #divHistorialCompra #TableScroollHistorialCompra2,
+body.modo-oscuro #divHistorialCompra #table_historial_compra,
+body.modo-oscuro #divHistorialCompra .hc-pestana-secundaria,
+body.modo-oscuro #divHistorialCompra .hc-pestana-secundaria > .div_cuerpo_table {
+    color: #c8ced7 !important;
+    border-color: #38414c !important;
+    background: #20252c !important;
+}
+
+body.dark #divHistorialCompra #table_historial_compra td,
+body.modo-oscuro #divHistorialCompra #table_historial_compra td {
+    color: #c8ced7 !important;
+    border-color: #343b46 !important;
+    background: #20252c !important;
+}
+
+body.dark #divHistorialCompra .hc-columnas,
+body.modo-oscuro #divHistorialCompra .hc-columnas {
+    border-color: #3c4551;
+    background: #252b33;
+}
+
+body.dark #divHistorialCompra .hc-columnas label,
+body.modo-oscuro #divHistorialCompra .hc-columnas label {
+    color: #c6cdd6;
+}
+
+body.dark #modalFiltrosHistorialComprasModerno .hc-modal-caja,
+body.dark #modalFiltrosHistorialComprasModerno .hc-modal-grilla,
+body.dark #modalFiltrosHistorialComprasModerno footer,
+body.modo-oscuro #modalFiltrosHistorialComprasModerno .hc-modal-caja,
+body.modo-oscuro #modalFiltrosHistorialComprasModerno .hc-modal-grilla,
+body.modo-oscuro #modalFiltrosHistorialComprasModerno footer {
+    color: #cbd1da;
+    border-color: #38414c;
+    background: #232830;
+}
+
+@media (max-width: 850px) {
+    #divHistorialCompra .hc-barra {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #divHistorialCompra .hc-busqueda,
+    #divHistorialCompra .hc-acciones {
+        width: 100%;
+        max-width: none;
+        overflow-x: auto;
+    }
+
+    #divHistorialCompra .hc-pie {
+        overflow-x: auto;
+    }
+
+    #modalFiltrosHistorialComprasModerno .hc-modal-grilla {
+        grid-template-columns: 1fr;
+    }
+}

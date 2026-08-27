@@ -1,0 +1,817 @@
+/*
+ * Modo oscuro compartido.
+ * Se activa con body.dark (interruptor actual) o body.modo-oscuro.
+ * La barra lateral queda fuera de esta capa.
+ */
+body.dark,
+body.modo-oscuro {
+    --gv-dark-bg: #17191e;
+    --gv-dark-surface: #1d2026;
+    --gv-dark-surface-2: #22262d;
+    --gv-dark-surface-3: #282d35;
+    --gv-dark-border: #343a44;
+    --gv-dark-border-soft: #2d323b;
+    --gv-dark-text: #d1d5db;
+    --gv-dark-text-soft: #b9c0ca;
+    --gv-dark-muted: #929ba8;
+    color: var(--gv-dark-text);
+    background: var(--gv-dark-bg) !important;
+    color-scheme: dark;
+}
+
+body.dark .principal2,
+body.dark .divPrincipalrepor,
+body.dark .divAbms,
+body.dark .divAbms_b,
+body.dark .abm-estandar,
+body.dark .clientes-container,
+body.dark .productos-container,
+body.dark #divCuentasAcobrar,
+body.dark #divArqueo,
+body.modo-oscuro .principal2,
+body.modo-oscuro .divPrincipalrepor,
+body.modo-oscuro .divAbms,
+body.modo-oscuro .divAbms_b,
+body.modo-oscuro .abm-estandar,
+body.modo-oscuro .clientes-container,
+body.modo-oscuro .productos-container,
+body.modo-oscuro #divCuentasAcobrar,
+body.modo-oscuro #divArqueo {
+    color: var(--gv-dark-text) !important;
+    background: var(--gv-dark-bg) !important;
+}
+
+body.dark .divMenuf,
+body.dark .divMenuF,
+body.dark .abm-estandar-contenido,
+body.dark .abm-estandar-toolbar,
+body.dark .catalogo-toolbar,
+body.dark .productos-toolbar,
+body.dark .clientes-footer-moderno,
+body.dark .productos-footer,
+body.dark .resumen-container,
+body.dark .table-head-wrapper,
+body.dark .productos-tabla-wrap,
+body.dark .productos-precios,
+body.modo-oscuro .divMenuf,
+body.modo-oscuro .divMenuF,
+body.modo-oscuro .abm-estandar-contenido,
+body.modo-oscuro .abm-estandar-toolbar,
+body.modo-oscuro .catalogo-toolbar,
+body.modo-oscuro .productos-toolbar,
+body.modo-oscuro .clientes-footer-moderno,
+body.modo-oscuro .productos-footer,
+body.modo-oscuro .resumen-container,
+body.modo-oscuro .table-head-wrapper,
+body.modo-oscuro .productos-tabla-wrap,
+body.modo-oscuro .productos-precios {
+    color: var(--gv-dark-text) !important;
+    border-color: var(--gv-dark-border) !important;
+    background: var(--gv-dark-surface) !important;
+    box-shadow: none !important;
+}
+
+body.dark .abm-estandar-header,
+body.dark .tableMenuZ.gv-form-title-modern,
+body.dark .gv-custom-form-title-modern,
+body.dark #divArqueo .header-arqueo,
+body.modo-oscuro .abm-estandar-header,
+body.modo-oscuro .tableMenuZ.gv-form-title-modern,
+body.modo-oscuro .gv-custom-form-title-modern,
+body.modo-oscuro #divArqueo .header-arqueo {
+    color: var(--gv-dark-text) !important;
+    border-bottom-color: var(--gv-dark-border) !important;
+    background: linear-gradient(135deg, #22262d, #1b1e24) !important;
+}
+
+body.dark .pTituloB,
+body.dark .pTituloC,
+body.dark .pTitulo8,
+body.dark .header-text,
+body.dark .principal2 label,
+body.dark .principal2 legend,
+body.dark .divAbms label,
+body.dark .divAbms legend,
+body.dark .clientes-footer-label,
+body.dark .productos-footer label,
+body.dark .resumen-item label,
+body.modo-oscuro .pTituloB,
+body.modo-oscuro .pTituloC,
+body.modo-oscuro .pTitulo8,
+body.modo-oscuro .header-text,
+body.modo-oscuro .principal2 label,
+body.modo-oscuro .principal2 legend,
+body.modo-oscuro .divAbms label,
+body.modo-oscuro .divAbms legend,
+body.modo-oscuro .clientes-footer-label,
+body.modo-oscuro .productos-footer label,
+body.modo-oscuro .resumen-item label {
+    color: var(--gv-dark-text-soft) !important;
+}
+
+body.dark .pTituloB::after,
+body.dark .gv-cobros-titulo-contenido small,
+body.dark .text-muted,
+body.modo-oscuro .pTituloB::after,
+body.modo-oscuro .gv-cobros-titulo-contenido small,
+body.modo-oscuro .text-muted {
+    color: var(--gv-dark-muted) !important;
+}
+
+body.dark .abm-estandar-chips,
+body.dark .catalogo-filtros-activos,
+body.dark .productos-chips,
+body.modo-oscuro .abm-estandar-chips,
+body.modo-oscuro .catalogo-filtros-activos,
+body.modo-oscuro .productos-chips {
+    border-color: var(--gv-dark-border) !important;
+    background: #1a1d22 !important;
+}
+
+body.dark .abm-estandar-chip,
+body.dark .chip-filtro,
+body.dark .producto-chip,
+body.modo-oscuro .abm-estandar-chip,
+body.modo-oscuro .chip-filtro,
+body.modo-oscuro .producto-chip {
+    color: #c7cdd6 !important;
+    background: #2a3039 !important;
+}
+
+body.dark .abm-estandar-chip.vacio,
+body.dark .chip-filtro-vacio,
+body.dark .producto-chip.vacio,
+body.modo-oscuro .abm-estandar-chip.vacio,
+body.modo-oscuro .chip-filtro-vacio,
+body.modo-oscuro .producto-chip.vacio {
+    color: var(--gv-dark-muted) !important;
+    background: #232831 !important;
+}
+
+body.dark #TableScroollCuentasACobrar1,
+body.dark #TableScroollCuentasACobrar2,
+body.dark #TableScroollArqeo1,
+body.dark #TableScroollArqeo2,
+body.dark .abm-estandar-tabla-cuerpo,
+body.dark .div_cuerpo_table,
+body.modo-oscuro #TableScroollCuentasACobrar1,
+body.modo-oscuro #TableScroollCuentasACobrar2,
+body.modo-oscuro #TableScroollArqeo1,
+body.modo-oscuro #TableScroollArqeo2,
+body.modo-oscuro .abm-estandar-tabla-cuerpo,
+body.modo-oscuro .div_cuerpo_table {
+    border-color: var(--gv-dark-border) !important;
+    background: var(--gv-dark-surface) !important;
+}
+
+body.dark .gv-table-title-color,
+body.dark .gv-table-title-color .td_registro,
+body.modo-oscuro .gv-table-title-color,
+body.modo-oscuro .gv-table-title-color .td_registro {
+    color: #dce2e8 !important;
+    border-color: #3b5667 !important;
+    background: #193a4c !important;
+}
+
+body.dark .tableRegistroSearch,
+body.dark .tableRegistroSearch tr,
+body.dark .tableRegistroSearch td,
+body.dark .listado-cliente-fila td,
+body.dark .producto-fila td,
+body.modo-oscuro .tableRegistroSearch,
+body.modo-oscuro .tableRegistroSearch tr,
+body.modo-oscuro .tableRegistroSearch td,
+body.modo-oscuro .listado-cliente-fila td,
+body.modo-oscuro .producto-fila td {
+    color: #c8ced7 !important;
+    border-color: var(--gv-dark-border-soft) !important;
+    background: var(--gv-dark-surface) !important;
+}
+
+body.dark .tableRegistroSearch:hover td,
+body.dark .listado-cliente-fila:hover td,
+body.dark .producto-fila:hover td,
+body.modo-oscuro .tableRegistroSearch:hover td,
+body.modo-oscuro .listado-cliente-fila:hover td,
+body.modo-oscuro .producto-fila:hover td {
+    color: #d8dde4 !important;
+    background: #272c34 !important;
+}
+
+body.dark .tableRegistroSelec,
+body.dark .tableRegistroSelec td,
+body.modo-oscuro .tableRegistroSelec,
+body.modo-oscuro .tableRegistroSelec td {
+    color: #dce1e7 !important;
+    background: #2b3947 !important;
+}
+
+body.dark input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+body.dark select,
+body.dark textarea,
+body.modo-oscuro input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+body.modo-oscuro select,
+body.modo-oscuro textarea {
+    color: #cdd3dc !important;
+    border-color: #46505d !important;
+    background: #20242c !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .25) !important;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder,
+body.modo-oscuro input::placeholder,
+body.modo-oscuro textarea::placeholder {
+    color: #8f99a8 !important;
+    opacity: 1;
+}
+
+body.dark input:focus,
+body.dark select:focus,
+body.dark textarea:focus,
+body.modo-oscuro input:focus,
+body.modo-oscuro select:focus,
+body.modo-oscuro textarea:focus {
+    border-color: #5da8ff !important;
+    background: #242933 !important;
+    box-shadow: 0 0 0 3px rgba(93, 168, 255, .18) !important;
+}
+
+body.dark input:disabled,
+body.dark select:disabled,
+body.dark textarea:disabled,
+body.dark input[readonly],
+body.modo-oscuro input:disabled,
+body.modo-oscuro select:disabled,
+body.modo-oscuro textarea:disabled,
+body.modo-oscuro input[readonly] {
+    color: #9aa4b2 !important;
+    -webkit-text-fill-color: #9aa4b2;
+    border-color: #343b46 !important;
+    background: #1a1e25 !important;
+    opacity: 1;
+}
+
+body.dark .abm-estandar-modal-box,
+body.dark .modal-filtros-box,
+body.dark .productos-modal-box,
+body.dark .panel-columnas-clientes,
+body.dark .productos-columnas-panel,
+body.dark .abm-estandar-menu-columnas,
+body.modo-oscuro .abm-estandar-modal-box,
+body.modo-oscuro .modal-filtros-box,
+body.modo-oscuro .productos-modal-box,
+body.modo-oscuro .panel-columnas-clientes,
+body.modo-oscuro .productos-columnas-panel,
+body.modo-oscuro .abm-estandar-menu-columnas {
+    color: var(--gv-dark-text) !important;
+    border-color: var(--gv-dark-border) !important;
+    background: var(--gv-dark-surface-2) !important;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .48) !important;
+}
+
+body.dark .abm-estandar-modal-body,
+body.dark .modal-filtros-body,
+body.dark .productos-modal-body,
+body.modo-oscuro .abm-estandar-modal-body,
+body.modo-oscuro .modal-filtros-body,
+body.modo-oscuro .productos-modal-body {
+    color: var(--gv-dark-text) !important;
+    background: var(--gv-dark-surface) !important;
+}
+
+body.dark .abm-estandar-modal-box > footer,
+body.dark .modal-filtros-footer,
+body.dark .productos-modal-box > footer,
+body.modo-oscuro .abm-estandar-modal-box > footer,
+body.modo-oscuro .modal-filtros-footer,
+body.modo-oscuro .productos-modal-box > footer {
+    border-color: var(--gv-dark-border) !important;
+    background: var(--gv-dark-surface-2) !important;
+}
+
+body.dark .iconoBtn,
+body.dark .btn-icon,
+body.dark .producto-icon,
+body.modo-oscuro .iconoBtn,
+body.modo-oscuro .btn-icon,
+body.modo-oscuro .producto-icon {
+    border-color: #3b424d !important;
+    background: var(--gv-dark-surface-3) !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, .28) !important;
+}
+
+body.dark .abm-estandar-btn.claro,
+body.dark .btn-light,
+body.dark .producto-btn.claro,
+body.modo-oscuro .abm-estandar-btn.claro,
+body.modo-oscuro .btn-light,
+body.modo-oscuro .producto-btn.claro {
+    color: #c9cfd8 !important;
+    border-color: #46505d !important;
+    background: #252a33 !important;
+}
+
+body.dark *,
+body.modo-oscuro * {
+    scrollbar-color: #4b5563 #181b21;
+}
+
+body.dark *::-webkit-scrollbar,
+body.modo-oscuro *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+body.dark *::-webkit-scrollbar-track,
+body.modo-oscuro *::-webkit-scrollbar-track {
+    background: #181b21;
+}
+
+body.dark *::-webkit-scrollbar-thumb,
+body.modo-oscuro *::-webkit-scrollbar-thumb {
+    border: 2px solid #181b21;
+    border-radius: 999px;
+    background: #4b5563;
+}
+
+body.dark *::-webkit-scrollbar-thumb:hover,
+body.modo-oscuro *::-webkit-scrollbar-thumb:hover {
+    background: #647184;
+}
+
+/* Capas centrales que en los estilos heredados conservan fondos blancos. */
+body.dark .principal2 main,
+body.dark .principal2 .main,
+body.dark .principal2 .main-content,
+body.dark .principal2 .content,
+body.dark .principal2 .contenido,
+body.dark .principal2 .equifax-bp-shell,
+body.dark .principal2 .equifax-bp-content,
+body.modo-oscuro .principal2 main,
+body.modo-oscuro .principal2 .main,
+body.modo-oscuro .principal2 .main-content,
+body.modo-oscuro .principal2 .content,
+body.modo-oscuro .principal2 .contenido,
+body.modo-oscuro .principal2 .equifax-bp-shell,
+body.modo-oscuro .principal2 .equifax-bp-content {
+    color: var(--gv-dark-text) !important;
+    background: var(--gv-dark-bg) !important;
+}
+
+body.dark .principal2 .card,
+body.dark .principal2 .panel,
+body.dark .principal2 fieldset,
+body.dark .principal2 .equifax-bp-card,
+body.dark .principal2 .equifax-bp-table-wrap,
+body.modo-oscuro .principal2 .card,
+body.modo-oscuro .principal2 .panel,
+body.modo-oscuro .principal2 fieldset,
+body.modo-oscuro .principal2 .equifax-bp-card,
+body.modo-oscuro .principal2 .equifax-bp-table-wrap {
+    color: var(--gv-dark-text-soft) !important;
+    border-color: var(--gv-dark-border) !important;
+    background: var(--gv-dark-surface) !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .16) !important;
+}
+
+body.dark .principal2 hr,
+body.modo-oscuro .principal2 hr {
+    border-color: var(--gv-dark-border-soft) !important;
+    opacity: .75;
+}
+
+/* Contraste equilibrado: Cobros Realizados y componentes ABM compartidos. */
+body.dark #divArqueo.gv-cobros-realizados-unificado,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado {
+    background: #1c2026 !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .header-arqueo,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .header-arqueo {
+    border-bottom-color: #363d48 !important;
+    background: #232830 !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .header-text,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .header-text {
+    color: #cbd1da !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-contenido small,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-contenido small {
+    color: #9fa8b6 !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-icono,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .gv-cobros-titulo-icono {
+    color: #79a9ee !important;
+    background: #29384d !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn {
+    border-color: #3b4450 !important;
+    background: #2a3038 !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, .18) !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:hover,
+body.dark #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:focus-visible,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:hover,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado .header-actions .iconoBtn:focus-visible {
+    border-color: #58708d !important;
+    background: #333b46 !important;
+}
+
+body.dark #divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo1,
+body.dark #divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo2,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo1,
+body.modo-oscuro #divArqueo.gv-cobros-realizados-unificado #TableScroollArqeo2 {
+    border-color: #3b4350 !important;
+    background: #20242b !important;
+}
+
+body.dark #divArqueo .resumen-container,
+body.modo-oscuro #divArqueo .resumen-container {
+    border-top: 1px solid #343b46 !important;
+    background: #20242b !important;
+}
+
+body.dark #divArqueo .resumen-item,
+body.modo-oscuro #divArqueo .resumen-item {
+    color: #c5cbd4 !important;
+    border: 1px solid #38404b !important;
+    background: #272c34 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .14) !important;
+}
+
+body.dark #divArqueo .resumen-item label,
+body.modo-oscuro #divArqueo .resumen-item label {
+    color: #aeb6c2 !important;
+}
+
+body.dark #divArqueo .resumen-item input,
+body.modo-oscuro #divArqueo .resumen-item input {
+    color: #cbd1d9 !important;
+    -webkit-text-fill-color: #cbd1d9 !important;
+    border-color: #414b59 !important;
+    background: #222a35 !important;
+}
+
+body.dark #divArqueo .resumen-item .btn-secundario,
+body.modo-oscuro #divArqueo .resumen-item .btn-secundario,
+body.dark .abm-estandar-btn.secundario,
+body.modo-oscuro .abm-estandar-btn.secundario {
+    color: #cbd1da !important;
+    border: 1px solid #46505e !important;
+    background: #303743 !important;
+}
+
+body.dark #divArqueo .resumen-item .btn-secundario:hover,
+body.modo-oscuro #divArqueo .resumen-item .btn-secundario:hover,
+body.dark .abm-estandar-btn.secundario:hover,
+body.modo-oscuro .abm-estandar-btn.secundario:hover {
+    background: #39424f !important;
+}
+
+/* Dashboard principal / Acceso Directo. No modifica la barra lateral. */
+body.dark > .content,
+body.modo-oscuro > .content,
+body.dark > .content > main,
+body.modo-oscuro > .content > main {
+    color: #cbd1da !important;
+    background: #1b1f25 !important;
+}
+
+body.dark > .content > nav,
+body.dark > .content .navbar-bg,
+body.modo-oscuro > .content > nav,
+body.modo-oscuro > .content .navbar-bg {
+    color: #c4cbd5 !important;
+    border-bottom: 1px solid #343b46 !important;
+    background: #232830 !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .16) !important;
+}
+
+body.dark > .content nav .bx.bx-menu,
+body.dark > .content nav a,
+body.modo-oscuro > .content nav .bx.bx-menu,
+body.modo-oscuro > .content nav a {
+    color: #b7c0cc !important;
+}
+
+body.dark > .content .search-container,
+body.modo-oscuro > .content .search-container {
+    border-color: #3d4653 !important;
+    background: #20252c !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .18) !important;
+}
+
+body.dark > .content .search-field,
+body.modo-oscuro > .content .search-field {
+    color: #cbd1da !important;
+    background: transparent !important;
+}
+
+body.dark > .content .search-field::placeholder,
+body.modo-oscuro > .content .search-field::placeholder {
+    color: #8993a2 !important;
+}
+
+body.dark > .content .theme-toggle,
+body.modo-oscuro > .content .theme-toggle,
+body.dark > .content .nav-icon,
+body.dark > .content .nav-link,
+body.modo-oscuro > .content .nav-icon,
+body.modo-oscuro > .content .nav-link {
+    border-color: #3b4450 !important;
+    background-color: #2a3038 !important;
+}
+
+body.dark > .content #spNombreLogin,
+body.modo-oscuro > .content #spNombreLogin {
+    color: #c2c9d2 !important;
+}
+
+body.dark #ContenedorAccesoDirecto,
+body.modo-oscuro #ContenedorAccesoDirecto {
+    color: #c8ced7 !important;
+    border-color: #373f4a !important;
+    background: #22272e !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .20) !important;
+}
+
+body.dark #ContenedorAccesoDirecto > .header,
+body.modo-oscuro #ContenedorAccesoDirecto > .header {
+    border: 1px solid #364354 !important;
+    background: linear-gradient(110deg, #243449, #303c5a) !important;
+}
+
+body.dark #ContenedorAccesoDirecto > .header h1,
+body.modo-oscuro #ContenedorAccesoDirecto > .header h1 {
+    color: #d2d7df !important;
+}
+
+body.dark #ContenedorAccesoDirecto .insights,
+body.modo-oscuro #ContenedorAccesoDirecto .insights {
+    background: transparent !important;
+}
+
+body.dark #ContenedorAccesoDirecto .divMenub,
+body.modo-oscuro #ContenedorAccesoDirecto .divMenub {
+    color: #bdc5d0 !important;
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+}
+
+body.dark #ContenedorAccesoDirecto .divMenub:hover,
+body.modo-oscuro #ContenedorAccesoDirecto .divMenub:hover {
+    border-color: #3d4c60 !important;
+    background: #2a313b !important;
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .18) !important;
+}
+
+body.dark #ContenedorAccesoDirecto .divMenub .pTitulo4,
+body.modo-oscuro #ContenedorAccesoDirecto .divMenub .pTitulo4 {
+    color: #c3cad4 !important;
+}
+
+body.dark #ContenedorAccesoDirecto .imgIconoMenu,
+body.modo-oscuro #ContenedorAccesoDirecto .imgIconoMenu {
+    border-color: #46505d !important;
+    background: #d9dde2 !important;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, .24) !important;
+}
+
+body.dark > .content .dropdown-menu,
+body.dark > .content .dropdown-menu .list-group-item,
+body.modo-oscuro > .content .dropdown-menu,
+body.modo-oscuro > .content .dropdown-menu .list-group-item {
+    color: #c6cdd6 !important;
+    border-color: #373f4a !important;
+    background: #252b33 !important;
+}
+
+/* Slider lateral integrado con la paleta principal. */
+body.dark > .sidebar,
+body.modo-oscuro > .sidebar {
+    border-right: 1px solid #343b46 !important;
+    background: #20252c !important;
+    box-shadow: 5px 0 18px rgba(0, 0, 0, .14) !important;
+}
+
+body.dark > .sidebar .logo,
+body.modo-oscuro > .sidebar .logo {
+    color: #cbd2dc !important;
+    background: #20252c !important;
+}
+
+body.dark > .sidebar .logo .logo-name,
+body.modo-oscuro > .sidebar .logo .logo-name {
+    color: #78a7df !important;
+}
+
+body.dark > .sidebar .logo .logo-name span,
+body.modo-oscuro > .sidebar .logo .logo-name span {
+    color: #d2d7de !important;
+}
+
+body.dark > .sidebar .side-menu li,
+body.dark > .sidebar .side-menu li.active,
+body.modo-oscuro > .sidebar .side-menu li,
+body.modo-oscuro > .sidebar .side-menu li.active {
+    background: transparent !important;
+}
+
+body.dark > .sidebar .side-menu li.active::before,
+body.dark > .sidebar .side-menu li.active::after,
+body.modo-oscuro > .sidebar .side-menu li.active::before,
+body.modo-oscuro > .sidebar .side-menu li.active::after {
+    box-shadow: none !important;
+}
+
+body.dark > .sidebar .side-menu li a,
+body.modo-oscuro > .sidebar .side-menu li a {
+    color: #c4cbd5 !important;
+    border: 1px solid #343d49 !important;
+    background: #282f38 !important;
+    box-shadow: none !important;
+}
+
+body.dark > .sidebar .side-menu li a:hover,
+body.modo-oscuro > .sidebar .side-menu li a:hover {
+    color: #d5dae1 !important;
+    border-color: #44536a !important;
+    background: #303946 !important;
+}
+
+body.dark > .sidebar .side-menu li.active a,
+body.modo-oscuro > .sidebar .side-menu li.active a {
+    color: #9dbce5 !important;
+    border-color: #506783 !important;
+    background: #334154 !important;
+    box-shadow: inset 3px 0 0 #6f9dd4 !important;
+}
+
+body.dark > .sidebar .side-menu li.active a .bx,
+body.modo-oscuro > .sidebar .side-menu li.active a .bx {
+    color: #82aee2 !important;
+}
+
+body.dark > .sidebar .side-menu li a.logout,
+body.modo-oscuro > .sidebar .side-menu li a.logout {
+    color: #e08188 !important;
+}
+
+/* Controles de la barra superior sin bordes blancos. */
+body.dark > .content nav .nav-item,
+body.modo-oscuro > .content nav .nav-item {
+    color: #c0c8d2 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.dark > .content nav .theme-toggle,
+body.modo-oscuro > .content nav .theme-toggle {
+    border: 1px solid #424c59 !important;
+    background: #171c22 !important;
+    box-shadow: none !important;
+}
+
+body.dark > .content nav .theme-toggle::before,
+body.modo-oscuro > .content nav .theme-toggle::before {
+    background: #5f91bd !important;
+}
+
+body.dark > .content nav .nav-icon,
+body.dark > .content nav .nav-link,
+body.modo-oscuro > .content nav .nav-icon,
+body.modo-oscuro > .content nav .nav-link {
+    color: #b9c2cd !important;
+    border: 1px solid #3c4652 !important;
+    background: #292f37 !important;
+    box-shadow: none !important;
+}
+
+body.dark > .content nav .nav-icon:hover,
+body.dark > .content nav .nav-link:hover,
+body.modo-oscuro > .content nav .nav-icon:hover,
+body.modo-oscuro > .content nav .nav-link:hover {
+    color: #d0d6de !important;
+    border-color: #4b596b !important;
+    background: #323a44 !important;
+}
+
+/* Ajuste fino del panel para separar capas sin contrastes extremos. */
+body.dark #ContenedorAccesoDirecto,
+body.modo-oscuro #ContenedorAccesoDirecto {
+    border-color: #38414c !important;
+    background: #23282f !important;
+}
+
+body.dark #ContenedorAccesoDirecto .imgIconoMenu,
+body.modo-oscuro #ContenedorAccesoDirecto .imgIconoMenu {
+    border-color: #555f6c !important;
+    background: #bfc5cc !important;
+}
+
+/* Todos los contenedores abiertos desde el slider lateral. */
+body.dark .contenedorAccesoDirecto,
+body.modo-oscuro .contenedorAccesoDirecto {
+    color: #c8ced7 !important;
+    border-color: #38414c !important;
+    background: #23282f !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .20) !important;
+}
+
+body.dark .contenedorAccesoDirecto > .header,
+body.modo-oscuro .contenedorAccesoDirecto > .header {
+    border: 1px solid #364354 !important;
+    background: linear-gradient(110deg, #243449, #303c5a) !important;
+}
+
+body.dark .contenedorAccesoDirecto > .header h1,
+body.modo-oscuro .contenedorAccesoDirecto > .header h1 {
+    color: #d2d7df !important;
+}
+
+body.dark .contenedorAccesoDirecto .insights,
+body.modo-oscuro .contenedorAccesoDirecto .insights {
+    background: transparent !important;
+}
+
+body.dark .contenedorAccesoDirecto .divMenub,
+body.modo-oscuro .contenedorAccesoDirecto .divMenub {
+    color: #bdc5d0 !important;
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.dark .contenedorAccesoDirecto .divMenub:hover,
+body.modo-oscuro .contenedorAccesoDirecto .divMenub:hover {
+    border-color: #3d4c60 !important;
+    background: #2a313b !important;
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .18) !important;
+}
+
+body.dark .contenedorAccesoDirecto .divMenub .pTitulo4,
+body.modo-oscuro .contenedorAccesoDirecto .divMenub .pTitulo4 {
+    color: #c3cad4 !important;
+}
+
+body.dark .contenedorAccesoDirecto .imgIconoMenu,
+body.modo-oscuro .contenedorAccesoDirecto .imgIconoMenu {
+    border-color: #555f6c !important;
+    background: #bfc5cc !important;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, .24) !important;
+}
+
+/* Centro de Datos posee una estructura distinta a los otros módulos. */
+body.dark #ContenedorGraficos,
+body.modo-oscuro #ContenedorGraficos {
+    min-height: calc(100vh - 76px);
+    color: #c8ced7 !important;
+    border: 1px solid #38414c !important;
+    border-radius: 12px !important;
+    background: #23282f !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .20) !important;
+}
+
+body.dark #ContenedorGraficos > .header,
+body.modo-oscuro #ContenedorGraficos > .header {
+    border: 1px solid #364354 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(110deg, #243449, #303c5a) !important;
+}
+
+body.dark #ContenedorGraficos .pTituloPanel,
+body.dark #ContenedorGraficos h1,
+body.dark #ContenedorGraficos h2,
+body.dark #ContenedorGraficos h3,
+body.dark #ContenedorGraficos h4,
+body.modo-oscuro #ContenedorGraficos .pTituloPanel,
+body.modo-oscuro #ContenedorGraficos h1,
+body.modo-oscuro #ContenedorGraficos h2,
+body.modo-oscuro #ContenedorGraficos h3,
+body.modo-oscuro #ContenedorGraficos h4 {
+    color: #cbd1da !important;
+}
+
+body.dark #ContenedorGraficos .analyse > div,
+body.dark #ContenedorGraficos .sales,
+body.dark #ContenedorGraficos .visits,
+body.dark #ContenedorGraficos .searches,
+body.modo-oscuro #ContenedorGraficos .analyse > div,
+body.modo-oscuro #ContenedorGraficos .sales,
+body.modo-oscuro #ContenedorGraficos .visits,
+body.modo-oscuro #ContenedorGraficos .searches {
+    color: #c3cad4 !important;
+    border-color: #3b4552 !important;
+    background: #292f37 !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, .16) !important;
+}

@@ -1,0 +1,507 @@
+#divInformeFotosCliente.iuc-ventana {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    background: #f2f7fc;
+}
+
+#divInformeFotosCliente .iuc-contenedor,
+#divInformeFotosCliente .iuc-contenedor * {
+    box-sizing: border-box;
+}
+
+#divInformeFotosCliente .iuc-contenedor {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) 58px;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    color: #1f2937;
+    background: linear-gradient(135deg, #eef7ff 0%, #f8fbff 65%, #edf9fb 100%);
+}
+
+#divInformeFotosCliente .iuc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 70px;
+    padding: 7px 12px;
+    border-bottom: 1px solid #d8e3ef;
+    background: rgba(255, 255, 255, .84);
+}
+
+#divInformeFotosCliente .iuc-titulo,
+#divInformeFotosCliente .iuc-header-acciones,
+#divInformeFotosCliente .iuc-toolbar,
+#divInformeFotosCliente .iuc-busqueda,
+#divInformeFotosCliente .iuc-toolbar-acciones {
+    display: flex;
+    align-items: center;
+}
+
+#divInformeFotosCliente .iuc-titulo {
+    gap: 10px;
+    min-width: 0;
+    text-align: left;
+}
+
+#divInformeFotosCliente .iuc-menu {
+    display: grid;
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    border-radius: 14px;
+    color: #2563eb;
+    background: #dceeff;
+    font-size: 28px;
+}
+
+#divInformeFotosCliente .iuc-titulo .pTituloB {
+    margin: 0;
+    color: #162033 !important;
+    font-size: 24px;
+    line-height: 1.1;
+}
+
+#divInformeFotosCliente .iuc-titulo .pTituloB b {
+    color: #2563eb !important;
+    font-size: inherit !important;
+}
+
+#divInformeFotosCliente .iuc-titulo small {
+    display: block;
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#divInformeFotosCliente .iuc-header-acciones {
+    gap: 8px;
+}
+
+#divInformeFotosCliente .iuc-icono {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid #dbe5f0;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 8px 20px rgba(30, 64, 105, .10);
+    cursor: pointer;
+}
+
+#divInformeFotosCliente .iuc-icono img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+#divInformeFotosCliente .iuc-toolbar {
+    justify-content: space-between;
+    gap: 10px;
+    padding: 7px 12px;
+    border-bottom: 1px solid #d8e3ef;
+    background: rgba(255, 255, 255, .72);
+}
+
+#divInformeFotosCliente .iuc-busqueda {
+    flex: 1 1 640px;
+    gap: 8px;
+    min-width: 260px;
+}
+
+#divInformeFotosCliente .iuc-busqueda input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #ccd8e6;
+    border-radius: 10px;
+    color: #26354a;
+    background: rgba(255, 255, 255, .94);
+    font-size: 15px;
+}
+
+#divInformeFotosCliente .iuc-toolbar-acciones {
+    flex: 0 0 auto;
+    gap: 8px;
+}
+
+#divInformeFotosCliente .iuc-btn {
+    min-width: 112px;
+    height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+#divInformeFotosCliente .iuc-btn.primario {
+    color: #fff;
+    background: #2563eb;
+}
+
+#divInformeFotosCliente .iuc-btn.advertencia {
+    color: #fff;
+    background: #df7800;
+}
+
+#divInformeFotosCliente .iuc-btn.columnas {
+    color: #fff;
+    background: #475569;
+}
+
+#divInformeFotosCliente .iuc-btn.claro {
+    color: #27364a;
+    border: 1px solid #ccd8e6;
+    background: #fff;
+}
+
+#divInformeFotosCliente .iuc-chips {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 34px;
+    padding: 4px 12px;
+    overflow-x: auto;
+    border-bottom: 1px solid #dbe5ef;
+    background: rgba(248, 251, 255, .88);
+}
+
+#divInformeFotosCliente .iuc-chip {
+    flex: 0 0 auto;
+    padding: 4px 9px;
+    border-radius: 999px;
+    color: #334155;
+    background: #e5eef9;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#divInformeFotosCliente .iuc-chip.vacio {
+    color: #64748b;
+    background: #edf2f7;
+}
+
+#divInformeFotosCliente .iuc-pestanas {
+    display: flex;
+    gap: 6px;
+    min-height: 43px;
+    padding: 5px 12px;
+    border-bottom: 1px solid #d8e3ef;
+    background: rgba(255, 255, 255, .66);
+}
+
+#divInformeFotosCliente .iuc-pestana {
+    min-width: 150px;
+    padding: 0 16px;
+    border: 1px solid #d2deeb;
+    border-radius: 9px;
+    color: #334155;
+    background: #eef3f8;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+#divInformeFotosCliente .iuc-pestana.activo {
+    color: #fff;
+    border-color: #df7800;
+    background: #df7800;
+    box-shadow: 0 6px 15px rgba(223, 120, 0, .18);
+}
+
+#divInformeFotosCliente .iuc-tablas,
+#divInformeFotosCliente .iuc-panel {
+    min-height: 0;
+    overflow: hidden;
+}
+
+#divInformeFotosCliente .iuc-panel {
+    display: none;
+    grid-template-rows: 54px minmax(0, 1fr);
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+}
+
+#divInformeFotosCliente .iuc-panel.activo {
+    display: grid !important;
+}
+
+#divInformeFotosCliente .iuc-tabla-cabecera {
+    width: 100%;
+    height: 54px;
+    margin: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+#divInformeFotosCliente .iuc-tabla-cabecera .td_registro {
+    height: 54px;
+    padding: 7px 8px;
+    color: #fff !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    background: #246786 !important;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+#divInformeFotosCliente .iuc-tabla-cuerpo {
+    width: 100%;
+    height: 100% !important;
+    min-height: 0;
+    max-height: 100% !important;
+    overflow: auto !important;
+    border: 1px solid #d7e2ed;
+    border-top: 0;
+    background: rgba(255, 255, 255, .86);
+    scrollbar-gutter: stable;
+}
+
+#divInformeFotosCliente .iuc-tabla-cuerpo > table {
+    width: 100%;
+    margin: 0;
+    table-layout: fixed;
+}
+
+#divInformeFotosCliente .iuc-tabla-cuerpo td:not([data-abm-celda-tecnica="1"]) {
+    padding: 8px;
+    color: #27364a;
+    border-bottom: 1px solid #e0e8f1;
+    text-align: center;
+}
+
+#divInformeFotosCliente .iuc-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 5px 12px;
+    border-top: 1px solid #d6e1ec;
+    background: rgba(255, 255, 255, .92);
+}
+
+#divInformeFotosCliente .iuc-footer label {
+    display: grid;
+    grid-template-rows: 17px 32px;
+    min-width: 150px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 750;
+    text-align: left;
+}
+
+#divInformeFotosCliente .iuc-footer input {
+    width: 150px;
+    height: 32px;
+    margin: 0;
+    border: 1px solid #ccd8e6;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#divInformeFotosCliente .iuc-compatibilidad,
+#divInformeFotosCliente #btnBuscarInformeFotosCliente,
+#divInformeFotosCliente #btnBuscarInformeUbicacionesCliente {
+    display: none !important;
+}
+
+#divInformeFotosCliente .iuc-columnas {
+    position: absolute;
+    z-index: 12100;
+    top: 126px;
+    right: 130px;
+    display: none;
+    width: 310px;
+    border: 1px solid #d4dfeb;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 22px 50px rgba(15, 23, 42, .24);
+}
+
+#divInformeFotosCliente .iuc-columnas.activo {
+    display: block;
+}
+
+#divInformeFotosCliente .iuc-columnas header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#divInformeFotosCliente .iuc-columnas header button {
+    border: 0;
+    color: #475569;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#divInformeFotosCliente .iuc-columnas > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    padding: 13px;
+}
+
+#divInformeFotosCliente .iuc-columnas label {
+    color: #334155;
+    font-size: 13px;
+}
+
+#divInformeFotosCliente .iuc-modal {
+    position: fixed;
+    z-index: 12200;
+    inset: 0;
+    display: none;
+}
+
+#divInformeFotosCliente .iuc-modal.activo {
+    display: block;
+}
+
+#divInformeFotosCliente .iuc-modal-fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .48);
+    backdrop-filter: blur(4px);
+}
+
+#divInformeFotosCliente .iuc-modal-caja {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(760px, 94vw);
+    max-height: 92vh;
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 18px;
+    background: #f5f8fc;
+    box-shadow: 0 30px 80px rgba(15, 23, 42, .28);
+}
+
+#divInformeFotosCliente .iuc-modal-caja > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    color: #fff;
+    background: linear-gradient(90deg, #286887, #46679a);
+}
+
+#divInformeFotosCliente .iuc-modal-caja h3 {
+    margin: 0;
+    font-size: 23px;
+}
+
+#divInformeFotosCliente .iuc-modal-caja > header button {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    background: rgba(255, 255, 255, .16);
+    font-size: 26px;
+    cursor: pointer;
+}
+
+#divInformeFotosCliente .iuc-modal-cuerpo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+#divInformeFotosCliente .iuc-modal-cuerpo > label {
+    color: #27364a;
+    font-size: 13px;
+    font-weight: 750;
+    text-align: left;
+}
+
+#divInformeFotosCliente .iuc-modal-cuerpo input:not([type="checkbox"]),
+#divInformeFotosCliente .iuc-modal-cuerpo select {
+    display: block;
+    width: 100%;
+    height: 46px;
+    margin-top: 6px;
+    padding: 0 12px;
+    border: 1px solid #ccd8e6;
+    border-radius: 10px;
+    color: #334155;
+    background: #fff;
+}
+
+#divInformeFotosCliente .iuc-opciones-principales {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+#divInformeFotosCliente .iuc-opciones-principales label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 46px;
+    padding: 0 13px;
+    border: 1px solid #d2ddea;
+    border-radius: 10px;
+    color: #27364a;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+#divInformeFotosCliente .iuc-modal-caja > footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    padding: 12px 20px;
+    border-top: 1px solid #dce5ef;
+    background: #fff;
+}
+
+@media (max-width: 800px) {
+    #divInformeFotosCliente .iuc-contenedor {
+        grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+    }
+    #divInformeFotosCliente .iuc-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    #divInformeFotosCliente .iuc-busqueda {
+        flex-basis: auto;
+    }
+    #divInformeFotosCliente .iuc-toolbar-acciones {
+        overflow-x: auto;
+    }
+    #divInformeFotosCliente .iuc-header-acciones .iuc-icono {
+        width: 40px;
+        height: 40px;
+    }
+    #divInformeFotosCliente .iuc-modal-cuerpo {
+        grid-template-columns: 1fr;
+    }
+    #divInformeFotosCliente .iuc-opciones-principales {
+        grid-template-columns: 1fr;
+    }
+}

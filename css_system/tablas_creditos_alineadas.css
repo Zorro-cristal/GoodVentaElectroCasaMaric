@@ -1,0 +1,64 @@
+/*
+ * Tablas de cuotas y calculo de pagos.
+ *
+ * La cabecera y cada registro se renderizan como tablas independientes.
+ * El algoritmo automatico dimensionaba cada fila segun su contenido y
+ * desplazaba los valores respecto de sus titulos. Ambos bloques deben usar
+ * exactamente el mismo algoritmo y el mismo ancho disponible.
+ */
+#TableScroollCredito1 .tableCabeceraRegistro,
+#TableScroollCredito2 #table_abm_opciones_pago > table,
+#TableScroollCalcularPagos1 .tableCabeceraRegistro,
+#TableScroollCalcularPagos2 #table_abm_opciones_CalcularPagos > table {
+    width: 100% !important;
+    min-width: 1420px;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+}
+
+#TableScroollCredito1 .tableCabeceraRegistro td,
+#TableScroollCredito2 #table_abm_opciones_pago > table td,
+#TableScroollCalcularPagos1 .tableCabeceraRegistro td,
+#TableScroollCalcularPagos2 #table_abm_opciones_CalcularPagos > table td {
+    box-sizing: border-box !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+#TableScroollCredito1 .tableCabeceraRegistro td,
+#TableScroollCalcularPagos1 .tableCabeceraRegistro td {
+    white-space: normal;
+    overflow-wrap: normal;
+}
+
+#TableScroollCredito2 #table_abm_opciones_pago > table td,
+#TableScroollCalcularPagos2 #table_abm_opciones_CalcularPagos > table td {
+    padding: 5px 4px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#TableScroollCredito1,
+#TableScroollCalcularPagos1 {
+    width: 100%;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    scrollbar-gutter: stable;
+}
+
+#TableScroollCredito2,
+#TableScroollCalcularPagos2 {
+    width: 100%;
+    overflow: auto !important;
+    scrollbar-gutter: stable;
+}
+
+@media (max-width: 900px) {
+    #TableScroollCredito1,
+    #TableScroollCalcularPagos1 {
+        overflow-x: auto !important;
+    }
+}

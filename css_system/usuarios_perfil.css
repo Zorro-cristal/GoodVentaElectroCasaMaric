@@ -1,0 +1,739 @@
+#divAbmUsuario2.abm-usuario-formulario {
+    max-width: calc(100vw - 24px);
+}
+
+.usuario-form-contenido {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 18px;
+    padding: 16px 18px 4px;
+    align-items: start;
+}
+
+.usuario-campos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.usuario-columna {
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 390px;
+    margin: 0 !important;
+}
+
+.usuario-foto-panel {
+    border-radius: 18px;
+    padding: 18px 14px;
+    text-align: center;
+    background: rgba(255, 255, 255, .82);
+    border: 1px solid rgba(148, 163, 184, .25);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+}
+
+.usuario-foto-titulo {
+    margin: 0 0 12px;
+}
+
+.usuario-foto-marco {
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, #168bc1, #286ef0);
+    box-shadow: 0 8px 24px rgba(30, 120, 210, .22);
+}
+
+.usuario-foto-marco img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eef4f8;
+}
+
+.usuario-foto-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.usuario-foto-seleccionar,
+.usuario-foto-quitar {
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.usuario-foto-seleccionar {
+    color: #fff;
+    background: #168bc1;
+    border: 1px solid #168bc1;
+}
+
+.usuario-foto-quitar {
+    margin-top: 8px;
+    color: #b42318;
+    background: #fff;
+    border: 1px solid #f1b4ae;
+}
+
+.usuario-foto-seleccionar:hover,
+.usuario-foto-seleccionar:focus-visible {
+    background: #0879ad;
+    outline: 3px solid rgba(22, 139, 193, .25);
+}
+
+.usuario-foto-quitar:hover,
+.usuario-foto-quitar:focus-visible {
+    background: #fff1f0;
+    outline: 3px solid rgba(180, 35, 24, .15);
+}
+
+.usuario-foto-panel small {
+    display: block;
+    margin-top: 10px;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.usuario-listado-foto-celda {
+    padding: 4px 8px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.usuario-listado-avatar {
+    width: 42px;
+    height: 42px;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eef4f8;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, .18);
+}
+
+.perfil-sesion-menu {
+    position: relative;
+}
+
+.perfil-sesion-activador {
+    cursor: pointer;
+    user-select: none;
+}
+
+.perfil-sesion-activador:focus-visible {
+    outline: 3px solid rgba(22, 139, 193, .3);
+    outline-offset: 2px;
+}
+
+.perfil-sesion-flecha {
+    display: inline-block;
+    margin-left: 7px;
+    vertical-align: 3px;
+    border-top: 5px solid #64748b;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform .18s ease;
+}
+
+.perfil-sesion-menu.is-open .perfil-sesion-flecha {
+    transform: rotate(180deg);
+}
+
+.perfil-sesion-menu > .dropdown-menu {
+    display: none;
+}
+
+.perfil-sesion-menu.is-open > .dropdown-menu {
+    display: block;
+}
+
+#divCambiarMisDatosPersonales {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+#divCambiarMisDatosPersonales:not([style*="display:none"]):not([style*="display: none"]) {
+    display: flex;
+}
+
+.mi-perfil-overlay,
+.mi-perfil-overlay > tbody,
+.mi-perfil-overlay > tbody > tr,
+.mi-perfil-overlay > tbody > tr > td {
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    margin: 0;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.mi-perfil-overlay center {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+#divCambiarMisDatosPersonales .mi-perfil-modal {
+    width: 900px !important;
+    max-width: calc(100vw - 48px) !important;
+    min-height: 0;
+    max-height: calc(100vh - 48px);
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 24px !important;
+    outline: 0 !important;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .22);
+    box-sizing: border-box;
+}
+
+.mi-perfil-modal .tableMenuZ {
+    min-height: 68px !important;
+    height: 68px !important;
+    padding: 0 14px !important;
+}
+
+.mi-perfil-modal .tableMenuZ > tbody,
+.mi-perfil-modal .tableMenuZ > tbody > tr {
+    height: 100% !important;
+}
+
+.mi-perfil-modal .tableMenuZ td:first-child {
+    height: 67px !important;
+}
+
+.mi-perfil-modal .pTituloB {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.mi-perfil-aviso {
+    align-items: center;
+    gap: 12px;
+    margin: 18px 44px 0;
+    padding: 12px 15px;
+    text-align: left;
+    color: #854d0e;
+    border: 1px solid #facc15;
+    border-radius: 12px;
+    background: #fefce8;
+}
+
+.mi-perfil-aviso > i {
+    flex: 0 0 auto;
+    color: #eab308;
+    font-size: 22px;
+}
+
+.mi-perfil-aviso strong,
+.mi-perfil-aviso span {
+    display: block;
+}
+
+.mi-perfil-aviso strong {
+    margin-bottom: 2px;
+    color: #713f12;
+    font-size: 14px;
+}
+
+.mi-perfil-aviso span {
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.mi-perfil-subtitulo {
+    display: block;
+    margin: -5px 0 8px 14px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.mi-perfil-contenido {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 42px;
+    padding: 32px 44px;
+    align-items: center;
+    text-align: left;
+    background: linear-gradient(145deg, rgba(248, 251, 255, .96), rgba(255, 255, 255, .98));
+}
+
+.mi-perfil-foto {
+    align-self: center;
+    padding: 18px 14px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #fff;
+}
+
+.mi-perfil-avatar-marco {
+    width: 116px;
+    height: 116px;
+    margin: 0 auto 14px;
+    padding: 4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, .22);
+}
+
+.mi-perfil-avatar-marco img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #eef4f8;
+}
+
+.mi-perfil-btn-foto,
+.mi-perfil-btn-quitar {
+    min-height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.mi-perfil-btn-foto {
+    color: #fff;
+    border: 1px solid #168bc1;
+    background: #168bc1;
+}
+
+.mi-perfil-btn-quitar {
+    margin-top: 8px;
+    color: #b42318;
+    border: 1px solid #fecaca;
+    background: #fff;
+}
+
+.mi-perfil-btn-foto:hover,
+.mi-perfil-btn-foto:focus-visible {
+    background: #0879ad;
+    outline: 3px solid rgba(22, 139, 193, .2);
+}
+
+.mi-perfil-btn-quitar:hover,
+.mi-perfil-btn-quitar:focus-visible {
+    background: #fff1f0;
+    outline: 3px solid rgba(180, 35, 24, .12);
+}
+
+.mi-perfil-foto small,
+.mi-perfil-campo small {
+    display: block;
+    margin-top: 9px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.mi-perfil-formulario {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.mi-perfil-campo label {
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.mi-perfil-campo > .inputText,
+.mi-perfil-password .inputText {
+    width: 100% !important;
+    height: 44px;
+    box-sizing: border-box;
+}
+
+.mi-perfil-password {
+    position: relative;
+}
+
+.mi-perfil-password .inputText {
+    padding-right: 48px !important;
+}
+
+.mi-perfil-password button {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    transform: translateY(-50%);
+    color: #64748b;
+    background: transparent;
+    cursor: pointer;
+}
+
+.mi-perfil-password button:hover,
+.mi-perfil-password button:focus-visible {
+    color: #168bc1;
+    background: #eaf6fc;
+    outline: 2px solid rgba(22, 139, 193, .2);
+}
+
+.mi-perfil-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 17px 38px 22px;
+    border-top: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.usuario-modal-confirmacion {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(15, 23, 42, .58);
+    backdrop-filter: blur(4px);
+}
+
+.usuario-modal-confirmacion.activo {
+    display: flex;
+}
+
+.usuario-modal-confirmacion-contenido {
+    width: min(620px, 100%);
+    overflow: hidden;
+    border: 0;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 28px 70px rgba(15, 23, 42, .28);
+}
+
+.usuario-modal-confirmacion-contenido > header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.usuario-modal-confirmacion-contenido h2,
+.usuario-modal-confirmacion-contenido p {
+    margin: 0;
+}
+
+.usuario-modal-confirmacion-contenido h2 {
+    color: #1e293b;
+    font-size: 21px;
+}
+
+.usuario-modal-confirmacion-contenido header p {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.usuario-modal-confirmacion-icono {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, #168bc1, #286ef0);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, .22);
+}
+
+.usuario-modal-confirmacion-cerrar {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 11px;
+    color: #64748b;
+    background: #f1f5f9;
+    cursor: pointer;
+    font-size: 26px;
+    line-height: 1;
+}
+
+.usuario-modal-confirmacion-aviso {
+    margin: 18px 24px 0;
+    padding: 12px 14px;
+    border-radius: 11px;
+    color: #334155;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    font-size: 14px;
+}
+
+.usuario-modal-confirmacion-opciones {
+    display: grid;
+    gap: 12px;
+    padding: 18px 24px 22px;
+}
+
+.usuario-modal-opcion {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: center;
+    gap: 13px;
+    padding: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.usuario-modal-opcion i {
+    font-size: 21px;
+    text-align: center;
+}
+
+.usuario-modal-opcion span,
+.usuario-modal-opcion strong,
+.usuario-modal-opcion small {
+    display: block;
+}
+
+.usuario-modal-opcion strong {
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.usuario-modal-opcion small {
+    line-height: 1.35;
+}
+
+.usuario-modal-opcion-principal {
+    color: #fff;
+    border: 1px solid #168bc1;
+    background: #168bc1;
+    box-shadow: 0 10px 24px rgba(22, 139, 193, .18);
+}
+
+.usuario-modal-opcion-principal small {
+    color: #e0f2fe;
+}
+
+.usuario-modal-opcion-secundaria {
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+}
+
+.usuario-modal-opcion-secundaria small {
+    color: #64748b;
+}
+
+.usuario-modal-opcion:hover,
+.usuario-modal-opcion:focus-visible {
+    transform: translateY(-1px);
+    outline: 3px solid rgba(22, 139, 193, .18);
+}
+
+.usuario-modal-confirmacion-contenido > footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 14px 24px 18px;
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.usuario-modal-confirmacion-contenido > footer button {
+    min-width: 110px;
+    min-height: 40px;
+    padding: 0 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    color: #475569;
+    background: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.mi-perfil-btn-cancelar,
+.mi-perfil-btn-guardar {
+    min-height: 44px;
+    padding: 0 22px;
+    border-radius: 11px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+}
+
+.mi-perfil-btn-cancelar {
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+}
+
+.mi-perfil-btn-guardar {
+    min-width: 190px;
+    color: #fff;
+    border: 1px solid #168bc1;
+    background: #168bc1;
+    box-shadow: 0 8px 18px rgba(22, 139, 193, .2);
+}
+
+.mi-perfil-btn-guardar:hover,
+.mi-perfil-btn-guardar:focus-visible {
+    background: #0879ad;
+    outline: 3px solid rgba(22, 139, 193, .2);
+}
+
+@media (max-width: 760px) {
+    .usuario-form-contenido {
+        grid-template-columns: 1fr;
+    }
+
+    .usuario-foto-panel {
+        max-width: 260px;
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .usuario-campos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .usuario-columna {
+        min-height: 0;
+    }
+
+    .usuario-listado-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    #divCambiarMisDatosPersonales .mi-perfil-modal {
+        width: min(96vw, 620px) !important;
+        max-width: 96vw !important;
+    }
+
+    .mi-perfil-contenido {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 20px 22px;
+    }
+
+    .mi-perfil-aviso {
+        margin: 15px 22px 0;
+    }
+
+    .mi-perfil-foto {
+        max-width: 290px;
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .mi-perfil-acciones {
+        padding: 15px 22px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #divCambiarMisDatosPersonales {
+        padding: 8px;
+        align-items: flex-start;
+    }
+
+    #divCambiarMisDatosPersonales .mi-perfil-modal {
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+        max-height: calc(100vh - 16px);
+        overflow-y: auto;
+    }
+
+    .mi-perfil-modal .tableMenuZ {
+        min-height: 62px !important;
+        height: 62px !important;
+    }
+
+    .mi-perfil-modal .tableMenuZ td:first-child {
+        height: 61px !important;
+    }
+
+    .mi-perfil-acciones {
+        flex-direction: column-reverse;
+    }
+
+    .mi-perfil-btn-cancelar,
+    .mi-perfil-btn-guardar {
+        width: 100%;
+    }
+
+    .usuario-modal-confirmacion {
+        padding: 10px;
+        align-items: flex-end;
+    }
+
+    .usuario-modal-confirmacion-contenido {
+        border-radius: 18px 18px 12px 12px;
+    }
+
+    .usuario-modal-confirmacion-contenido > header,
+    .usuario-modal-confirmacion-opciones {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .usuario-modal-confirmacion-aviso {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}

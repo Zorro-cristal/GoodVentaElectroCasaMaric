@@ -1,0 +1,108 @@
+/*
+ * Capa final para los botones legacy btn4.
+ * Conserva los anchos y colores inline usados como estados de negocio.
+ */
+input.btn4,
+button.btn4,
+a.btn4 {
+    display: inline-block;
+    width: auto;
+    min-width: 96px;
+    height: 36px !important;
+    min-height: 36px;
+    margin: 0;
+    padding: 0 14px !important;
+    border: 1px solid #d97706;
+    border-radius: 7px !important;
+    color: #fff;
+    background-color: #d97706;
+    font-family: "Merriweather Sans", Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 34px;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    box-sizing: border-box;
+    box-shadow: 0 3px 8px rgba(217, 119, 6, .20);
+    cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .12s ease;
+}
+
+input.btn4:hover,
+button.btn4:hover,
+a.btn4:hover {
+    border-color: #b45309;
+    background-color: #b45309;
+    box-shadow: 0 5px 12px rgba(217, 119, 6, .27);
+    filter: brightness(.94);
+    transform: translateY(-1px);
+}
+
+input.btn4:active,
+button.btn4:active,
+a.btn4:active {
+    box-shadow: 0 2px 5px rgba(217, 119, 6, .20);
+    filter: brightness(.9);
+    transform: translateY(0);
+}
+
+input.btn4:focus-visible,
+button.btn4:focus-visible,
+a.btn4:focus-visible {
+    outline: 3px solid rgba(217, 119, 6, .24) !important;
+    outline-offset: 2px;
+}
+
+input.btn4:disabled,
+button.btn4:disabled,
+input.btn4[aria-disabled="true"],
+button.btn4[aria-disabled="true"] {
+    border-color: #cbd5e1 !important;
+    color: #7a8796 !important;
+    background-color: #eef2f6 !important;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Estados legacy que se expresan con fondo gris sin usar disabled. */
+input.btn4[style*="background-color: #ccc"],
+input.btn4[style*="background-color:#ccc"],
+button.btn4[style*="background-color: #ccc"],
+button.btn4[style*="background-color:#ccc"] {
+    border-color: #cbd5e1 !important;
+    color: #7a8796 !important;
+    background-color: #eef2f6 !important;
+    box-shadow: none;
+}
+
+/* Variantes semanticas legacy conservan el color y reciben el mismo acabado. */
+input.btn4.orange,
+button.btn4.orange,
+input.btn4[style*="#FF5722"],
+button.btn4[style*="#FF5722"],
+input.btn4[style*="#ff5722"],
+button.btn4[style*="#ff5722"] {
+    border-color: #d97706;
+}
+
+input.btn4[style*="background-color:red"],
+button.btn4[style*="background-color:red"],
+input.btn4[style*="#f44336"],
+button.btn4[style*="#f44336"] {
+    border-color: #c83d4f;
+}
+
+@media (max-width: 768px) {
+    input.btn4,
+    button.btn4,
+    a.btn4 {
+        min-width: 90px;
+        min-height: 38px;
+        height: 38px !important;
+        padding: 0 12px !important;
+        line-height: 36px;
+    }
+}

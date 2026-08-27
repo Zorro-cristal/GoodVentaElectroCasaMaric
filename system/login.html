@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Content-Language" content="es">
+    <meta name="theme-color" content="#edf6ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Iniciar Sesión | Good Venta</title>
+
+    <script src="/GoodVentaElectroCasaMaric/js/jquery.js"></script>
+    <script src="/GoodVentaElectroCasaMaric/js_system/login.js?x=20260722-login-ios1"></script>
+    <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css/info.css">
+    <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/login.css?x=20260722-login-ios4">
+</head>
+<body class="login-ios">
+    <main class="login-page">
+        <div class="login-background" aria-hidden="true">
+            <span class="login-orb login-orb--one"></span>
+            <span class="login-orb login-orb--two"></span>
+            <span class="login-orb login-orb--three"></span>
+            <span class="login-ring login-ring--one"></span>
+            <span class="login-ring login-ring--two"></span>
+        </div>
+
+        <section class="login-card" aria-labelledby="login-title">
+            <div class="login-card__welcome">
+                <div class="login-brand">
+                    <div class="login-brand__logo-wrap">
+                        <img class="login-brand__logo" src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Good Venta">
+                    </div>
+                    <h1 id="login-title">Iniciar Sesión</h1>
+                    <span class="login-brand__accent" aria-hidden="true"></span>
+                    <p>Bienvenido de nuevo. Ingresá tus credenciales para continuar.</p>
+                </div>
+            </div>
+
+            <div class="login-card__form-panel">
+                <form class="login-form" method="POST" autocomplete="on" onsubmit="verificardatos(); return false;">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+                    <div class="login-field">
+                        <span class="login-field__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 8a7 7 0 0 0-14 0h14Z"/></svg>
+                        </span>
+                        <label class="sr-only" for="inpt_user">Correo o usuario</label>
+                        <input type="text" id="inpt_user" name="inpt_user" placeholder="Correo o usuario" autocomplete="username" required>
+                    </div>
+
+                    <div class="login-field">
+                        <span class="login-field__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><path d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V7Zm3 9.73V18h-2v-1.27a2 2 0 1 1 2 0Z"/></svg>
+                        </span>
+                        <label class="sr-only" for="inpt_pass">Contraseña</label>
+                        <input type="password" id="inpt_pass" name="inpt_pass" placeholder="Contraseña" autocomplete="current-password" required>
+                        <button type="button" class="login-field__action toggle-password" data-target="inpt_pass" aria-label="Mostrar contraseña" aria-pressed="false">
+                            <svg class="eye-open" viewBox="0 0 24 24" focusable="false"><path d="M12 5c5.5 0 9.5 5.2 9.7 5.4a1 1 0 0 1 0 1.2C21.5 11.8 17.5 17 12 17s-9.5-5.2-9.7-5.4a1 1 0 0 1 0-1.2C2.5 10.2 6.5 5 12 5Zm0 2c-3.5 0-6.4 2.8-7.6 4 1.2 1.2 4.1 4 7.6 4s6.4-2.8 7.6-4c-1.2-1.2-4.1-4-7.6-4Zm0 1a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="login-field login-field--select">
+                        <span class="login-field__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 10h16l-1.5-5h-13L4 10Zm1 2v7h14v-7h-2v5h-3v-5H5Zm2 0h5v5H7v-5Z"/></svg>
+                        </span>
+                        <div class="login-field__select-content">
+                            <label for="inptlocaluser">Local</label>
+                            <select id="inptlocaluser" name="local" onchange="buscarCajaOption()" required>
+                                <option value="" selected disabled>Seleccione un local</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="login-field login-field--select">
+                        <span class="login-field__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v14H4V5Zm2 2v3h12V7H6Zm0 5v5h5v-5H6Zm7 0v1h5v-1h-5Zm0 3v2h5v-2h-5Z"/></svg>
+                        </span>
+                        <div class="login-field__select-content">
+                            <label for="inptcajauser">Caja</label>
+                            <select id="inptcajauser" name="caja" required>
+                                <option value="001-001">Caja 01</option>
+                                <option value="001-002">Caja 02</option>
+                                <option value="">Sin especificar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-submit">
+                        <span>Iniciar Sesión</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></svg>
+                    </button>
+
+                    <div id="mensaje" class="login-message" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+
+        <footer class="login-footer">
+            <a href="https://goodtechnology.com.py/" target="_blank" rel="noopener noreferrer" class="login-footer__website">
+                <span class="login-footer__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3a15.7 15.7 0 0 0-1.4-3.2A8.1 8.1 0 0 1 18.9 8ZM12 4c.8 1 1.5 2.3 1.9 4h-3.8c.4-1.7 1.1-3 1.9-4ZM9.5 4.8A15.7 15.7 0 0 0 8.1 8h-3a8.1 8.1 0 0 1 4.4-3.2ZM4.3 10h3.5a16.8 16.8 0 0 0 0 4H4.3a8.1 8.1 0 0 1 0-4Zm.8 6h3a15.7 15.7 0 0 0 1.4 3.2A8.1 8.1 0 0 1 5.1 16Zm6.9 4c-.8-1-1.5-2.3-1.9-4h3.8c-.4 1.7-1.1 3-1.9 4Zm2.3-6H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.2 5.2a15.7 15.7 0 0 0 1.4-3.2h3a8.1 8.1 0 0 1-4.4 3.2Zm1.7-5.2a16.8 16.8 0 0 0 0-4h3.5a8.1 8.1 0 0 1 0 4h-3.5Z"/></svg>
+                </span>
+                <span>goodtechnology.com.py</span>
+            </a>
+
+            <p class="login-footer__copyright">© <span id="loginYear">2026</span> Good Venta. Todos los derechos reservados.</p>
+
+            <div class="login-footer__social" aria-label="Redes sociales">
+                <span>Seguinos en redes</span>
+                <a href="#" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg>
+                </a>
+                <a href="#" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm11 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
+                </a>
+            </div>
+        </footer>
+    </main>
+
+    <div class="div_info_10" id="div_principal_info_carga" style="display:none" onclick="ocultarmensaje()">
+        <div class="login-loader">
+            <img src="/GoodVentaElectroCasaMaric/iconos/cargando.gif" alt="">
+            <span id="lbltitulomensaje_b">Cargando...</span>
+        </div>
+    </div>
+
+    <div id="capa_informativa" class="div_info_2_1" style="display:none"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var year = document.getElementById('loginYear');
+            if (year) {
+                year.textContent = new Date().getFullYear();
+            }
+
+            document.querySelectorAll('.toggle-password').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var input = document.getElementById(button.getAttribute('data-target'));
+                    var showPassword = input.type === 'password';
+                    input.type = showPassword ? 'text' : 'password';
+                    button.setAttribute('aria-pressed', showPassword ? 'true' : 'false');
+                    button.setAttribute('aria-label', showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

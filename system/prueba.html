@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selector de Botones</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    select {
+      width: 150px;
+      height: 200px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .botones-orden {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-left: 10px;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div>
+      <label>Botones disponibles:</label><br>
+      <select id="disponibles" multiple>
+        <option value="M2">M2 2 Minutos</option>
+        <option value="M4">M4 4 Minutos</option>
+        <option value="M6">M6 6 Minutos</option>
+        <option value="M10">M10 10 Minutos</option>
+        <option value="M12">M12 12 Minutos</option>
+        <option value="M20">M20 20 Minutos</option>
+        <option value="H2">H2 2 Horas</option>
+        <option value="H3">H3 3 Horas</option>
+      </select>
+    </div>
+
+    <div class="controls">
+      <button onclick="insertar()">Insertar →</button>
+      <button onclick="eliminar()">← Eliminar</button>
+    </div>
+
+    <div>
+      <label>Botones seleccionados:</label><br>
+      <select id="seleccionados" multiple>
+        <option value="M5">M5 5 Minutos</option>
+        <option value="M15">M15 15 Minutos</option>
+        <option value="M30">M30 30 Minutos</option>
+        <option value="H1">H1 1 Hora</option>
+        <option value="H4">H4 4 Horas</option>
+        <option value="D1">D1 Diario</option>
+        <option value="W1">W1 Semanal</option>
+        <option value="MN">MN Mensual</option>
+      </select>
+    </div>
+
+    <div class="botones-orden">
+      <button onclick="mover('arriba')">Arriba</button>
+      <button onclick="mover('abajo')">Abajo</button>
+      <button onclick="reiniciar()">Reiniciar</button>
+      <button onclick="cerrar()">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    const disponibles = document.getElementById('disponibles');
+    const seleccionados = document.getElementById('seleccionados');
+
+    const valoresIniciales = [...seleccionados.options].map(opt => opt.outerHTML);
+
+    function insertar() {
+      [...disponibles.selectedOptions].forEach(opt => {
+        disponibles.remove(opt.index);
+        seleccionados.add(opt);
+      });
+    }
+
+    function eliminar() {
+      [...seleccionados.selectedOptions].forEach(opt => {
+        seleccionados.remove(opt.index);
+        disponibles.add(opt);
+      });
+    }
+
+    function mover(direccion) {
+      let sel = seleccionados;
+      let idx = sel.selectedIndex;
+      if (idx === -1) return;
+
+      if (direccion === 'arriba' && idx > 0) {
+        let opt = sel.options[idx];
+        sel.remove(idx);
+        sel.add(opt, idx - 1);
+        sel.selectedIndex = idx - 1;
+      }
+
+      if (direccion === 'abajo' && idx < sel.options.length - 1) {
+        let opt = sel.options[idx];
+        sel.remove(idx);
+        sel.add(opt, idx + 1);
+        sel.selectedIndex = idx + 1;
+      }
+    }
+
+    function reiniciar() {
+      seleccionados.innerHTML = '';
+      disponibles.innerHTML = '';
+
+      // Restaurar valores iniciales
+      valoresIniciales.forEach(html => {
+        seleccionados.insertAdjacentHTML('beforeend', html);
+      });
+
+      // Puedes modificar esta parte para restaurar también los disponibles originales si lo deseas
+    }
+
+    function cerrar() {
+      alert("Ventana cerrada (simulado)");
+    }
+  </script>
+
+</body>
+</html>

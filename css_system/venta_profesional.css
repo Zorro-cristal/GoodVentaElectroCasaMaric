@@ -1,0 +1,1873 @@
+/* Formulario principal de Nueva Venta. La capa es visual y conserva todos los hooks legacy. */
+#divAbmVenta.venta-profesional {
+    --venta-fondo: #f3f6fa;
+    --venta-superficie: #ffffff;
+    --venta-superficie-suave: #f7f9fc;
+    --venta-borde: #dce4ee;
+    --venta-texto: #172033;
+    --venta-muted: #64748b;
+    --venta-primario: #2563eb;
+    --venta-primario-oscuro: #1f4f7a;
+    --venta-cabecera: #1f6389;
+    --venta-exito: #16845b;
+    --venta-advertencia: #d97706;
+    --venta-peligro: #cf3f50;
+    box-sizing: border-box;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: var(--venta-fondo) !important;
+}
+
+#divAbmVenta *,
+#divAbmVenta *::before,
+#divAbmVenta *::after { box-sizing: border-box; }
+
+#divAbmVenta #tdEfectoAbmVenta {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+}
+
+#divAbmVenta .venta-shell {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    color: var(--venta-texto);
+    background: var(--venta-fondo) !important;
+    box-shadow: none !important;
+}
+
+#divAbmVenta .venta-header {
+    width: 100% !important;
+    min-height: 66px;
+    margin: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--venta-borde) !important;
+    background: var(--venta-superficie) !important;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .06) !important;
+}
+
+#divAbmVenta .venta-header td { padding: 8px 7px !important; vertical-align: middle; }
+#divAbmVenta .venta-header td:first-child { padding-left: 20px !important; }
+#divAbmVenta .venta-header td:first-child::before {
+    content: "NUEVA VENTA";
+    display: block;
+    margin-bottom: 3px;
+    color: var(--venta-muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .11em;
+}
+
+#divAbmVenta #pCaja,
+#divAbmVenta #pNroFactuaCaja,
+#divAbmVenta #pCajeraVenta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    margin: 0 8px 0 0 !important;
+    color: var(--venta-texto) !important;
+    font-family: inherit !important;
+    line-height: 1.1;
+}
+
+#divAbmVenta #pCaja {
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #fff !important;
+    background: var(--venta-cabecera);
+    font-size: 12px !important;
+    font-weight: 800;
+}
+
+#divAbmVenta #pNroFactuaCaja { color: var(--venta-primario) !important; font-size: 23px !important; }
+#divAbmVenta #pCajeraVenta { color: var(--venta-muted) !important; font-size: 13px !important; font-weight: 700; }
+
+#divAbmVenta .venta-header .iconoBtn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px;
+    padding: 9px !important;
+    border: 1px solid var(--venta-borde) !important;
+    border-radius: 13px !important;
+    background: var(--venta-superficie) !important;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, .08) !important;
+    transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+#divAbmVenta .venta-header .iconoBtn:hover {
+    border-color: #a9bdd1 !important;
+    box-shadow: 0 9px 22px rgba(15, 23, 42, .12) !important;
+    transform: translateY(-1px);
+}
+
+#divAbmVenta .venta-header .iconoBtn:focus-visible,
+#divAbmVenta button:focus-visible,
+#divAbmVenta input:focus-visible,
+#divAbmVenta select:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .22) !important;
+    outline-offset: 2px;
+}
+
+#divAbmVenta .venta-contenido {
+    width: 100% !important;
+    min-height: 0;
+    padding: 12px !important;
+    overflow: auto !important;
+    background: var(--venta-fondo);
+}
+
+#divAbmVenta .venta-panel { width: 100% !important; padding: 0 !important; }
+#divAbmVenta .venta-card {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    border: 1px solid var(--venta-borde) !important;
+    border-radius: 16px !important;
+    background: var(--venta-superficie) !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .07) !important;
+}
+
+#divAbmVenta .venta-datos {
+    margin: 0 0 12px;
+    padding: 10px 12px 7px;
+    border: 1px solid var(--venta-borde);
+    border-radius: 13px;
+    background: var(--venta-superficie-suave) !important;
+}
+
+#divAbmVenta .venta-datos table { width: 100% !important; border-collapse: separate; border-spacing: 10px 5px; }
+#divAbmVenta .venta-datos td { padding: 0 !important; vertical-align: bottom; }
+#divAbmVenta .pTituloC {
+    min-height: 16px;
+    margin: 0 0 6px !important;
+    color: var(--venta-texto) !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 750 !important;
+    letter-spacing: 0 !important;
+}
+
+#divAbmVenta input.inputText,
+#divAbmVenta input.inputTextDisable,
+#divAbmVenta select.inputSelect {
+    min-width: 0;
+    height: 40px !important;
+    margin: 0 !important;
+    padding: 0 11px !important;
+    color: var(--venta-texto) !important;
+    border: 1px solid #cbd6e3 !important;
+    border-radius: 10px !important;
+    background: var(--venta-superficie) !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .03) inset !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+#divAbmVenta input.inputText:focus,
+#divAbmVenta select.inputSelect:focus {
+    border-color: #5790ea !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important;
+}
+
+#divAbmVenta input:disabled,
+#divAbmVenta select:disabled {
+    color: #718096 !important;
+    border-color: #d9e1eb !important;
+    background: #edf2f7 !important;
+    opacity: 1 !important;
+}
+
+#divAbmVenta input[type="checkbox"] { accent-color: var(--venta-primario); }
+
+#divAbmVenta .btn4,
+#divAbmVenta input.btn4,
+#divAbmVenta input[type="button"].btn4 {
+    min-width: 84px;
+    height: 38px !important;
+    margin: 0 2px !important;
+    padding: 0 13px !important;
+    color: #fff !important;
+    border: 0 !important;
+    border-radius: 9px !important;
+    background: var(--venta-primario) !important;
+    box-shadow: none !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 750 !important;
+    line-height: 38px !important;
+    cursor: pointer;
+    transition: filter .16s ease, transform .16s ease;
+}
+
+#divAbmVenta .btn4:hover { filter: brightness(.94); transform: translateY(-1px); }
+#divAbmVenta #btnMasInfoClienteVenta { background: var(--venta-advertencia) !important; }
+#divAbmVenta #btnNuevoClienteVenta,
+#divAbmVenta #btnVerCreditos { background: #475467 !important; }
+#divAbmVenta #btnAddDetallesaVenta { min-width: 58px; background: var(--venta-primario) !important; }
+#divAbmVenta #btnFinalizarVenta { background: var(--venta-exito) !important; }
+#divAbmVenta #btnCancelarVenta { background: var(--venta-peligro) !important; }
+#divAbmVenta #btnSolicitarDescuento,
+#divAbmVenta #btnListaDescuento { background: var(--venta-advertencia) !important; }
+
+#divAbmVenta .venta-operacion {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+}
+
+#divAbmVenta .venta-operacion > table { border-collapse: separate; border-spacing: 8px 5px; }
+#divAbmVenta .venta-operacion > table:first-child {
+    margin-bottom: 8px;
+    border: 1px solid var(--venta-borde);
+    border-radius: 12px;
+    background: var(--venta-superficie);
+}
+
+#divAbmVenta .tableCabeceraRegistro {
+    overflow: hidden;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 10px 10px 0 0 !important;
+    background: var(--venta-cabecera) !important;
+}
+
+#divAbmVenta .tableCabeceraRegistro .td_registro {
+    height: 42px !important;
+    padding: 8px 10px !important;
+    color: #fff !important;
+    border-right: 1px solid rgba(255, 255, 255, .28) !important;
+    background: var(--venta-cabecera) !important;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    letter-spacing: .02em;
+}
+
+#divAbmVenta #table_vista_producto_venta,
+#divAbmVenta #table_abm_detalle_venta {
+    width: 100% !important;
+    min-height: 130px;
+    border: 1px solid var(--venta-borde) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 10px 10px;
+    background: var(--venta-superficie) !important;
+    scrollbar-color: #8ba0b4 transparent;
+    scrollbar-width: thin;
+}
+
+#divAbmVenta #table_vista_producto_venta { height: clamp(150px, 22vh, 230px) !important; }
+#divAbmVenta #table_abm_detalle_venta { height: clamp(170px, 24vh, 280px) !important; }
+
+#divAbmVenta #table_vista_producto_venta:empty::before,
+#divAbmVenta #table_abm_detalle_venta:empty::before {
+    display: grid;
+    min-height: 100%;
+    place-items: center;
+    padding: 20px;
+    color: var(--venta-muted);
+    font-size: 12px;
+    font-weight: 650;
+    text-align: center;
+}
+
+#divAbmVenta #table_vista_producto_venta:empty::before { content: "Busque un producto para comenzar"; }
+#divAbmVenta #table_abm_detalle_venta:empty::before { content: "Todavía no hay productos agregados a la venta"; }
+
+#divAbmVenta #table_vista_producto_venta > table,
+#divAbmVenta #table_abm_detalle_venta > table {
+    width: 100% !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--venta-borde) !important;
+    border-radius: 0 !important;
+    background: var(--venta-superficie) !important;
+}
+
+#divAbmVenta #table_vista_producto_venta td,
+#divAbmVenta #table_abm_detalle_venta td {
+    padding: 9px 10px !important;
+    color: var(--venta-texto) !important;
+    background: transparent !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+}
+
+#divAbmVenta #table_vista_producto_venta > table:hover td,
+#divAbmVenta #table_abm_detalle_venta > table:hover td { background: #edf5fc !important; }
+
+#divAbmVenta #inptTotalVenta2 {
+    width: 100% !important;
+    height: clamp(120px, 22vh, 230px) !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 0 10px 10px !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #164d72, #256a95) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12) !important;
+    font-size: clamp(28px, 3vw, 44px) !important;
+    letter-spacing: -.03em;
+}
+
+#divAbmVenta .venta-operacion > table:last-of-type {
+    margin-top: 8px;
+    padding: 6px;
+    border: 1px solid var(--venta-borde);
+    border-radius: 12px;
+    background: var(--venta-superficie-suave);
+}
+
+#divAbmVenta .venta-operacion > table:last-of-type input.inputTextDisable {
+    min-width: 110px;
+    height: 42px !important;
+    color: var(--venta-texto) !important;
+    font-weight: 800 !important;
+    text-align: right !important;
+}
+
+#divAbmVenta .imgIconH {
+    width: 38px !important;
+    height: 38px !important;
+    padding: 7px;
+    border: 1px solid var(--venta-borde);
+    border-radius: 10px;
+    background: var(--venta-superficie);
+    cursor: pointer;
+}
+
+#divAbmVenta .venta-contenido::-webkit-scrollbar,
+#divAbmVenta .div_cuerpo_table::-webkit-scrollbar { width: 9px; height: 9px; }
+#divAbmVenta .venta-contenido::-webkit-scrollbar-thumb,
+#divAbmVenta .div_cuerpo_table::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: #8ba0b4; background-clip: padding-box; }
+
+body.dark #divAbmVenta.venta-profesional,
+body.modo-oscuro #divAbmVenta.venta-profesional {
+    --venta-fondo: #171c24;
+    --venta-superficie: #202630;
+    --venta-superficie-suave: #252d38;
+    --venta-borde: #354252;
+    --venta-texto: #e3e8ef;
+    --venta-muted: #aab4c2;
+    --venta-cabecera: #214f69;
+}
+
+body.dark #divAbmVenta input:disabled,
+body.dark #divAbmVenta select:disabled,
+body.modo-oscuro #divAbmVenta input:disabled,
+body.modo-oscuro #divAbmVenta select:disabled { color: #b8c2cf !important; border-color: #3b4858 !important; background: #2a3441 !important; }
+
+body.dark #divAbmVenta #table_vista_producto_venta > table:hover td,
+body.dark #divAbmVenta #table_abm_detalle_venta > table:hover td,
+body.modo-oscuro #divAbmVenta #table_vista_producto_venta > table:hover td,
+body.modo-oscuro #divAbmVenta #table_abm_detalle_venta > table:hover td { background: #293746 !important; }
+
+@media (max-width: 1100px) {
+    #divAbmVenta .venta-datos table,
+    #divAbmVenta .venta-datos tbody { display: block; }
+    #divAbmVenta .venta-datos tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    #divAbmVenta .venta-datos td { display: block; width: auto !important; }
+    #divAbmVenta .venta-datos input,
+    #divAbmVenta .venta-datos select { max-width: 100%; }
+}
+
+@media (max-width: 760px) {
+    #divAbmVenta .venta-header { min-height: 58px; }
+    #divAbmVenta .venta-header td:first-child { padding-left: 10px !important; }
+    #divAbmVenta .venta-header .iconoBtn { width: 38px !important; height: 38px !important; min-width: 38px; padding: 7px !important; }
+    #divAbmVenta #pNroFactuaCaja { font-size: 17px !important; }
+    #divAbmVenta #pCajeraVenta { display: none; }
+    #divAbmVenta .venta-contenido { padding: 7px !important; }
+    #divAbmVenta .venta-card { padding: 8px !important; border-radius: 12px !important; }
+    #divAbmVenta .venta-datos tr { grid-template-columns: 1fr; }
+    #divAbmVenta .venta-operacion > table:first-child > tbody > tr { display: grid; grid-template-columns: 1fr; }
+    #divAbmVenta .venta-operacion > table:first-child > tbody > tr > td { display: block; width: 100% !important; }
+    #divAbmVenta #inptTotalVenta2 { height: 90px !important; }
+    #divAbmVenta .venta-operacion > table:nth-of-type(2) > tbody > tr { display: flex; flex-wrap: wrap; gap: 8px; }
+    #divAbmVenta .venta-operacion > table:nth-of-type(2) > tbody > tr > td { display: block; width: auto !important; min-width: 130px; flex: 1 1 160px; }
+}
+
+/* ========================================================================== */
+/* Nueva Venta · Glassmorphism inspirado en iOS                               */
+/* ========================================================================== */
+#divAbmVenta.venta-profesional {
+    --venta-fondo: #eaf1fa;
+    --venta-superficie: rgba(255, 255, 255, .72);
+    --venta-superficie-fuerte: rgba(255, 255, 255, .88);
+    --venta-superficie-suave: rgba(247, 250, 255, .62);
+    --venta-borde: rgba(255, 255, 255, .72);
+    --venta-borde-control: rgba(138, 154, 176, .30);
+    --venta-texto: #1c2433;
+    --venta-muted: #647087;
+    --venta-primario: #007aff;
+    --venta-primario-oscuro: #0063d1;
+    --venta-cabecera: #155f86;
+    --venta-exito: #2da75d;
+    --venta-advertencia: #ed8b00;
+    --venta-peligro: #e5484d;
+    position: relative;
+    isolation: isolate;
+    color: var(--venta-texto);
+    background:
+        radial-gradient(circle at 8% 12%, rgba(0, 122, 255, .18), transparent 29%),
+        radial-gradient(circle at 92% 4%, rgba(90, 200, 250, .20), transparent 27%),
+        linear-gradient(145deg, #e8f0fa 0%, #f5f7fb 46%, #e6eef8 100%) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif !important;
+}
+
+#divAbmVenta.venta-profesional::before,
+#divAbmVenta.venta-profesional::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(24px);
+}
+
+#divAbmVenta.venta-profesional::before {
+    top: 20%;
+    left: -150px;
+    background: rgba(10, 132, 255, .12);
+}
+
+#divAbmVenta.venta-profesional::after {
+    right: -130px;
+    bottom: -120px;
+    background: rgba(100, 210, 255, .15);
+}
+
+#divAbmVenta .venta-shell {
+    position: relative;
+    z-index: 1;
+    grid-template-rows: auto minmax(0, 1fr);
+    background: transparent !important;
+}
+
+#divAbmVenta .venta-shell > center {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#divAbmVenta .venta-header {
+    width: calc(100% - 24px) !important;
+    min-height: 78px;
+    margin: 12px 12px 0 !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .82) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, .66) !important;
+    box-shadow: 0 16px 38px rgba(52, 72, 105, .12), inset 0 1px 0 rgba(255, 255, 255, .85) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(175%);
+    backdrop-filter: blur(26px) saturate(175%);
+}
+
+#divAbmVenta .venta-header tr { height: 76px; }
+#divAbmVenta .venta-header td { padding: 8px 5px !important; }
+#divAbmVenta .venta-header td:first-child { padding-left: 17px !important; }
+#divAbmVenta .venta-header td:first-child::before { content: none; }
+
+#divAbmVenta .venta-identidad {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    min-width: 0;
+}
+
+#divAbmVenta .venta-identidad__titulo {
+    display: flex;
+    min-width: 145px;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#divAbmVenta .venta-identidad__titulo span {
+    color: var(--venta-muted);
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+#divAbmVenta .venta-identidad__titulo strong {
+    color: var(--venta-texto);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.025em;
+}
+
+#divAbmVenta .venta-identidad__datos {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#divAbmVenta #pCaja {
+    width: auto !important;
+    min-height: 32px;
+    padding: 7px 12px;
+    background: linear-gradient(135deg, #1774b1, #0b5e91) !important;
+    box-shadow: 0 7px 16px rgba(15, 96, 145, .18);
+}
+
+#divAbmVenta #pNroFactuaCaja {
+    min-height: 36px;
+    padding: 5px 11px;
+    border: 1px solid rgba(0, 122, 255, .16);
+    border-radius: 11px;
+    background: rgba(0, 122, 255, .07);
+    font-size: 20px !important;
+    letter-spacing: -.02em;
+}
+
+#divAbmVenta #pNroFactuaCaja:hover { background: rgba(0, 122, 255, .12); }
+#divAbmVenta #pCajeraVenta { overflow: hidden; max-width: 220px; text-overflow: ellipsis; white-space: nowrap; }
+
+#divAbmVenta .venta-header .iconoBtn {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px;
+    padding: 9px !important;
+    border: 1px solid rgba(255, 255, 255, .86) !important;
+    border-radius: 15px !important;
+    background: rgba(255, 255, 255, .74) !important;
+    box-shadow: 0 10px 24px rgba(55, 74, 103, .12), inset 0 1px 0 rgba(255, 255, 255, .88) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+#divAbmVenta .venta-header .iconoBtn:hover {
+    border-color: rgba(0, 122, 255, .25) !important;
+    background: rgba(255, 255, 255, .94) !important;
+    box-shadow: 0 12px 28px rgba(35, 74, 120, .16) !important;
+    transform: translateY(-2px) scale(1.02);
+}
+
+#divAbmVenta .venta-contenido {
+    height: 100%;
+    min-height: 0;
+    padding: 12px !important;
+    overflow: auto !important;
+    background: transparent !important;
+    overscroll-behavior: contain;
+}
+
+#divAbmVenta .venta-card {
+    padding: 14px !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .76) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, .54) !important;
+    box-shadow: 0 20px 48px rgba(45, 64, 94, .12), inset 0 1px 0 rgba(255, 255, 255, .82) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(165%);
+    backdrop-filter: blur(28px) saturate(165%);
+}
+
+#divAbmVenta .venta-datos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 0 0 12px;
+    padding: 0;
+    border: 0;
+    background: transparent !important;
+}
+
+#divAbmVenta .venta-datos::before,
+#divAbmVenta .venta-operacion::before {
+    display: flex;
+    align-items: center;
+    min-height: 28px;
+    color: #26374d;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+}
+
+#divAbmVenta .venta-datos::before { content: "1. Datos de la venta y del cliente"; }
+#divAbmVenta .venta-operacion::before { content: "2. Productos y resumen de la operación"; margin: 0 2px 7px; }
+
+#divAbmVenta .venta-datos > table,
+#divAbmVenta .venta-productos-vista,
+#divAbmVenta .venta-producto-editor,
+#divAbmVenta .venta-resumen {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    border: 1px solid rgba(255, 255, 255, .78) !important;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, .58) !important;
+    box-shadow: 0 9px 24px rgba(48, 66, 95, .08), inset 0 1px 0 rgba(255, 255, 255, .78);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+}
+
+#divAbmVenta .venta-configuracion > tbody > tr,
+#divAbmVenta .venta-configuracion > tr {
+    display: grid;
+    grid-template-columns: minmax(130px, .65fr) minmax(130px, .65fr) minmax(230px, 1.35fr) minmax(230px, 1.35fr);
+    gap: 10px;
+    align-items: end;
+}
+
+#divAbmVenta .venta-cliente > tbody > tr,
+#divAbmVenta .venta-cliente > tr {
+    display: grid;
+    grid-template-columns: minmax(430px, 1.45fr) minmax(390px, 1fr);
+    gap: 10px;
+    align-items: end;
+}
+
+#divAbmVenta .venta-configuracion td,
+#divAbmVenta .venta-cliente td { width: auto !important; min-width: 0; }
+
+#divAbmVenta .venta-configuracion td:nth-child(3),
+#divAbmVenta .venta-configuracion td:nth-child(4) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+}
+
+#divAbmVenta .venta-cliente td:nth-child(2) {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.4fr) minmax(140px, .6fr) auto;
+    gap: 7px;
+}
+
+#divAbmVenta .venta-cliente td:nth-child(3) {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) auto auto;
+    gap: 7px;
+}
+
+#divAbmVenta .venta-configuracion td > .pTituloC,
+#divAbmVenta .venta-cliente td > .pTituloC { grid-column: 1 / -1; }
+
+#divAbmVenta .venta-configuracion input:not([type="button"]),
+#divAbmVenta .venta-configuracion select,
+#divAbmVenta .venta-cliente input:not([type="button"]),
+#divAbmVenta .venta-cliente select { width: 100% !important; }
+
+#divAbmVenta .venta-configuracion input.btn4,
+#divAbmVenta .venta-cliente input.btn4 {
+    width: auto !important;
+    min-width: 104px;
+}
+
+#divAbmVenta input.inputText,
+#divAbmVenta input.inputTextDisable,
+#divAbmVenta select.inputSelect {
+    height: 42px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--venta-borde-control) !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, .72) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .90), 0 3px 10px rgba(54, 74, 103, .05) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+#divAbmVenta input.inputText:hover,
+#divAbmVenta select.inputSelect:hover { border-color: rgba(0, 122, 255, .28) !important; }
+
+#divAbmVenta input.inputText:focus,
+#divAbmVenta select.inputSelect:focus {
+    border-color: rgba(0, 122, 255, .62) !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, .12), inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+#divAbmVenta input:disabled,
+#divAbmVenta select:disabled {
+    color: #6c7789 !important;
+    border-color: rgba(143, 157, 176, .18) !important;
+    background: rgba(235, 240, 247, .70) !important;
+}
+
+#divAbmVenta .btn4,
+#divAbmVenta input.btn4,
+#divAbmVenta input[type="button"].btn4 {
+    min-height: 40px;
+    height: 40px !important;
+    padding: 0 15px !important;
+    border: 1px solid rgba(255, 255, 255, .22) !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #1687ff, #0072e8) !important;
+    box-shadow: 0 7px 16px rgba(0, 122, 255, .20), inset 0 1px 0 rgba(255, 255, 255, .24) !important;
+    line-height: 38px !important;
+    transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+#divAbmVenta .btn4:hover {
+    box-shadow: 0 10px 22px rgba(0, 122, 255, .26), inset 0 1px 0 rgba(255, 255, 255, .26) !important;
+    filter: brightness(1.02);
+    transform: translateY(-2px);
+}
+
+#divAbmVenta input.btn4:disabled,
+#divAbmVenta button.btn4:disabled,
+#divAbmVenta input.btn4[style*="#b7b7b7"],
+#divAbmVenta input.btn4[style*="183, 183, 183"] {
+    color: #7d8999 !important;
+    border-color: rgba(144, 158, 177, .20) !important;
+    background: rgba(225, 231, 239, .88) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+}
+
+#divAbmVenta input.btn4:disabled:hover,
+#divAbmVenta button.btn4:disabled:hover,
+#divAbmVenta input.btn4[style*="#b7b7b7"]:hover,
+#divAbmVenta input.btn4[style*="183, 183, 183"]:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+    filter: none;
+    transform: none;
+}
+
+#divAbmVenta #btnMasInfoClienteVenta,
+#divAbmVenta #btnSolicitarDescuento,
+#divAbmVenta #btnListaDescuento {
+    background: linear-gradient(180deg, #f4a51c, #e88900) !important;
+    box-shadow: 0 7px 16px rgba(232, 137, 0, .20) !important;
+}
+
+#divAbmVenta #btnNuevoClienteVenta,
+#divAbmVenta #btnVerCreditos {
+    background: linear-gradient(180deg, #65748a, #4b596d) !important;
+    box-shadow: 0 7px 16px rgba(55, 65, 81, .18) !important;
+}
+
+#divAbmVenta #btnFinalizarVenta {
+    background: linear-gradient(180deg, #35b96a, #249953) !important;
+    box-shadow: 0 8px 18px rgba(36, 153, 83, .22) !important;
+}
+
+#divAbmVenta #btnCancelarVenta {
+    background: linear-gradient(180deg, #ee5960, #d94149) !important;
+    box-shadow: 0 8px 18px rgba(217, 65, 73, .20) !important;
+}
+
+#divAbmVenta .venta-operacion { position: relative; }
+#divAbmVenta .venta-operacion > table:first-of-type { border: 0 !important; background: transparent !important; }
+
+#divAbmVenta .venta-productos-vista > tbody > tr,
+#divAbmVenta .venta-productos-vista > tr {
+    display: grid;
+    grid-template-columns: minmax(620px, 3fr) minmax(220px, 1fr);
+    gap: 10px;
+}
+
+#divAbmVenta .venta-productos-vista > tbody > tr > td,
+#divAbmVenta .venta-productos-vista > tr > td { width: auto !important; min-width: 0; }
+
+#divAbmVenta .tableCabeceraRegistro {
+    border: 1px solid rgba(255, 255, 255, .30) !important;
+    border-radius: 13px 13px 0 0 !important;
+    background: linear-gradient(135deg, rgba(18, 91, 128, .96), rgba(28, 105, 145, .92)) !important;
+    box-shadow: 0 6px 16px rgba(23, 80, 112, .12);
+}
+
+#divAbmVenta .tableCabeceraRegistro .td_registro {
+    height: 42px !important;
+    background: transparent !important;
+    font-size: 11px !important;
+    letter-spacing: .035em;
+}
+
+#divAbmVenta #table_vista_producto_venta,
+#divAbmVenta #table_abm_detalle_venta {
+    border-color: rgba(138, 154, 176, .22) !important;
+    background: rgba(255, 255, 255, .56) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .80);
+}
+
+#divAbmVenta #table_vista_producto_venta { height: clamp(140px, 19vh, 205px) !important; }
+#divAbmVenta #table_abm_detalle_venta { height: clamp(165px, 22vh, 245px) !important; }
+
+#divAbmVenta #table_vista_producto_venta > table,
+#divAbmVenta #table_abm_detalle_venta > table { background: rgba(255, 255, 255, .60) !important; }
+
+#divAbmVenta #table_vista_producto_venta > table:hover td,
+#divAbmVenta #table_abm_detalle_venta > table:hover td { background: rgba(0, 122, 255, .075) !important; }
+
+#divAbmVenta #inptTotalVenta2 {
+    height: clamp(140px, 19vh, 205px) !important;
+    border: 1px solid rgba(255, 255, 255, .28) !important;
+    border-radius: 0 0 13px 13px !important;
+    background: linear-gradient(145deg, rgba(17, 88, 126, .97), rgba(34, 113, 154, .92)) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .20), 0 10px 28px rgba(21, 89, 127, .16) !important;
+}
+
+#divAbmVenta .venta-producto-editor { margin-top: 10px !important; }
+#divAbmVenta .venta-producto-editor > tbody > tr,
+#divAbmVenta .venta-producto-editor > tr {
+    display: grid;
+    grid-template-columns: minmax(310px, 2.7fr) 86px 48px 90px 135px minmax(175px, 1.15fr);
+    gap: 9px;
+    align-items: end;
+}
+
+#divAbmVenta .venta-producto-editor > tbody > tr > td,
+#divAbmVenta .venta-producto-editor > tr > td {
+    width: auto !important;
+    min-width: 0;
+    padding: 0 !important;
+}
+
+#divAbmVenta .venta-producto-editor td:first-child {
+    display: grid;
+    grid-template-columns: 94px minmax(0, 1fr);
+    gap: 7px;
+}
+
+#divAbmVenta .venta-producto-editor td:first-child > .pTituloC { grid-column: 1 / -1; }
+#divAbmVenta .venta-producto-editor input.inputText,
+#divAbmVenta .venta-producto-editor input.inputTextDisable { width: 100% !important; }
+
+#divAbmVenta .venta-producto-editor td:nth-child(2) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+#divAbmVenta .venta-producto-editor td:nth-child(2) .pTituloC { text-align: center; }
+#divAbmVenta #checkDescuentoBuscarProducto { width: 22px !important; height: 22px !important; margin: 8px 0 5px !important; }
+
+#divAbmVenta .venta-producto-editor td:nth-child(3) { display: flex; align-items: flex-end; justify-content: center; }
+
+#divAbmVenta .venta-producto-editor td:nth-child(5) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 38px;
+    gap: 4px;
+}
+
+#divAbmVenta .venta-producto-editor td:nth-child(5) > .pTituloC { grid-column: 1 / -1; }
+#divAbmVenta .venta-producto-editor td:last-child {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+}
+
+#divAbmVenta .venta-producto-editor td:last-child > .pTituloC { grid-column: 1 / -1; }
+#divAbmVenta #btnAddDetallesaVenta { min-width: 82px; }
+
+#divAbmVenta .imgIconH {
+    width: 42px !important;
+    height: 42px !important;
+    border: 1px solid rgba(255, 255, 255, .78);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .72);
+    box-shadow: 0 7px 16px rgba(49, 67, 96, .10);
+}
+
+#divAbmVenta .venta-detalle-cabecera { margin-top: 12px !important; }
+
+#divAbmVenta .venta-resumen {
+    margin-top: 10px !important;
+    padding: 9px !important;
+}
+
+#divAbmVenta .venta-resumen > tbody > tr,
+#divAbmVenta .venta-resumen > tr {
+    display: grid;
+    grid-template-columns: 150px 150px minmax(360px, 1fr) 165px;
+    gap: 9px;
+    align-items: end;
+}
+
+#divAbmVenta .venta-resumen td {
+    width: auto !important;
+    min-width: 0;
+    padding: 0 !important;
+}
+
+#divAbmVenta .venta-resumen td:nth-child(3) {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+#divAbmVenta .venta-resumen td:nth-child(3) > .pTituloC { width: 100%; }
+#divAbmVenta .venta-resumen input.inputTextDisable { width: 100% !important; min-width: 0; }
+#divAbmVenta .venta-resumen td:nth-child(3) input.inputTextDisable { width: 120px !important; }
+#divAbmVenta .venta-resumen td:last-child .btn4 { width: 100% !important; margin: 0 !important; }
+
+body.dark #divAbmVenta.venta-profesional,
+body.modo-oscuro #divAbmVenta.venta-profesional {
+    --venta-fondo: #171b22;
+    --venta-superficie: rgba(31, 37, 47, .72);
+    --venta-superficie-fuerte: rgba(37, 44, 55, .88);
+    --venta-superficie-suave: rgba(39, 47, 58, .60);
+    --venta-borde: rgba(117, 134, 157, .22);
+    --venta-borde-control: rgba(151, 165, 184, .25);
+    --venta-texto: #eef2f7;
+    --venta-muted: #aab4c2;
+    background:
+        radial-gradient(circle at 8% 12%, rgba(10, 132, 255, .15), transparent 30%),
+        radial-gradient(circle at 92% 4%, rgba(50, 173, 230, .12), transparent 28%),
+        linear-gradient(145deg, #151a21 0%, #1c222b 48%, #151a21 100%) !important;
+}
+
+body.dark #divAbmVenta .venta-header,
+body.modo-oscuro #divAbmVenta .venta-header,
+body.dark #divAbmVenta .venta-card,
+body.modo-oscuro #divAbmVenta .venta-card,
+body.dark #divAbmVenta .venta-datos > table,
+body.modo-oscuro #divAbmVenta .venta-datos > table,
+body.dark #divAbmVenta .venta-productos-vista,
+body.modo-oscuro #divAbmVenta .venta-productos-vista,
+body.dark #divAbmVenta .venta-producto-editor,
+body.modo-oscuro #divAbmVenta .venta-producto-editor,
+body.dark #divAbmVenta .venta-resumen,
+body.modo-oscuro #divAbmVenta .venta-resumen {
+    border-color: rgba(127, 143, 164, .20) !important;
+    background: rgba(32, 39, 49, .70) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .055) !important;
+}
+
+body.dark #divAbmVenta .venta-datos::before,
+body.dark #divAbmVenta .venta-operacion::before,
+body.modo-oscuro #divAbmVenta .venta-datos::before,
+body.modo-oscuro #divAbmVenta .venta-operacion::before { color: #e7edf5; }
+
+body.dark #divAbmVenta input.inputText,
+body.dark #divAbmVenta input.inputTextDisable,
+body.dark #divAbmVenta select.inputSelect,
+body.modo-oscuro #divAbmVenta input.inputText,
+body.modo-oscuro #divAbmVenta input.inputTextDisable,
+body.modo-oscuro #divAbmVenta select.inputSelect {
+    color: #edf2f7 !important;
+    border-color: rgba(148, 163, 184, .22) !important;
+    background: rgba(20, 25, 33, .60) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045), 0 4px 12px rgba(0, 0, 0, .10) !important;
+}
+
+body.dark #divAbmVenta input:disabled,
+body.dark #divAbmVenta select:disabled,
+body.modo-oscuro #divAbmVenta input:disabled,
+body.modo-oscuro #divAbmVenta select:disabled {
+    color: #adb8c6 !important;
+    border-color: rgba(139, 153, 171, .16) !important;
+    background: rgba(49, 58, 71, .70) !important;
+}
+
+body.dark #divAbmVenta input.btn4:disabled,
+body.dark #divAbmVenta button.btn4:disabled,
+body.dark #divAbmVenta input.btn4[style*="#b7b7b7"],
+body.dark #divAbmVenta input.btn4[style*="183, 183, 183"],
+body.modo-oscuro #divAbmVenta input.btn4:disabled,
+body.modo-oscuro #divAbmVenta button.btn4:disabled,
+body.modo-oscuro #divAbmVenta input.btn4[style*="#b7b7b7"],
+body.modo-oscuro #divAbmVenta input.btn4[style*="183, 183, 183"] {
+    color: #8f9aaa !important;
+    border-color: rgba(139, 153, 171, .14) !important;
+    background: rgba(53, 62, 74, .82) !important;
+    box-shadow: none !important;
+}
+
+body.dark #divAbmVenta #table_vista_producto_venta,
+body.dark #divAbmVenta #table_abm_detalle_venta,
+body.modo-oscuro #divAbmVenta #table_vista_producto_venta,
+body.modo-oscuro #divAbmVenta #table_abm_detalle_venta,
+body.dark #divAbmVenta #table_vista_producto_venta > table,
+body.dark #divAbmVenta #table_abm_detalle_venta > table,
+body.modo-oscuro #divAbmVenta #table_vista_producto_venta > table,
+body.modo-oscuro #divAbmVenta #table_abm_detalle_venta > table {
+    border-color: rgba(139, 153, 171, .18) !important;
+    background: rgba(24, 30, 39, .66) !important;
+}
+
+@media (max-width: 1180px) {
+    #divAbmVenta .venta-configuracion > tbody > tr,
+    #divAbmVenta .venta-configuracion > tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #divAbmVenta .venta-cliente > tbody > tr,
+    #divAbmVenta .venta-cliente > tr { grid-template-columns: 1fr; }
+    #divAbmVenta .venta-producto-editor > tbody > tr,
+    #divAbmVenta .venta-producto-editor > tr { grid-template-columns: minmax(310px, 2fr) 82px 48px 88px 130px; }
+    #divAbmVenta .venta-producto-editor td:last-child { grid-column: 1 / -1; }
+    #divAbmVenta .venta-resumen > tbody > tr,
+    #divAbmVenta .venta-resumen > tr { grid-template-columns: 145px 145px minmax(310px, 1fr); }
+    #divAbmVenta .venta-resumen td:last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 820px) {
+    #divAbmVenta .venta-header { width: calc(100% - 14px) !important; min-height: 70px; margin: 7px 7px 0 !important; border-radius: 18px !important; }
+    #divAbmVenta .venta-header tr { height: 68px; }
+    #divAbmVenta .venta-identidad { gap: 10px; }
+    #divAbmVenta .venta-identidad__titulo { min-width: 104px; }
+    #divAbmVenta .venta-identidad__titulo strong { font-size: 18px; }
+    #divAbmVenta .venta-identidad__datos { gap: 4px; }
+    #divAbmVenta #pCaja { padding: 6px 8px; font-size: 10px !important; }
+    #divAbmVenta #pNroFactuaCaja { padding: 4px 7px; font-size: 15px !important; }
+    #divAbmVenta #pCajeraVenta { display: none; }
+    #divAbmVenta .venta-header .iconoBtn { width: 40px !important; height: 40px !important; min-width: 40px; padding: 7px !important; }
+    #divAbmVenta .venta-contenido { padding: 7px !important; }
+    #divAbmVenta .venta-card { padding: 9px !important; border-radius: 18px !important; }
+    #divAbmVenta .venta-configuracion > tbody > tr,
+    #divAbmVenta .venta-configuracion > tr,
+    #divAbmVenta .venta-cliente > tbody > tr,
+    #divAbmVenta .venta-cliente > tr { grid-template-columns: 1fr; }
+    #divAbmVenta .venta-productos-vista > tbody > tr,
+    #divAbmVenta .venta-productos-vista > tr { grid-template-columns: minmax(720px, 1fr) 220px; }
+    #divAbmVenta .venta-productos-vista { overflow-x: auto; }
+    #divAbmVenta .venta-producto-editor > tbody > tr,
+    #divAbmVenta .venta-producto-editor > tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #divAbmVenta .venta-producto-editor td:first-child,
+    #divAbmVenta .venta-producto-editor td:last-child { grid-column: 1 / -1; }
+    #divAbmVenta .venta-producto-editor td:nth-child(3) { justify-content: flex-start; }
+    #divAbmVenta .venta-resumen > tbody > tr,
+    #divAbmVenta .venta-resumen > tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #divAbmVenta .venta-resumen td:nth-child(3),
+    #divAbmVenta .venta-resumen td:last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 560px) {
+    #divAbmVenta .venta-identidad__titulo span { display: none; }
+    #divAbmVenta .venta-identidad__titulo { min-width: auto; }
+    #divAbmVenta .venta-identidad__titulo strong { font-size: 16px; }
+    #divAbmVenta #pCaja { display: none; }
+    #divAbmVenta .venta-cliente td:nth-child(2),
+    #divAbmVenta .venta-cliente td:nth-child(3),
+    #divAbmVenta .venta-configuracion td:nth-child(3),
+    #divAbmVenta .venta-configuracion td:nth-child(4) { grid-template-columns: 1fr; }
+    #divAbmVenta .venta-producto-editor > tbody > tr,
+    #divAbmVenta .venta-producto-editor > tr,
+    #divAbmVenta .venta-resumen > tbody > tr,
+    #divAbmVenta .venta-resumen > tr { grid-template-columns: 1fr; }
+    #divAbmVenta .venta-producto-editor td:first-child,
+    #divAbmVenta .venta-producto-editor td:last-child,
+    #divAbmVenta .venta-resumen td:nth-child(3),
+    #divAbmVenta .venta-resumen td:last-child { grid-column: auto; }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+    #divAbmVenta .venta-header,
+    #divAbmVenta .venta-card,
+    #divAbmVenta .venta-datos > table,
+    #divAbmVenta .venta-productos-vista,
+    #divAbmVenta .venta-producto-editor,
+    #divAbmVenta .venta-resumen { background: rgba(248, 251, 255, .96) !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #divAbmVenta .iconoBtn,
+    #divAbmVenta .btn4 { transition: none !important; }
+}
+
+/* ========================================================================== */
+/* Nueva Venta en primer plano y a pantalla completa + densidad compacta      */
+/* ========================================================================== */
+#divAbmVenta.venta-profesional {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    z-index: 10000 !important;
+}
+
+/* Selectores invocados desde Nueva Venta.
+ * Nueva Venta trabaja en z-index 10000; estos overlays legacy estaban en 6000
+ * y se abrian correctamente, pero quedaban ocultos detras del formulario. */
+#divVistaCliente,
+#divVistaVendedor,
+#divVistaSolicitudCredito,
+#divVistaVentas {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12000 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+/* Pantallas que pueden abrirse desde los selectores anteriores. */
+#divVistaSolicitudCreditoDetalle,
+#divAbmCliente {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12100 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+/* El selector de Zona se abre desde formularios que ya ocupan el frente,
+ * como Datos de Clientes (12100). Debe quedar por encima del formulario
+ * llamador y la ventana para crear una zona debe quedar encima del selector. */
+#divVistaZona {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12300 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+#divAbmZonaVista {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12400 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+/* Ventanas y confirmaciones encadenadas desde Nueva Venta. El formulario
+ * principal se muestra en 10000, por lo que los principal2 legacy (6000)
+ * quedaban activos pero invisibles detras de el. */
+#divVistaCombo,
+#divFinalizarVentaAcredito,
+#divMasConfigVenta,
+#divFinalizarVentaAContado,
+#divOpcionPago,
+#divConfirmarEgresoContado,
+#divAddMasDetallesVenta,
+#divOpcionesDetallesGarantia,
+#divOpcionesDetalles,
+#divEliminarVenta,
+#divEliminarProductoDetalle,
+#divDescuentoProductoDetalle,
+#divAbmOpcionesPagos,
+#divAbmCalcularPagos,
+#divOpcionPagoCredito,
+#divOpcionPagoCreditoParcial,
+#divConfirmarEgreso,
+#divConfirmarEgresoParcial,
+#divConfirmarNroDeFactura,
+#divOpcionesImpresion,
+#divVueltoVentaAContado,
+#divEditarCredistos,
+#divSolicitarDescuentoCredito,
+#divSolicitarDescuentoCreditoDetalle,
+#divHistorialDescuentoCredito,
+#divHistorialPagosReimpresion,
+#divCargaPagos,
+#divConfirmarPago,
+#divDescuentoInteresDetalle,
+#divOpcionesCuota,
+#divOpcionesPagos,
+#divInfExpediente {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12000 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+/* Flujo contado: el ID real de la grilla es divOpcionesPago. No debe
+ * confundirse con divOpcionPago (confirmacion para eliminar una fila) ni con
+ * divOpcionesPagos, que pertenece a otro flujo legacy. */
+#divOpcionesPago,
+#divOpcionesPagoCredito,
+#divOpcionesPagoCreditoParcial {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12100 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+#divOpcionPago,
+#divOpcionPagoCredito,
+#divOpcionPagoCreditoParcial {
+    z-index: 12200 !important;
+}
+
+/* El historial se abre desde Cuentas a Cobrar, que permanece visible debajo.
+ * Debe superar tanto al formulario como a sus paneles de opciones. */
+#divHistorialPagosReimpresion,
+#divCargaPagos {
+    z-index: 12300 !important;
+    background: rgba(20, 32, 49, .30) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#divHistorialPagosReimpresion > table > tbody > tr > td,
+#divCargaPagos > table > tbody > tr > td {
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+/* Carga de pagos parciales: el HTML legacy separa cada campo en una tabla.
+ * Se reutilizan esas tablas como celdas de una grilla compacta sin alterar
+ * IDs, eventos ni la logica de cobro. */
+#divCargaPagos .carga-pago-parcial-modal {
+    width: min(760px, calc(100vw - 24px)) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+    margin: 12px auto !important;
+}
+
+#divCargaPagos .carga-pago-parcial-modal > .tableMenuZ {
+    height: 56px !important;
+}
+
+#divCargaPagos .carga-pago-parcial-modal > .tableMenuZ td {
+    padding: 4px 14px !important;
+}
+
+#divCargaPagos .carga-pago-parcial-modal .pTituloB,
+#divCargaPagos .carga-pago-parcial-modal .pTituloB b {
+    font-size: 24px !important;
+    line-height: 1.1 !important;
+}
+
+#divCargaPagos .carga-pago-parcial-contenido {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+    width: calc(100% - 20px) !important;
+    margin: 10px !important;
+    padding: 10px !important;
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+#divCargaPagos .carga-pago-parcial-contenido > div {
+    display: contents;
+}
+
+#divCargaPagos .carga-pago-parcial-contenido > br,
+#divCargaPagos .carga-pago-parcial-contenido > div > br {
+    display: none !important;
+}
+
+#divCargaPagos .carga-pago-parcial-modal > center > br,
+#divCargaPagos .campo-fecha-utilizada {
+    display: none !important;
+}
+
+#divCargaPagos .carga-pago-parcial-campo {
+    width: 100% !important;
+    margin: 0 !important;
+    align-self: end;
+}
+
+#divCargaPagos .carga-pago-parcial-campo td {
+    width: auto !important;
+    padding: 0 3px !important;
+    vertical-align: bottom !important;
+    text-align: left !important;
+}
+
+#divCargaPagos .carga-pago-parcial-campo .pTituloC,
+#divCargaPagos .carga-pago-parcial-campo .pTitulo8 {
+    min-height: 17px;
+    margin: 0 0 3px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+}
+
+#divCargaPagos .carga-pago-parcial-campo input:not([type="checkbox"]):not([type="button"]),
+#divCargaPagos .carga-pago-parcial-campo select {
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    box-sizing: border-box;
+}
+
+#divCargaPagos .campo-monto {
+    grid-column: span 2;
+}
+
+#divCargaPagos .campo-monto td {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 126px;
+    gap: 7px;
+    align-items: end;
+}
+
+#divCargaPagos .campo-monto .pTituloC {
+    grid-column: 1 / -1;
+}
+
+#divCargaPagos .campo-monto input[type="button"],
+#divCargaPagos .campo-cobrador input[type="button"] {
+    width: auto !important;
+    min-width: 92px;
+    height: 36px !important;
+    margin: 0 !important;
+}
+
+#divCargaPagos .campo-cobrador td {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 92px;
+    gap: 7px;
+    align-items: end;
+}
+
+#divCargaPagos .campo-cobrador .pTituloC {
+    grid-column: 1 / -1;
+}
+
+#divCargaPagos .campo-comprobante .pTitulo8 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    border: 1px solid rgba(137, 156, 181, .30);
+    border-radius: 10px;
+}
+
+#divCargaPagos .carga-pago-parcial-guardar {
+    grid-column: 1 / -1;
+    width: min(240px, 100%) !important;
+    height: 38px !important;
+    margin: 2px auto 0 !important;
+}
+
+@media (max-width: 760px) {
+    #divCargaPagos .carga-pago-parcial-contenido {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    #divCargaPagos .carga-pago-parcial-contenido {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #divCargaPagos .campo-monto {
+        grid-column: auto;
+    }
+}
+
+/* Confirmar pago fijo: compactacion equivalente al pago parcial, aislada
+ * mediante clases propias para no alterar otros formularios legacy. */
+#divConfirmarPago .confirmar-pago-modal {
+    width: min(780px, calc(100vw - 24px)) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+    margin: 12px auto !important;
+}
+
+#divConfirmarPago .confirmar-pago-modal > .tableMenuZ {
+    height: 56px !important;
+}
+
+#divConfirmarPago .confirmar-pago-modal > .tableMenuZ td {
+    padding: 4px 12px !important;
+}
+
+#divConfirmarPago .confirmar-pago-modal .pTituloB,
+#divConfirmarPago .confirmar-pago-modal .pTituloB b {
+    font-size: 24px !important;
+    line-height: 1.1 !important;
+}
+
+#divConfirmarPago .confirmar-pago-contenido {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+    width: calc(100% - 20px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 10px !important;
+    padding: 10px !important;
+    box-sizing: border-box;
+}
+
+#divConfirmarPago .confirmar-pago-contenido > div {
+    display: contents;
+}
+
+#divConfirmarPago .confirmar-pago-contenido br,
+#divConfirmarPago .confirmar-pago-modal > center > br,
+#divConfirmarPago .campo-maximo {
+    display: none !important;
+}
+
+#divConfirmarPago .confirmar-pago-campo {
+    width: 100% !important;
+    margin: 0 !important;
+    align-self: end;
+}
+
+#divConfirmarPago .confirmar-pago-campo td {
+    width: auto !important;
+    padding: 0 3px !important;
+    vertical-align: bottom !important;
+    text-align: left !important;
+}
+
+#divConfirmarPago .confirmar-pago-campo .pTituloC,
+#divConfirmarPago .confirmar-pago-campo .pTitulo8 {
+    min-height: 17px;
+    margin: 0 0 3px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+}
+
+#divConfirmarPago .confirmar-pago-campo input:not([type="checkbox"]):not([type="button"]),
+#divConfirmarPago .confirmar-pago-campo select {
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    box-sizing: border-box;
+}
+
+#divConfirmarPago .campo-cuota-interes,
+#divConfirmarPago .campo-monto {
+    grid-column: span 2;
+}
+
+#divConfirmarPago .campo-cuota-interes td {
+    padding-right: 6px !important;
+}
+
+#divConfirmarPago .campo-cuota-interes input[type="button"] {
+    width: 112px !important;
+    height: 36px !important;
+    margin: 0 !important;
+}
+
+#divConfirmarPago .campo-monto td,
+#divConfirmarPago .campo-cobrador td {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 126px;
+    gap: 7px;
+    align-items: end;
+}
+
+#divConfirmarPago .campo-monto .pTituloC,
+#divConfirmarPago .campo-cobrador .pTituloC {
+    grid-column: 1 / -1;
+}
+
+#divConfirmarPago .campo-monto input[type="button"],
+#divConfirmarPago .campo-cobrador input[type="button"] {
+    width: auto !important;
+    min-width: 100px;
+    height: 36px !important;
+    margin: 0 !important;
+}
+
+#divConfirmarPago .campo-comprobante .pTitulo8 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    border: 1px solid rgba(137, 156, 181, .30);
+    border-radius: 10px;
+}
+
+#divConfirmarPago .confirmar-pago-guardar {
+    grid-column: 1 / -1;
+    width: min(240px, 100%) !important;
+    height: 38px !important;
+    margin: 2px auto 0 !important;
+}
+
+@media (max-width: 760px) {
+    #divConfirmarPago .confirmar-pago-contenido {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    #divConfirmarPago .confirmar-pago-contenido {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #divConfirmarPago .campo-cuota-interes,
+    #divConfirmarPago .campo-monto {
+        grid-column: auto;
+    }
+}
+
+/* Los datos bancarios se solicitan desde una grilla de pago que ya esta en
+ * primer plano. Estas confirmaciones deben quedar por encima de esa grilla y
+ * mantener centrados tanto la tarjeta como su accion principal. */
+#divConfirmarEgresoContado,
+#divConfirmarEgreso,
+#divConfirmarEgresoParcial {
+    z-index: 12500 !important;
+    background: rgba(20, 32, 49, .30) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#divConfirmarEgresoContado > table > tbody > tr > td,
+#divConfirmarEgreso > table > tbody > tr > td,
+#divConfirmarEgresoParcial > table > tbody > tr > td {
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+#divConfirmarEgresoContado .divAbms_b,
+#divConfirmarEgreso .divAbms_b,
+#divConfirmarEgresoParcial .divAbms_b {
+    margin-right: auto !important;
+    margin-left: auto !important;
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+}
+
+#divConfirmarEgresoContado input.btn1,
+#divConfirmarEgreso input.btn1,
+#divConfirmarEgresoParcial input.btn1 {
+    display: block !important;
+    width: min(250px, calc(100% - 32px)) !important;
+    margin: 18px auto !important;
+}
+
+/* Confirmacion propia de la grilla de productos (boton X). */
+#modalConfirmacion {
+    z-index: 12100 !important;
+    pointer-events: auto !important;
+}
+
+#divAbmVenta .venta-shell {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+#divAbmVenta .venta-header {
+    width: calc(100% - 12px) !important;
+    min-height: 58px;
+    margin: 6px 6px 0 !important;
+    border-radius: 16px !important;
+}
+
+#divAbmVenta .venta-header tr { height: 56px; }
+#divAbmVenta .venta-header td { padding: 4px !important; }
+#divAbmVenta .venta-header td:first-child { padding-left: 12px !important; }
+#divAbmVenta .venta-identidad { gap: 12px; }
+#divAbmVenta .venta-identidad__titulo { min-width: 118px; }
+#divAbmVenta .venta-identidad__titulo strong { font-size: 18px; }
+#divAbmVenta .venta-identidad__datos { gap: 4px; }
+
+#divAbmVenta #pCaja {
+    min-height: 27px;
+    padding: 5px 9px;
+    font-size: 10px !important;
+}
+
+#divAbmVenta #pNroFactuaCaja {
+    min-height: 30px;
+    padding: 4px 8px;
+    font-size: 17px !important;
+}
+
+#divAbmVenta #pCajeraVenta { font-size: 12px !important; }
+
+#divAbmVenta .venta-header .iconoBtn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    padding: 7px !important;
+    border-radius: 12px !important;
+}
+
+#divAbmVenta .venta-contenido { padding: 6px !important; }
+
+#divAbmVenta .venta-card {
+    padding: 8px !important;
+    border-radius: 18px !important;
+}
+
+#divAbmVenta .venta-datos {
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+#divAbmVenta .venta-datos::before,
+#divAbmVenta .venta-operacion::before {
+    min-height: 22px;
+    font-size: 12px;
+}
+
+#divAbmVenta .venta-operacion::before { margin: 0 2px 4px; }
+
+#divAbmVenta .venta-datos > table,
+#divAbmVenta .venta-productos-vista,
+#divAbmVenta .venta-producto-editor,
+#divAbmVenta .venta-resumen {
+    padding: 6px !important;
+    border-radius: 12px !important;
+}
+
+#divAbmVenta .venta-configuracion > tbody > tr,
+#divAbmVenta .venta-configuracion > tr,
+#divAbmVenta .venta-cliente > tbody > tr,
+#divAbmVenta .venta-cliente > tr,
+#divAbmVenta .venta-productos-vista > tbody > tr,
+#divAbmVenta .venta-productos-vista > tr,
+#divAbmVenta .venta-producto-editor > tbody > tr,
+#divAbmVenta .venta-producto-editor > tr,
+#divAbmVenta .venta-resumen > tbody > tr,
+#divAbmVenta .venta-resumen > tr { gap: 6px; }
+
+#divAbmVenta .pTituloC {
+    min-height: 13px;
+    margin-bottom: 3px !important;
+    font-size: 11px !important;
+}
+
+#divAbmVenta input.inputText,
+#divAbmVenta input.inputTextDisable,
+#divAbmVenta select.inputSelect {
+    height: 36px !important;
+    padding: 0 9px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+}
+
+#divAbmVenta .btn4,
+#divAbmVenta input.btn4,
+#divAbmVenta input[type="button"].btn4 {
+    min-height: 36px;
+    height: 36px !important;
+    padding: 0 11px !important;
+    border-radius: 10px !important;
+    font-size: 11px !important;
+    line-height: 34px !important;
+}
+
+#divAbmVenta .tableCabeceraRegistro .td_registro {
+    height: 35px !important;
+    padding: 5px 7px !important;
+    font-size: 10px !important;
+}
+
+#divAbmVenta #table_vista_producto_venta {
+    min-height: 96px;
+    height: clamp(105px, 14vh, 145px) !important;
+}
+
+#divAbmVenta #table_abm_detalle_venta {
+    min-height: 105px;
+    height: clamp(120px, 17vh, 175px) !important;
+}
+
+#divAbmVenta #inptTotalVenta2 {
+    height: clamp(105px, 14vh, 145px) !important;
+    font-size: clamp(24px, 2.5vw, 36px) !important;
+}
+
+#divAbmVenta #table_vista_producto_venta td,
+#divAbmVenta #table_abm_detalle_venta td {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+}
+
+#divAbmVenta .venta-producto-editor { margin-top: 6px !important; }
+
+#divAbmVenta .venta-producto-editor td:first-child,
+#divAbmVenta .venta-configuracion td:nth-child(3),
+#divAbmVenta .venta-configuracion td:nth-child(4),
+#divAbmVenta .venta-cliente td:nth-child(2),
+#divAbmVenta .venta-cliente td:nth-child(3) { gap: 4px; }
+
+#divAbmVenta #checkDescuentoBuscarProducto {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 6px 0 3px !important;
+}
+
+#divAbmVenta .imgIconH {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 6px;
+    border-radius: 10px;
+}
+
+#divAbmVenta .venta-detalle-cabecera { margin-top: 6px !important; }
+#divAbmVenta .venta-resumen { margin-top: 6px !important; padding: 6px !important; }
+
+@media (max-width: 760px) {
+    #divAbmVenta .venta-header .iconoBtn,
+    #divAbmVenta .btn4,
+    #divAbmVenta input.btn4,
+    #divAbmVenta input[type="button"].btn4 { min-height: 40px; }
+}
+
+/* Datos superiores mas compactos para priorizar el area de las tablas. */
+#divAbmVenta .venta-datos {
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+#divAbmVenta .venta-datos::before {
+    min-height: 18px;
+    line-height: 18px;
+    font-size: 11px;
+}
+
+#divAbmVenta .venta-datos > table {
+    padding: 4px 6px !important;
+    border-radius: 10px !important;
+}
+
+#divAbmVenta .venta-configuracion > tbody > tr,
+#divAbmVenta .venta-configuracion > tr,
+#divAbmVenta .venta-cliente > tbody > tr,
+#divAbmVenta .venta-cliente > tr {
+    gap: 4px 6px;
+}
+
+#divAbmVenta .venta-datos .pTituloC {
+    min-height: 11px;
+    margin-bottom: 1px !important;
+    font-size: 10px !important;
+    line-height: 1.1;
+}
+
+#divAbmVenta .venta-datos input.inputText,
+#divAbmVenta .venta-datos input.inputTextDisable,
+#divAbmVenta .venta-datos select.inputSelect {
+    height: 32px !important;
+    padding: 0 8px !important;
+    border-radius: 9px !important;
+    font-size: 11px !important;
+}
+
+#divAbmVenta .venta-datos .btn4,
+#divAbmVenta .venta-datos input.btn4,
+#divAbmVenta .venta-datos input[type="button"].btn4 {
+    min-height: 32px;
+    height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 9px !important;
+    font-size: 10px !important;
+    line-height: 30px !important;
+}
+
+#divAbmVenta #table_vista_producto_venta {
+    height: clamp(125px, 17vh, 175px) !important;
+}
+
+#divAbmVenta #table_abm_detalle_venta {
+    height: clamp(145px, 21vh, 215px) !important;
+}
+
+#divAbmVenta #inptTotalVenta2 {
+    height: clamp(125px, 17vh, 175px) !important;
+}
+
+@media (max-width: 760px) {
+    #divAbmVenta .venta-datos input.inputText,
+    #divAbmVenta .venta-datos input.inputTextDisable,
+    #divAbmVenta .venta-datos select.inputSelect,
+    #divAbmVenta .venta-datos .btn4,
+    #divAbmVenta .venta-datos input.btn4,
+    #divAbmVenta .venta-datos input[type="button"].btn4 {
+        min-height: 38px;
+        height: 38px !important;
+    }
+}
+
+/* Editor de producto compacto: deja mas alto disponible para los registros. */
+#divAbmVenta .venta-producto-editor {
+    margin-top: 3px !important;
+    padding: 4px 6px !important;
+    border-radius: 10px !important;
+}
+
+#divAbmVenta .venta-producto-editor > tbody > tr,
+#divAbmVenta .venta-producto-editor > tr {
+    gap: 4px 6px;
+}
+
+#divAbmVenta .venta-producto-editor .pTituloC {
+    min-height: 11px;
+    margin-bottom: 1px !important;
+    font-size: 10px !important;
+    line-height: 1.1;
+}
+
+#divAbmVenta .venta-producto-editor input.inputText,
+#divAbmVenta .venta-producto-editor input.inputTextDisable,
+#divAbmVenta .venta-producto-editor select.inputSelect {
+    height: 32px !important;
+    padding: 0 8px !important;
+    border-radius: 9px !important;
+    font-size: 11px !important;
+}
+
+#divAbmVenta .venta-producto-editor .btn4,
+#divAbmVenta .venta-producto-editor input.btn4,
+#divAbmVenta .venta-producto-editor input[type="button"].btn4 {
+    min-height: 32px;
+    height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 9px !important;
+    font-size: 10px !important;
+    line-height: 30px !important;
+}
+
+#divAbmVenta .venta-producto-editor .imgIconH {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 5px;
+    border-radius: 9px;
+}
+
+#divAbmVenta .venta-producto-editor #checkDescuentoBuscarProducto {
+    width: 17px !important;
+    height: 17px !important;
+    margin: 3px 0 2px !important;
+}
+
+#divAbmVenta #table_vista_producto_venta,
+#divAbmVenta #inptTotalVenta2 {
+    height: clamp(140px, 19vh, 200px) !important;
+}
+
+#divAbmVenta #table_abm_detalle_venta {
+    height: clamp(165px, 24vh, 245px) !important;
+}
+
+@media (max-width: 760px) {
+    #divAbmVenta .venta-producto-editor input.inputText,
+    #divAbmVenta .venta-producto-editor input.inputTextDisable,
+    #divAbmVenta .venta-producto-editor select.inputSelect,
+    #divAbmVenta .venta-producto-editor .btn4,
+    #divAbmVenta .venta-producto-editor input.btn4,
+    #divAbmVenta .venta-producto-editor input[type="button"].btn4 {
+        min-height: 38px;
+        height: 38px !important;
+    }
+}

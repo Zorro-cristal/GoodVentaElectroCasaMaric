@@ -1,0 +1,1890 @@
+/* Balance General empresa copiado desde GoodVentaElectroCasaMaric2 y aislado para este modulo. */
+/* ============================================================
+   BALANCE GENERAL - VENTANA Y CONTENIDO VISIBLE
+   ============================================================ */
+
+#divAbmInformeBalanceGeneral {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 950000 !important;
+    overflow: auto !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    backdrop-filter: none !important;
+}
+
+#divAbmInformeBalanceGeneral > .divAbms {
+    width: 100% !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+}
+
+#divAbmInformeBalanceGeneral .tableMenuZ {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 950001 !important;
+    width: 100% !important;
+    min-height: 58px !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #d8e2ee !important;
+    color: #0f172a !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+}
+
+#divAbmInformeBalanceGeneral .pTituloB,
+#divAbmInformeBalanceGeneral .pTituloB b {
+    color: #0f172a !important;
+    text-shadow: none !important;
+}
+
+#divAbmInformeBalanceGeneral .filtros-container,
+#divAbmInformeBalanceGeneral .resumen-container,
+#divAbmInformeBalanceGeneral .balance-general-panel,
+#divAbmInformeBalanceGeneral .balance-general-contenedor,
+#divAbmInformeBalanceGeneral .balance-general-empresa {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+#divAbmInformeBalanceGeneral .filtros-container {
+    width: min(1600px, calc(100vw - 24px)) !important;
+    margin: 12px auto 8px !important;
+    border: 1px solid #d8e2ee !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+}
+
+#divAbmInformeBalanceGeneral .filtro-item,
+#divAbmInformeBalanceGeneral .resumen-item {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #d8e2ee !important;
+    box-shadow: none !important;
+}
+
+#divAbmInformeBalanceGeneral .filtro-item label,
+#divAbmInformeBalanceGeneral .resumen-item label,
+#divAbmInformeBalanceGeneral .pTitulo8 {
+    color: #334155 !important;
+}
+
+#divAbmInformeBalanceGeneral input,
+#divAbmInformeBalanceGeneral select {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+#divAbmInformeBalanceGeneral .balance-general-panel {
+    width: min(1600px, calc(100vw - 24px)) !important;
+    margin: 0 auto 10px !important;
+    border: 1px solid #d8e2ee !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+}
+
+#divAbmInformeBalanceGeneral .balance-general-contenedor {
+    width: 100% !important;
+    min-height: 480px !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #d8e2ee !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+}
+
+#divAbmInformeBalanceGeneral .balance-general-totales {
+    width: min(1600px, calc(100vw - 24px)) !important;
+    margin: 0 auto 16px !important;
+    border: 1px solid #d8e2ee !important;
+    box-shadow: none !important;
+}
+
+#divAbmInformeBalanceGeneral .balance-general-card,
+#divAbmInformeBalanceGeneral .balance-general-grid section,
+#divAbmInformeBalanceGeneral .balance-general-formula,
+#divAbmInformeBalanceGeneral .balance-general-tabla {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* ============================================================
+   BALANCE GENERAL - MODULO REESTRUCTURADO
+   ============================================================ */
+
+body.balance-general-abierto {
+    overflow: hidden !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo {
+    width: 100% !important;
+    min-height: calc(100vh - 24px) !important;
+    background: #f4f7fb !important;
+    color: #0f172a !important;
+    box-sizing: border-box !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo.balance-general-modulo--visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo * {
+    box-sizing: border-box !important;
+    letter-spacing: 0 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-shell {
+    width: 100% !important;
+    min-height: calc(100vh - 24px) !important;
+    display: grid !important;
+    grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 14px 18px 18px !important;
+    background: #f4f7fb !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-header,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-toolbar,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid section,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-formula,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-header {
+    min-height: 92px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand {
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand__icon {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: #eaf2ff !important;
+    color: #1f5bd8 !important;
+    font-size: 26px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand__eyebrow {
+    display: block !important;
+    margin: 0 0 4px !important;
+    color: #50739d !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand h2 {
+    margin: 0 !important;
+    color: #0f172a !important;
+    font-size: 28px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand p {
+    max-width: 720px !important;
+    margin: 5px 0 0 !important;
+    color: #526579 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-icon-btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #d6e1ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08) !important;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-icon-btn:hover {
+    border-color: #2c61d8 !important;
+    background: #eef4ff !important;
+    transform: translateY(-1px) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-icon-btn img {
+    width: 24px !important;
+    height: 24px !important;
+    object-fit: contain !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+    display: grid !important;
+    grid-template-columns: minmax(220px, 320px) minmax(180px, 260px) auto minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: end !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-filter-card {
+    min-width: 0 !important;
+    display: grid !important;
+    gap: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-filter-card label {
+    color: #334155 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-input {
+    width: 100% !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    border: 1px solid #cbd8e8 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    padding: 8px 10px !important;
+    outline: none !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-input:focus {
+    border-color: #2c61d8 !important;
+    box-shadow: 0 0 0 3px rgba(44, 97, 216, 0.14) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    height: 42px !important;
+    min-width: 128px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+    background: #2458d8 !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    box-shadow: 0 12px 22px rgba(36, 88, 216, 0.22) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn:hover {
+    background: #1b49bd !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-resumen {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-resumen {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    margin: 0 0 12px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat {
+    min-height: 76px !important;
+    display: grid !important;
+    align-content: center !important;
+    gap: 6px !important;
+    border: 1px solid #d7e2ef !important;
+    border-left: 5px solid #64748b !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat--activo {
+    border-left-color: #14864f !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat--pasivo {
+    border-left-color: #b45309 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat--patrimonio {
+    border-left-color: #2458d8 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat span,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card span {
+    color: #526579 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat input {
+    width: 100% !important;
+    min-height: 30px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    font-size: 23px !important;
+    font-weight: 950 !important;
+    line-height: 1.05 !important;
+    padding: 0 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-main {
+    min-height: 0 !important;
+    display: grid !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel {
+    width: 100% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    gap: 0 !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+    min-height: 64px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    border-bottom: 1px solid #d7e2ef !important;
+    background: #fbfdff !important;
+    padding: 12px 16px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head span {
+    display: block !important;
+    margin-bottom: 3px !important;
+    color: #50739d !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head h3 {
+    margin: 0 !important;
+    color: #0f172a !important;
+    font-size: 19px !important;
+    line-height: 1.2 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 32px !important;
+    border-radius: 999px !important;
+    background: #eaf2ff !important;
+    color: #1f5bd8 !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    padding: 7px 12px !important;
+    white-space: nowrap !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+    width: 100% !important;
+    min-height: calc(100vh - 330px) !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty {
+    min-height: calc(100vh - 360px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 34px !important;
+    color: #526579 !important;
+    text-align: center !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty strong {
+    color: #0f172a !important;
+    font-size: 22px !important;
+    font-weight: 950 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty span {
+    max-width: 560px !important;
+    color: #64748b !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty--loading strong {
+    color: #2458d8 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty--error strong {
+    color: #b91c1c !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-legacy-totales {
+    display: none !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empresa {
+    width: 100% !important;
+    padding: 14px !important;
+    background: #ffffff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card {
+    min-height: 92px !important;
+    border: 1px solid #d7e2ef !important;
+    border-left: 5px solid #14864f !important;
+    border-radius: 8px !important;
+    background: #f7fcfa !important;
+    padding: 14px !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card.pasivo {
+    border-left-color: #b45309 !important;
+    background: #fffaf2 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card.patrimonio {
+    border-left-color: #2458d8 !important;
+    background: #f5f8ff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card strong {
+    color: #0f172a !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-formula {
+    margin: 0 0 12px !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #fbfdff !important;
+    color: #334155 !important;
+    padding: 12px 14px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-formula span {
+    color: #1f5bd8 !important;
+    font-weight: 950 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid section {
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid h3 {
+    margin: 0 !important;
+    background: #1f7aaa !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 950 !important;
+    padding: 10px 12px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 13px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla th,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla td {
+    border-bottom: 1px solid #e5edf5 !important;
+    padding: 9px 10px !important;
+    vertical-align: middle !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla th {
+    background: #f4f8fc !important;
+    color: #334155 !important;
+    font-weight: 950 !important;
+    text-align: left !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo {
+    cursor: pointer !important;
+    outline: none !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child strong,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child span {
+    display: block !important;
+    line-height: 1.35 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child strong {
+    color: #475569 !important;
+    font-weight: 950 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo td:first-child span {
+    margin-top: 3px !important;
+    color: #64748b !important;
+    font-weight: 700 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo:hover {
+    background: #eef6ff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo:focus,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grupo--seleccionado,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo:focus,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo--seleccionado {
+    background: #e8f1ff !important;
+    box-shadow: inset 4px 0 0 #2458d8 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-ver-detalle {
+    border: 1px solid #2458d8 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #1f5bd8 !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    padding: 6px 9px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-ver-detalle:hover {
+    background: #2458d8 !important;
+    color: #ffffff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-detalle-oculto,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-detalle-oculto {
+    display: none !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 18px !important;
+    background: rgba(15, 23, 42, 0.55) !important;
+    z-index: 2147483647 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-contenido,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-contenido {
+    width: min(1180px, calc(100vw - 32px)) !important;
+    max-height: min(760px, calc(100vh - 36px)) !important;
+    display: grid !important;
+    grid-template-rows: auto auto minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #d8e2ee !important;
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.32) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header {
+    min-height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    background: #1f7aaa !important;
+    color: #ffffff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header strong {
+    min-width: 0 !important;
+    font-size: 17px !important;
+    font-weight: 950 !important;
+    line-height: 1.2 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header button,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header button {
+    min-width: 86px !important;
+    min-height: 36px !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #155e86 !important;
+    font-weight: 950 !important;
+    cursor: pointer !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-filtro,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-filtro {
+    display: grid !important;
+    grid-template-columns: minmax(180px, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #e5edf5 !important;
+    background: #f8fbff !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-filtro input,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-filtro input {
+    width: 100% !important;
+    min-height: 40px !important;
+    border: 1px solid #cbd8e8 !important;
+    border-radius: 7px !important;
+    padding: 8px 10px !important;
+    color: #0f172a !important;
+    background: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-filtro span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-filtro span {
+    color: #475569 !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-body,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-body {
+    min-height: 0 !important;
+    overflow: auto !important;
+    padding: 12px 16px 16px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-body h3,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-body h3 {
+    margin: 0 0 10px !important;
+    color: #0f172a !important;
+    font-size: 18px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-body .balance-general-tabla,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-body .balance-general-tabla {
+    min-width: 760px !important;
+}
+
+@media (max-width: 1100px) {
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-resumen {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 780px) {
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-shell {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-header,
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+        align-items: stretch !important;
+        flex-direction: column !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+        justify-content: flex-end !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+        width: 100% !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-resumen {
+        grid-template-columns: 1fr !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+        width: 100% !important;
+        justify-content: center !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+}
+
+/* Balance General compacto: aprovecha el alto visible sin alterar sus datos ni acciones. */
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-shell,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+    gap: 5px !important;
+    padding: 5px 7px 7px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-header,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-header {
+    min-height: 54px !important;
+    gap: 8px !important;
+    padding: 5px 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand {
+    gap: 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand__icon,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__icon {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    font-size: 20px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand__eyebrow,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__eyebrow {
+    margin-bottom: 1px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand h2,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand h2 {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-brand p,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand p {
+    margin-top: 2px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-window-actions,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+    gap: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-icon-btn,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-icon-btn img,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn img {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-toolbar,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+    grid-template-columns: minmax(175px, 250px) minmax(145px, 205px) auto minmax(0, 1fr) !important;
+    gap: 6px !important;
+    padding: 5px 7px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-filter-card,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card {
+    gap: 2px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-filter-card label,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card label {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-input,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-input,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    height: 34px !important;
+    min-height: 34px !important;
+    font-size: 12px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    min-width: 104px !important;
+    gap: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn i,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn i {
+    font-size: 17px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stats {
+    gap: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat {
+    min-height: 48px !important;
+    gap: 2px !important;
+    border-left-width: 3px !important;
+    padding: 4px 7px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat span {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-fast-stat input,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat input {
+    min-height: 20px !important;
+    font-size: 17px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+    min-height: 40px !important;
+    gap: 6px !important;
+    padding: 4px 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head span {
+    margin-bottom: 1px !important;
+    font-size: 9px !important;
+    line-height: 1.05 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head h3,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head h3 {
+    font-size: 15px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-panel-head strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+    min-height: 25px !important;
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-contenedor,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+    min-height: calc(100vh - 205px) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty {
+    min-height: calc(100vh - 225px) !important;
+    gap: 4px !important;
+    padding: 14px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty strong {
+    font-size: 17px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empty span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty span {
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-empresa,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empresa {
+    padding: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-resumen,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-resumen {
+    gap: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card {
+    min-height: 56px !important;
+    border-left-width: 3px !important;
+    padding: 6px 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card span,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card span {
+    font-size: 10px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-card strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card strong {
+    font-size: 19px !important;
+    line-height: 1.1 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-formula,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-formula {
+    margin-bottom: 5px !important;
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid {
+    gap: 5px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-grid h3,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid h3 {
+    font-size: 13px !important;
+    padding: 5px 7px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla {
+    font-size: 11px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla th,
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-tabla td,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla th,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla td {
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-ver-detalle,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-ver-detalle {
+    min-height: 28px !important;
+    padding: 3px 7px !important;
+    font-size: 11px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal {
+    padding: 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-contenido,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-contenido {
+    width: min(1280px, calc(100vw - 16px)) !important;
+    max-height: calc(100vh - 16px) !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header {
+    min-height: 42px !important;
+    gap: 7px !important;
+    padding: 6px 9px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header strong,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header strong {
+    font-size: 14px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-header button,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-header button {
+    min-width: 68px !important;
+    min-height: 30px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-filtro,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-filtro {
+    gap: 7px !important;
+    padding: 6px 9px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-filtro input,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-filtro input {
+    min-height: 32px !important;
+    padding: 5px 8px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-body,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-body {
+    padding: 7px 9px 9px !important;
+}
+
+#ContenedorBalanceGeneral.balance-general-modulo .balance-general-modal-body h3,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal-body h3 {
+    margin-bottom: 5px !important;
+    font-size: 15px !important;
+}
+
+@media (max-width: 780px) {
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-shell,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+        gap: 5px !important;
+        padding: 5px !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-toolbar,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-primary-btn,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+        width: 100% !important;
+    }
+
+    #ContenedorBalanceGeneral.balance-general-modulo .balance-general-contenedor,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+        min-height: 420px !important;
+    }
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 2147483646 !important;
+    overflow: auto !important;
+    background: #f4f7fb !important;
+    color: #0f172a !important;
+    box-sizing: border-box !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo.balance-general-modulo--visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483646 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo * {
+    box-sizing: border-box !important;
+    letter-spacing: 0 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+    width: 100% !important;
+    min-height: 100vh !important;
+    display: grid !important;
+    grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 14px 18px 18px !important;
+    background: #f4f7fb !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-header {
+    min-height: 92px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand {
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__icon {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: #eaf2ff !important;
+    color: #1f5bd8 !important;
+    font-size: 26px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__eyebrow {
+    display: block !important;
+    margin: 0 0 4px !important;
+    color: #50739d !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand h2 {
+    margin: 0 !important;
+    color: #0f172a !important;
+    font-size: 28px !important;
+    line-height: 1.1 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand p {
+    max-width: 720px !important;
+    margin: 5px 0 0 !important;
+    color: #526579 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #d6e1ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08) !important;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn:hover {
+    border-color: #2c61d8 !important;
+    background: #eef4ff !important;
+    transform: translateY(-1px) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn--danger {
+    border-color: #fecaca !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn--danger:hover {
+    border-color: #ef4444 !important;
+    background: #fff1f2 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn img {
+    width: 24px !important;
+    height: 24px !important;
+    object-fit: contain !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+    display: grid !important;
+    grid-template-columns: minmax(220px, 320px) minmax(180px, 260px) auto minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: end !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    padding: 12px !important;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card {
+    min-width: 0 !important;
+    display: grid !important;
+    gap: 5px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card label {
+    color: #334155 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-input {
+    width: 100% !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    border: 1px solid #cbd8e8 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    padding: 8px 10px !important;
+    outline: none !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-input:focus {
+    border-color: #2c61d8 !important;
+    box-shadow: 0 0 0 3px rgba(44, 97, 216, 0.14) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    height: 42px !important;
+    min-width: 128px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+    background: #2458d8 !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    box-shadow: 0 12px 22px rgba(36, 88, 216, 0.22) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn:hover {
+    background: #1b49bd !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn i {
+    font-size: 20px !important;
+    line-height: 1 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat {
+    min-height: 76px !important;
+    display: grid !important;
+    align-content: center !important;
+    gap: 6px !important;
+    border: 1px solid #d7e2ef !important;
+    border-left: 5px solid #64748b !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat--activo {
+    border-left-color: #14864f !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat--pasivo {
+    border-left-color: #b45309 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat--patrimonio {
+    border-left-color: #2458d8 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat span {
+    color: #526579 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat input {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 30px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    font-size: 23px !important;
+    font-weight: 950 !important;
+    line-height: 1.05 !important;
+    padding: 0 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-main {
+    min-height: 0 !important;
+    display: grid !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel {
+    width: 100% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    gap: 0 !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+    min-height: 64px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    border-bottom: 1px solid #d7e2ef !important;
+    background: #fbfdff !important;
+    padding: 12px 16px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head span {
+    display: block !important;
+    margin-bottom: 3px !important;
+    color: #50739d !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head h3 {
+    margin: 0 !important;
+    color: #0f172a !important;
+    font-size: 19px !important;
+    line-height: 1.2 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 32px !important;
+    border-radius: 999px !important;
+    background: #eaf2ff !important;
+    color: #1f5bd8 !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    padding: 7px 12px !important;
+    white-space: nowrap !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+    width: 100% !important;
+    min-height: calc(100vh - 330px) !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty {
+    min-height: calc(100vh - 360px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 34px !important;
+    color: #526579 !important;
+    text-align: center !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty strong {
+    color: #0f172a !important;
+    font-size: 22px !important;
+    font-weight: 950 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty span {
+    max-width: 560px !important;
+    color: #64748b !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty--loading strong {
+    color: #2458d8 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty--error strong {
+    color: #b91c1c !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-legacy-totales {
+    display: none !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empresa {
+    width: 100% !important;
+    padding: 14px !important;
+    background: #ffffff !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-resumen {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 0 0 12px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card {
+    min-height: 92px !important;
+    border: 1px solid #d7e2ef !important;
+    border-left: 5px solid #14864f !important;
+    border-radius: 8px !important;
+    background: #f7fcfa !important;
+    padding: 14px !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05) !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card.pasivo {
+    border-left-color: #b45309 !important;
+    background: #fffaf2 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card.patrimonio {
+    border-left-color: #2458d8 !important;
+    background: #f5f8ff !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card span {
+    color: #526579 !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card strong {
+    color: #0f172a !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-formula {
+    margin: 0 0 12px !important;
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #fbfdff !important;
+    color: #334155 !important;
+    padding: 12px 14px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-formula span {
+    color: #1f5bd8 !important;
+    font-weight: 950 !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid section {
+    border: 1px solid #d7e2ef !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid h3 {
+    margin: 0 !important;
+    background: #1f7aaa !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 950 !important;
+    padding: 10px 12px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 13px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla th,
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla td {
+    border-bottom: 1px solid #e5edf5 !important;
+    padding: 9px 10px !important;
+    vertical-align: middle !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla th {
+    background: #f4f8fc !important;
+    color: #334155 !important;
+    font-weight: 950 !important;
+    text-align: left !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grupo:hover {
+    background: #eef6ff !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-ver-detalle {
+    border: 1px solid #2458d8 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #1f5bd8 !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    padding: 6px 9px !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-ver-detalle:hover {
+    background: #2458d8 !important;
+    color: #ffffff !important;
+}
+
+#divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-modal {
+    z-index: 2147483647 !important;
+}
+
+@media (max-width: 1100px) {
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-resumen {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 780px) {
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-header,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+        align-items: stretch !important;
+        flex-direction: column !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+        justify-content: flex-end !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+        width: 100% !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stats,
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-resumen {
+        grid-template-columns: 1fr !important;
+    }
+
+    #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+        width: 100% !important;
+        justify-content: center !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+}
+
+/* La vista completa posee reglas heredadas posteriores: esta capa mantiene la misma densidad compacta. */
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+    gap: 5px !important;
+    padding: 5px 7px 7px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-header {
+    min-height: 54px !important;
+    gap: 8px !important;
+    padding: 5px 8px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand {
+    gap: 8px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__icon {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    font-size: 20px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand__eyebrow {
+    margin-bottom: 1px !important;
+    font-size: 9px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand h2 {
+    font-size: 20px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-brand p {
+    margin-top: 2px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-window-actions {
+    gap: 5px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-icon-btn img {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+    grid-template-columns: minmax(175px, 250px) minmax(145px, 205px) auto minmax(0, 1fr) !important;
+    gap: 6px !important;
+    padding: 5px 7px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card {
+    gap: 2px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-filter-card label {
+    font-size: 10px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-input,
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    height: 34px !important;
+    min-height: 34px !important;
+    font-size: 12px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-primary-btn {
+    min-width: 104px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stats {
+    gap: 5px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat {
+    min-height: 48px !important;
+    gap: 2px !important;
+    border-left-width: 3px !important;
+    padding: 4px 7px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat span {
+    font-size: 9px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-fast-stat input {
+    min-height: 20px !important;
+    font-size: 17px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head {
+    min-height: 40px !important;
+    gap: 6px !important;
+    padding: 4px 8px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head span {
+    margin-bottom: 1px !important;
+    font-size: 9px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head h3 {
+    font-size: 15px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel-head strong {
+    min-height: 25px !important;
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+    min-height: calc(100vh - 205px) !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty {
+    min-height: calc(100vh - 225px) !important;
+    gap: 4px !important;
+    padding: 14px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empresa {
+    padding: 5px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-resumen {
+    gap: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card {
+    min-height: 56px !important;
+    border-left-width: 3px !important;
+    padding: 6px 8px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card span {
+    font-size: 10px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-card strong {
+    font-size: 19px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-formula {
+    margin-bottom: 5px !important;
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid {
+    gap: 5px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-grid h3 {
+    font-size: 13px !important;
+    padding: 5px 7px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla {
+    font-size: 11px !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla th,
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-tabla td {
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-ver-detalle {
+    min-height: 28px !important;
+    padding: 3px 7px !important;
+    font-size: 11px !important;
+}
+
+@media (max-width: 780px) {
+    body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+        gap: 5px !important;
+        padding: 5px !important;
+    }
+
+    body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-toolbar {
+        grid-template-columns: 1fr !important;
+    }
+
+    body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+        min-height: 420px !important;
+    }
+}
+
+/* Ajuste de viewport: elimina el scroll exterior y usa el alto exacto de la pantalla. */
+body #divAbmInformeBalanceGeneral.balance-general-modulo {
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-shell {
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+    overflow: hidden !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-main,
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-panel {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+}
+
+body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-empty {
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+@media (max-width: 780px) {
+    body #divAbmInformeBalanceGeneral.balance-general-modulo .balance-general-contenedor {
+        min-height: 0 !important;
+    }
+}

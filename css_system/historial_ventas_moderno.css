@@ -1,0 +1,99 @@
+/* Historial de Ventas con la misma estructura visual del listado de Productos. */
+#divHistorialVenta.hv-moderno{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    height:100vh;
+    min-height:0;
+    overflow:hidden;
+    background:#f4f7fb !important;
+}
+#divHistorialVenta .hv-header{
+    flex:0 0 58px;
+    width:100% !important;
+    height:58px;
+    margin:0;
+    padding:0 12px;
+    border:0 !important;
+    border-bottom:1px solid #dfe6ef !important;
+    background:#fff !important;
+    box-sizing:border-box;
+}
+#divHistorialVenta .hv-header tbody,#divHistorialVenta .hv-header tr{height:100%}
+#divHistorialVenta .hv-header td{border:0 !important;background:transparent !important}
+#divHistorialVenta .hv-header .pTituloB{margin:0;color:#1f2937 !important;font-size:20px !important;font-weight:900}
+#divHistorialVenta .hv-header .pTituloB b{color:#2563eb !important;font-size:inherit !important}
+#divHistorialVenta .hv-header .pTituloB::after{content:"Consulta, filtros y seleccion de ventas";display:block;margin-top:3px;color:#526173;font-size:11px;font-weight:600}
+#divHistorialVenta .hv-shell{display:flex !important;flex:1 1 auto;flex-direction:column;align-items:stretch !important;width:100%;min-height:0;overflow:hidden}
+#divHistorialVenta .hv-panel{display:flex;flex:1 1 auto;flex-direction:column;width:100% !important;min-height:0;overflow:hidden;background:#fff !important}
+#divHistorialVenta .hv-toolbar{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:10px;padding:6px 10px;border-bottom:1px solid #e1e7ef;background:#fff}
+#divHistorialVenta .hv-search{display:flex;flex:1 1 560px;max-width:760px;gap:8px}
+#divHistorialVenta .hv-search input{flex:1;min-width:180px;height:36px;padding:0 12px;border:1px solid #cfd8e3;border-radius:8px;background:#fff}
+#divHistorialVenta .hv-actions{display:flex;align-items:center;gap:8px}
+#divHistorialVenta .hv-btn,#modalFiltrosHistorialVentasModerno .hv-btn{height:36px;padding:0 15px;border:0;border-radius:7px;color:#fff;background:#475467;font-weight:750;cursor:pointer}
+#divHistorialVenta .hv-btn-primary,#modalFiltrosHistorialVentasModerno .hv-btn-primary{background:#2563eb}
+#divHistorialVenta .hv-btn-excel{background:#16824b}
+#divHistorialVenta .hv-btn-filter{background:#d97706}
+#divHistorialVenta .hv-btn-light,#modalFiltrosHistorialVentasModerno .hv-btn-light{color:#344054;border:1px solid #cfd8e3;background:#fff}
+#divHistorialVenta .hv-chips{display:flex;flex:0 0 auto;flex-wrap:wrap;gap:5px;min-height:28px;padding:3px 10px;border-bottom:1px solid #e5e7eb;background:#f8fafc}
+#divHistorialVenta .hv-chip{padding:3px 8px;border-radius:999px;color:#334155;background:#e8eef8;font-size:11px;font-weight:700}
+#divHistorialVenta .hv-chip-empty{color:#667085;background:#eef2f6}
+#divHistorialVenta .hv-tabs{flex:0 0 auto;width:100% !important;margin:0 !important;padding:4px 10px;border-bottom:1px solid #e1e7ef;background:#fff}
+#divHistorialVenta .hv-tabs input{height:34px;margin:2px;padding:0 12px;border:1px solid #cfd8e3;border-radius:7px;background:#eef2f6;color:#344054;font-weight:700}
+#divHistorialVenta .hv-tabs input[style*="ff9800"]{border-color:#d97706 !important;background:#d97706 !important;color:#fff !important}
+#divHistorialVenta .hv-original-print{display:none !important}
+#divHistorialVenta .hv-opciones-antiguas{display:none !important}
+#divHistorialVenta.hv-moderno .abm-auxiliar-toolbar,#divHistorialVenta.hv-moderno .abm-auxiliar-chips,#divHistorialVenta.hv-moderno .abm-auxiliar-modal{display:none !important}
+#divHistorialVenta #cntHistVenta.hv-listado{display:flex;flex:1 1 auto;flex-direction:column;width:100%;min-height:0;overflow:hidden}
+#divHistorialVenta #TableScroollHistorialVenta1{display:none !important}
+#divHistorialVenta #TableScroollHistorialVenta1 .hv-filtros-antiguos{display:none !important}
+#divHistorialVenta #tbTituloImpreHistorialVenta{position:sticky;z-index:4;top:0;width:2400px !important;min-width:2400px;margin:0 !important;border-radius:0 !important}
+#divHistorialVenta #tbTituloImpreHistorialVenta .td_registro{height:42px;padding:4px 6px !important;cursor:pointer;user-select:none}
+#divHistorialVenta #tbTituloImpreHistorialVenta .td_registro:hover{background:#245f7d !important}
+#divHistorialVenta #TableScroollHistorialVenta2{display:block;flex:1 1 auto;width:100% !important;height:0 !important;min-height:0;overflow:auto !important;border:1px solid #dfe6ef;background:#fff;overscroll-behavior:contain;scrollbar-gutter:stable}
+#divHistorialVenta #table_historial_venta{display:block;flex:none;width:2400px !important;min-width:2400px;min-height:100%;height:auto !important;overflow:visible !important}
+#divHistorialVenta #table_historial_venta > table,#divHistorialVenta #table_historial_venta div > table{width:2400px !important;min-width:2400px;table-layout:fixed;border-collapse:collapse}
+#divHistorialVenta #table_historial_venta td{padding:7px 6px;border-color:#e4eaf1 !important;color:#344054;font-size:11px;text-align:center;vertical-align:middle}
+#divHistorialVenta #table_historial_venta table:hover td{background:#f0f7fb}
+#divHistorialVenta #tbProcessHistorialVenta{flex:0 0 auto;margin:0 !important}
+#divHistorialVenta .hv-footer{flex:0 0 auto;width:100% !important;margin:0 !important;padding:5px 10px;border-top:1px solid #e1e7ef;background:#fff;box-sizing:border-box}
+#divHistorialVenta .hv-footer tbody,#divHistorialVenta .hv-footer tr{display:flex;align-items:flex-end;gap:10px;width:100%}
+#divHistorialVenta .hv-footer td{display:flex;align-items:flex-end;gap:6px;width:auto !important;border:0 !important}
+#divHistorialVenta .hv-footer .pTituloC{margin:0;color:#475467;font-size:11px;font-weight:700}
+#divHistorialVenta .hv-footer input[type="text"]{height:36px !important;margin:0;border-radius:7px}
+#divHistorialVenta .hv-footer input[type="button"]{height:36px;margin:0;border-radius:7px}
+#divHistorialVenta #cntHistVentaPago,#divHistorialVenta #cntHistDetalleVenta{flex:1 1 auto;flex-direction:column;width:100% !important;min-height:0;overflow:hidden;background:#fff}
+#divHistorialVenta #cntHistVentaPago:not([style*="display:none"]),#divHistorialVenta #cntHistDetalleVenta:not([style*="display:none"]){display:flex}
+#divHistorialVenta #cntHistVentaPago > .tableCabeceraRegistro,#divHistorialVenta #cntHistDetalleVenta > .tableCabeceraRegistro{flex:0 0 auto;width:100% !important;margin:0;border-radius:0 !important}
+#divHistorialVenta #table_historial_venta_pagos,#divHistorialVenta #table_historial_venta_detalle{flex:1 1 auto;width:100% !important;height:0 !important;min-height:0 !important;overflow:auto !important;border:1px solid #dfe6ef;background:#fff;scrollbar-gutter:stable}
+#divHistorialVenta #cntHistDetalleVenta > table:last-of-type{flex:0 0 auto;width:100% !important;margin:0;padding:5px 10px;border-top:1px solid #e1e7ef;background:#fff}
+#divHistorialVenta .hv-columnas{position:absolute;z-index:12020;top:100px;right:12px;display:none;grid-template-columns:1fr 1fr;gap:7px;width:310px;max-height:370px;padding:12px;overflow:auto;border:1px solid #d8e2ee;border-radius:10px;background:#fff;box-shadow:0 18px 42px rgba(15,23,42,.20)}
+#divHistorialVenta .hv-columnas.activo{display:grid}
+#divHistorialVenta .hv-columnas label{display:flex;align-items:center;gap:7px;color:#344054;font-size:11px;font-weight:650}
+#modalFiltrosHistorialVentasModerno{position:fixed;inset:0;z-index:13000;display:none}
+#modalFiltrosHistorialVentasModerno.activo{display:block}
+#modalFiltrosHistorialVentasModerno .hv-modal-overlay{position:absolute;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(3px)}
+#modalFiltrosHistorialVentasModerno .hv-modal-box{position:absolute;top:50%;left:50%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;width:min(900px,95vw);max-height:90vh;transform:translate(-50%,-50%);overflow:hidden;border-radius:14px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+#modalFiltrosHistorialVentasModerno header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;color:#fff;background:#266091}
+#modalFiltrosHistorialVentasModerno header h3{margin:0;font-size:19px}
+#modalFiltrosHistorialVentasModerno header button{width:36px;height:36px;border:0;border-radius:8px;color:#fff;background:rgba(255,255,255,.15);font-size:24px;cursor:pointer}
+#modalFiltrosHistorialVentasModerno .hv-modal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px;overflow:auto;background:#f8fafc}
+#modalFiltrosHistorialVentasModerno .hv-field{display:flex;flex-direction:column;gap:5px;color:#374151;font-size:12px;font-weight:700}
+#modalFiltrosHistorialVentasModerno .hv-field input:not([type="checkbox"]),#modalFiltrosHistorialVentasModerno .hv-field select{width:100%;height:38px;padding:0 10px;border:1px solid #cfd8e3;border-radius:7px;background:#fff;box-sizing:border-box}
+#modalFiltrosHistorialVentasModerno .hv-checks{display:flex;align-items:center;gap:18px;grid-column:1/-1;padding:8px 10px;border:1px solid #d8e2ee;border-radius:8px;background:#fff}
+#modalFiltrosHistorialVentasModerno .hv-checks label{display:flex;align-items:center;gap:7px;color:#374151;font-size:12px;font-weight:700}
+#modalFiltrosHistorialVentasModerno footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid #e5e7eb;background:#fff}
+body.dark #divHistorialVenta.hv-moderno,body.modo-oscuro #divHistorialVenta.hv-moderno{background:#1b1f25 !important}
+body.dark #divHistorialVenta .hv-header,body.dark #divHistorialVenta .hv-toolbar,body.dark #divHistorialVenta .hv-tabs,body.dark #divHistorialVenta .hv-footer,body.modo-oscuro #divHistorialVenta .hv-header,body.modo-oscuro #divHistorialVenta .hv-toolbar,body.modo-oscuro #divHistorialVenta .hv-tabs,body.modo-oscuro #divHistorialVenta .hv-footer{color:#cbd1da !important;border-color:#343b46 !important;background:#232830 !important}
+body.dark #divHistorialVenta .hv-header .pTituloB,body.modo-oscuro #divHistorialVenta .hv-header .pTituloB{color:#cbd1da !important}
+body.dark #divHistorialVenta .hv-panel,body.dark #divHistorialVenta #TableScroollHistorialVenta1,body.dark #divHistorialVenta #TableScroollHistorialVenta2,body.dark #divHistorialVenta #table_historial_venta,body.modo-oscuro #divHistorialVenta .hv-panel,body.modo-oscuro #divHistorialVenta #TableScroollHistorialVenta1,body.modo-oscuro #divHistorialVenta #TableScroollHistorialVenta2,body.modo-oscuro #divHistorialVenta #table_historial_venta{color:#c8ced7 !important;border-color:#38414c !important;background:#20252c !important}
+body.dark #divHistorialVenta .hv-chips,body.modo-oscuro #divHistorialVenta .hv-chips{border-color:#343b46;background:#1d2229}
+body.dark #divHistorialVenta .hv-chip,body.modo-oscuro #divHistorialVenta .hv-chip{color:#c7ced7;background:#2c3440}
+body.dark #divHistorialVenta #table_historial_venta td,body.modo-oscuro #divHistorialVenta #table_historial_venta td{color:#c8ced7 !important;border-color:#343b46 !important;background:#20252c !important}
+body.dark #divHistorialVenta #cntHistVentaPago,body.dark #divHistorialVenta #cntHistDetalleVenta,body.dark #divHistorialVenta #table_historial_venta_pagos,body.dark #divHistorialVenta #table_historial_venta_detalle,body.modo-oscuro #divHistorialVenta #cntHistVentaPago,body.modo-oscuro #divHistorialVenta #cntHistDetalleVenta,body.modo-oscuro #divHistorialVenta #table_historial_venta_pagos,body.modo-oscuro #divHistorialVenta #table_historial_venta_detalle{color:#c8ced7 !important;border-color:#38414c !important;background:#20252c !important}
+body.dark #divHistorialVenta #table_historial_venta table:hover td,body.modo-oscuro #divHistorialVenta #table_historial_venta table:hover td{background:#29313b !important}
+body.dark #divHistorialVenta .hv-columnas,body.modo-oscuro #divHistorialVenta .hv-columnas{border-color:#3c4551;background:#252b33}
+body.dark #divHistorialVenta .hv-columnas label,body.modo-oscuro #divHistorialVenta .hv-columnas label{color:#c6cdd6}
+body.dark #modalFiltrosHistorialVentasModerno .hv-modal-box,body.dark #modalFiltrosHistorialVentasModerno .hv-modal-grid,body.dark #modalFiltrosHistorialVentasModerno footer,body.modo-oscuro #modalFiltrosHistorialVentasModerno .hv-modal-box,body.modo-oscuro #modalFiltrosHistorialVentasModerno .hv-modal-grid,body.modo-oscuro #modalFiltrosHistorialVentasModerno footer{color:#cbd1da;border-color:#38414c;background:#232830}
+body.dark #modalFiltrosHistorialVentasModerno .hv-field,body.modo-oscuro #modalFiltrosHistorialVentasModerno .hv-field{color:#c3cad4}
+@media(max-width:850px){#divHistorialVenta .hv-toolbar{align-items:stretch;flex-direction:column}#divHistorialVenta .hv-search,#divHistorialVenta .hv-actions{width:100%;max-width:none;overflow-x:auto}#modalFiltrosHistorialVentasModerno .hv-modal-grid{grid-template-columns:1fr}}

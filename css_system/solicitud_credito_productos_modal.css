@@ -1,0 +1,1021 @@
+body.solicitud-productos-modal-abierto {
+    overflow: hidden !important;
+}
+
+.solicitud-productos-celda {
+    vertical-align: top;
+}
+
+.solicitud-productos-lanzador {
+    height: 560px;
+    min-height: 560px;
+    width: 99%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid #d8e3ef;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #ffffff 0%, #f3f7fc 100%);
+    box-shadow: 0 12px 30px rgba(31, 57, 87, 0.10);
+    color: #26364d;
+    text-align: left;
+    overflow: hidden;
+}
+
+.solicitud-productos-lanzador__cabecera,
+.solicitud-productos-lanzador__identidad,
+.solicitud-productos-lanzador__pie {
+    display: flex;
+    align-items: center;
+}
+
+.solicitud-productos-lanzador__cabecera {
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #dde6f0;
+}
+
+.solicitud-productos-lanzador__identidad {
+    min-width: 0;
+    gap: 13px;
+}
+
+.solicitud-productos-lanzador__icono {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #dff1ff, #c8e4fb);
+    box-shadow: inset 0 0 0 1px rgba(31, 111, 181, 0.10);
+}
+
+.solicitud-productos-lanzador__icono span {
+    width: 6px;
+    border-radius: 4px 4px 2px 2px;
+    background: #2563eb;
+}
+
+.solicitud-productos-lanzador__icono span:nth-child(1) {
+    height: 16px;
+}
+
+.solicitud-productos-lanzador__icono span:nth-child(2) {
+    height: 27px;
+}
+
+.solicitud-productos-lanzador__icono span:nth-child(3) {
+    height: 21px;
+}
+
+.solicitud-productos-lanzador__texto {
+    min-width: 0;
+}
+
+.solicitud-productos-lanzador__titulo {
+    margin: 0 0 4px;
+    color: #17243a;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.solicitud-productos-lanzador__detalle {
+    margin: 0;
+    color: #66758b;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.solicitud-productos-lanzador__contador {
+    flex: 0 0 auto;
+    padding: 7px 11px;
+    border: 1px solid #cfe0f1;
+    border-radius: 999px;
+    background: #edf5ff;
+    color: #1f5d96;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.solicitud-productos-lanzador__contenido {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.solicitud-productos-resumen__vacio {
+    height: 100%;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 24px;
+    border: 1px dashed #cbd9e7;
+    border-radius: 14px;
+    background: rgba(242, 247, 252, 0.72);
+    text-align: center;
+}
+
+.solicitud-productos-resumen__vacio-icono {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+    border-radius: 14px;
+    background: #e2effd;
+    color: #2563eb;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.solicitud-productos-resumen__vacio-titulo,
+.solicitud-productos-resumen__vacio-detalle,
+.solicitud-productos-resumen__nombre,
+.solicitud-productos-resumen__meta {
+    margin: 0;
+}
+
+.solicitud-productos-resumen__vacio-titulo {
+    color: #213047;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.solicitud-productos-resumen__vacio-detalle {
+    max-width: 520px;
+    margin-top: 6px;
+    color: #748196;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.solicitud-productos-resumen__lista {
+    height: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #9eb2c7 transparent;
+}
+
+.solicitud-productos-resumen__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.34fr) minmax(100px, 0.28fr);
+    align-items: center;
+    gap: 14px;
+    box-sizing: border-box;
+    min-height: 74px;
+    margin-bottom: 9px;
+    padding: 12px 14px;
+    border: 1px solid #dce5ee;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(31, 57, 87, 0.06);
+}
+
+.solicitud-productos-resumen__item:last-child {
+    margin-bottom: 0;
+}
+
+.solicitud-productos-resumen__producto {
+    min-width: 0;
+}
+
+.solicitud-productos-resumen__nombre {
+    overflow: hidden;
+    color: #1f2d42;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.solicitud-productos-resumen__meta {
+    margin-top: 5px;
+    color: #78869a;
+    font-size: 12px;
+}
+
+.solicitud-productos-resumen__dato {
+    min-width: 0;
+    padding-left: 14px;
+    border-left: 1px solid #e3e9f0;
+}
+
+.solicitud-productos-resumen__dato span,
+.solicitud-productos-resumen__dato strong {
+    display: block;
+}
+
+.solicitud-productos-resumen__dato span {
+    margin-bottom: 4px;
+    color: #7a8799;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.solicitud-productos-resumen__dato strong {
+    overflow: hidden;
+    color: #24344b;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.solicitud-productos-resumen__dato--plan strong {
+    width: fit-content;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #eaf3ff;
+    color: #205f9c;
+    font-size: 12px;
+}
+
+.solicitud-productos-lanzador__pie {
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #dde6f0;
+}
+
+.solicitud-productos-lanzador__total span,
+.solicitud-productos-lanzador__total strong {
+    display: block;
+}
+
+.solicitud-productos-lanzador__total span {
+    margin-bottom: 3px;
+    color: #758398;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.solicitud-productos-lanzador__total strong {
+    color: #17243a;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.solicitud-productos-lanzador__boton,
+.solicitud-productos-modal__volver {
+    min-height: 44px;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 22px;
+    background: #e37700;
+    box-shadow: 0 8px 18px rgba(227, 119, 0, 0.22);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 800;
+    transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.solicitud-productos-lanzador__boton:hover,
+.solicitud-productos-modal__volver:hover {
+    background: #c96700;
+    box-shadow: 0 10px 22px rgba(201, 103, 0, 0.28);
+    transform: translateY(-1px);
+}
+
+.solicitud-productos-lanzador__boton:focus-visible,
+.solicitud-productos-modal button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.35);
+    outline-offset: 3px;
+}
+
+.solicitud-productos-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000005;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 16px;
+}
+
+.solicitud-productos-modal--abierto {
+    display: flex;
+}
+
+.solicitud-productos-modal__fondo {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 29, 45, 0.68);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.solicitud-productos-modal__dialogo {
+    position: relative;
+    width: min(1480px, 98vw);
+    height: min(900px, 96vh);
+    height: min(900px, 96dvh);
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 20px;
+    background: #f4f7fb;
+    box-shadow: 0 30px 80px rgba(7, 20, 37, 0.42);
+    animation: solicitudProductosEntrada 180ms ease-out;
+}
+
+@keyframes solicitudProductosEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.solicitud-productos-modal__cabecera {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-sizing: border-box;
+    padding: 13px 18px 13px 22px;
+    background: linear-gradient(115deg, #15577b 0%, #266a92 52%, #315d91 100%);
+    color: #ffffff;
+}
+
+.solicitud-productos-modal__cabecera-texto {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.solicitud-productos-modal__indicador {
+    width: 11px;
+    height: 42px;
+    flex: 0 0 11px;
+    border-radius: 999px;
+    background: #ffb24a;
+}
+
+.solicitud-productos-modal__cabecera h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(20px, 2vw, 27px);
+    line-height: 1.15;
+}
+
+.solicitud-productos-modal__cabecera p {
+    margin: 5px 0 0;
+    color: #dbeaf4;
+    font-size: 13px;
+}
+
+.solicitud-productos-modal__cerrar {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 33px;
+    line-height: 40px;
+}
+
+.solicitud-productos-modal__cerrar:hover {
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.solicitud-productos-modal__cuerpo {
+    min-height: 0;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 14px;
+    background: #edf3f8;
+}
+
+.solicitud-productos-modal__contenido.divMenuf {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100%;
+    margin: 0 !important;
+    box-sizing: border-box;
+    overflow: visible;
+    border: 1px solid #d6e1ec;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: none;
+}
+
+.solicitud-productos-modal__contenido > .pTituloRepor:first-child {
+    margin: 0 0 10px !important;
+    padding: 11px 15px !important;
+    border-radius: 12px 12px 6px 6px;
+    background: #e8f1f8 !important;
+    color: #18334e !important;
+    font-size: 17px !important;
+    text-align: left !important;
+}
+
+.solicitud-productos-modal__contenido > table:first-of-type {
+    width: 100% !important;
+    table-layout: fixed;
+}
+
+#modalProductosSolicitudCredito #table_vista_ProDuc_Solicitud_Credito {
+    height: clamp(190px, 25vh, 290px) !important;
+    min-height: 190px;
+    overflow: auto !important;
+    border: 1px solid #d8e2ec;
+    border-top: 0;
+    background: #ffffff;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto {
+    display: grid;
+    grid-template-columns: minmax(290px, 0.72fr) minmax(600px, 1.28fr);
+    gap: 12px;
+    box-sizing: border-box;
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid #d7e2ed;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__bloque {
+    min-width: 0;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #dce5ee;
+    border-radius: 11px;
+    background: #ffffff;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__input,
+#modalProductosSolicitudCredito .solicitud-producto__select {
+    min-height: 42px;
+    box-sizing: border-box;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__boton {
+    min-height: 42px;
+    border-radius: 9px;
+}
+
+#modalProductosSolicitudCredito .divTablesScrool {
+    height: clamp(170px, 22vh, 260px) !important;
+    min-height: 170px;
+    overflow: auto !important;
+    border: 1px solid #d8e2ec;
+    border-top: 0;
+    background: #ffffff;
+}
+
+#modalProductosSolicitudCredito #table_Solicitud_Credito_Producto {
+    min-height: 100%;
+}
+
+#modalProductosSolicitudCredito .tableCabeceraRegistro {
+    margin: 0;
+}
+
+#modalProductosSolicitudCredito .td_registro {
+    height: 42px;
+    padding: 5px 7px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones .btn4 {
+    width: auto !important;
+    min-width: 0;
+    min-height: 42px;
+    flex: 1 1 0;
+    margin: 10px 0 0 !important;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones__eliminar {
+    border-color: #c83d4f !important;
+    background: #d74355 !important;
+    box-shadow: 0 5px 12px rgba(215, 67, 85, 0.20);
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones__cancelar {
+    border-color: #475569 !important;
+    background: #475569 !important;
+    box-shadow: 0 5px 12px rgba(71, 85, 105, 0.18);
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones__eliminar:hover {
+    background: #be3446 !important;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones__cancelar:hover {
+    background: #374151 !important;
+}
+
+.solicitud-productos-modal__pie {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-sizing: border-box;
+    padding: 11px 20px;
+    border-top: 1px solid #d9e2eb;
+    background: #ffffff;
+}
+
+.solicitud-productos-modal__pie p {
+    margin: 0;
+    color: #68768a;
+    font-size: 13px;
+}
+
+body.dark .solicitud-productos-lanzador,
+body.modo-oscuro .solicitud-productos-lanzador {
+    border-color: #3a4859;
+    background: linear-gradient(145deg, #202731 0%, #242d39 100%);
+    color: #d8e0ea;
+}
+
+body.dark .solicitud-productos-lanzador__cabecera,
+body.modo-oscuro .solicitud-productos-lanzador__cabecera,
+body.dark .solicitud-productos-lanzador__pie,
+body.modo-oscuro .solicitud-productos-lanzador__pie {
+    border-color: #3b4755;
+}
+
+body.dark .solicitud-productos-lanzador__titulo,
+body.modo-oscuro .solicitud-productos-lanzador__titulo,
+body.dark .solicitud-productos-lanzador__total strong,
+body.modo-oscuro .solicitud-productos-lanzador__total strong,
+body.dark .solicitud-productos-resumen__vacio-titulo,
+body.modo-oscuro .solicitud-productos-resumen__vacio-titulo,
+body.dark .solicitud-productos-resumen__nombre,
+body.modo-oscuro .solicitud-productos-resumen__nombre,
+body.dark .solicitud-productos-resumen__dato strong,
+body.modo-oscuro .solicitud-productos-resumen__dato strong {
+    color: #edf2f7;
+}
+
+body.dark .solicitud-productos-lanzador__detalle,
+body.modo-oscuro .solicitud-productos-lanzador__detalle,
+body.dark .solicitud-productos-resumen__vacio-detalle,
+body.modo-oscuro .solicitud-productos-resumen__vacio-detalle,
+body.dark .solicitud-productos-resumen__meta,
+body.modo-oscuro .solicitud-productos-resumen__meta,
+body.dark .solicitud-productos-resumen__dato span,
+body.modo-oscuro .solicitud-productos-resumen__dato span,
+body.dark .solicitud-productos-lanzador__total span,
+body.modo-oscuro .solicitud-productos-lanzador__total span {
+    color: #aab6c5;
+}
+
+body.dark .solicitud-productos-lanzador__contador,
+body.modo-oscuro .solicitud-productos-lanzador__contador {
+    border-color: #40566d;
+    background: #28394b;
+    color: #9acbff;
+}
+
+body.dark .solicitud-productos-resumen__vacio,
+body.modo-oscuro .solicitud-productos-resumen__vacio {
+    border-color: #465464;
+    background: rgba(31, 39, 49, 0.72);
+}
+
+body.dark .solicitud-productos-resumen__vacio-icono,
+body.modo-oscuro .solicitud-productos-resumen__vacio-icono,
+body.dark .solicitud-productos-resumen__dato--plan strong,
+body.modo-oscuro .solicitud-productos-resumen__dato--plan strong {
+    background: #2b4057;
+    color: #9bcaff;
+}
+
+body.dark .solicitud-productos-resumen__item,
+body.modo-oscuro .solicitud-productos-resumen__item {
+    border-color: #3b4755;
+    background: #252e39;
+    box-shadow: none;
+}
+
+body.dark .solicitud-productos-resumen__dato,
+body.modo-oscuro .solicitud-productos-resumen__dato {
+    border-color: #3d4856;
+}
+
+body.dark .solicitud-productos-modal__dialogo,
+body.modo-oscuro .solicitud-productos-modal__dialogo,
+body.dark .solicitud-productos-modal__cuerpo,
+body.modo-oscuro .solicitud-productos-modal__cuerpo {
+    background: #1b2129;
+}
+
+body.dark .solicitud-productos-modal__contenido.divMenuf,
+body.modo-oscuro .solicitud-productos-modal__contenido.divMenuf,
+body.dark #modalProductosSolicitudCredito .solicitud-producto,
+body.modo-oscuro #modalProductosSolicitudCredito .solicitud-producto {
+    border-color: #384454;
+    background: #222a34;
+    color: #dbe3ed;
+}
+
+body.dark #modalProductosSolicitudCredito .solicitud-producto__bloque,
+body.modo-oscuro #modalProductosSolicitudCredito .solicitud-producto__bloque,
+body.dark #modalProductosSolicitudCredito #table_vista_ProDuc_Solicitud_Credito,
+body.modo-oscuro #modalProductosSolicitudCredito #table_vista_ProDuc_Solicitud_Credito,
+body.dark #modalProductosSolicitudCredito .divTablesScrool,
+body.modo-oscuro #modalProductosSolicitudCredito .divTablesScrool,
+body.dark .solicitud-productos-modal__pie,
+body.modo-oscuro .solicitud-productos-modal__pie {
+    border-color: #3a4655;
+    background: #252e39;
+    color: #dbe3ed;
+}
+
+body.dark .solicitud-productos-modal__pie p,
+body.modo-oscuro .solicitud-productos-modal__pie p {
+    color: #adb9c8;
+}
+
+@media (max-width: 980px) {
+    .solicitud-productos-modal {
+        padding: 8px;
+    }
+
+    .solicitud-productos-modal__dialogo {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 16px);
+        height: calc(100dvh - 16px);
+        border-radius: 15px;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-producto {
+        grid-template-columns: 1fr;
+    }
+
+    .solicitud-productos-modal__cuerpo {
+        padding: 9px;
+    }
+}
+
+@media (max-width: 680px) {
+    .solicitud-productos-lanzador {
+        height: auto;
+        min-height: 460px;
+        padding: 16px;
+    }
+
+    .solicitud-productos-lanzador__cabecera {
+        align-items: flex-start;
+    }
+
+    .solicitud-productos-lanzador__detalle {
+        display: none;
+    }
+
+    .solicitud-productos-resumen__item {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+    }
+
+    .solicitud-productos-resumen__dato {
+        padding-left: 10px;
+    }
+
+    .solicitud-productos-resumen__dato--plan {
+        grid-column: 1 / -1;
+        padding: 9px 0 0;
+        border-top: 1px solid #e3e9f0;
+        border-left: 0;
+    }
+
+    .solicitud-productos-resumen__dato--plan span,
+    .solicitud-productos-resumen__dato--plan strong {
+        display: inline-block;
+    }
+
+    .solicitud-productos-resumen__dato--plan span {
+        margin: 0 7px 0 0;
+    }
+
+    .solicitud-productos-lanzador__pie {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .solicitud-productos-lanzador__boton {
+        width: 100%;
+    }
+
+    .solicitud-productos-modal__cabecera {
+        min-height: 70px;
+        padding: 10px 11px 10px 14px;
+    }
+
+    .solicitud-productos-modal__cabecera p,
+    .solicitud-productos-modal__pie p {
+        display: none;
+    }
+
+    .solicitud-productos-modal__cerrar {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .solicitud-productos-modal__contenido {
+        min-width: 860px;
+    }
+
+    .solicitud-productos-modal__pie {
+        justify-content: flex-end;
+        min-height: 60px;
+        padding: 8px 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .solicitud-productos-modal__dialogo {
+        animation: none;
+    }
+}
+
+/* Vista compacta: prioriza las tablas sin alterar los controles ni sus eventos. */
+#modalProductosSolicitudCredito.solicitud-productos-modal {
+    padding: 5px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__dialogo {
+    width: min(1760px, 99.4vw) !important;
+    height: min(1040px, 99vh) !important;
+    height: min(1040px, 99dvh) !important;
+    border-radius: 16px !important;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cabecera {
+    min-height: 52px;
+    gap: 8px;
+    padding: 6px 10px 6px 13px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cabecera-texto {
+    gap: 8px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__indicador {
+    width: 6px;
+    height: 30px;
+    flex-basis: 6px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cabecera h2 {
+    font-size: clamp(17px, 1.45vw, 21px);
+    line-height: 1.05;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cabecera p {
+    margin-top: 2px;
+    font-size: 10px;
+    line-height: 1.15;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cerrar {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+    border-radius: 10px;
+    font-size: 26px;
+    line-height: 30px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__cuerpo {
+    padding: 5px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__contenido.divMenuf {
+    border-radius: 10px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__contenido > .pTituloRepor:first-child {
+    margin: 0 0 4px !important;
+    padding: 5px 9px !important;
+    border-radius: 8px 8px 4px 4px;
+    font-size: 13px !important;
+    line-height: 1.15;
+}
+
+#modalProductosSolicitudCredito #table_vista_ProDuc_Solicitud_Credito {
+    height: clamp(220px, 31vh, 350px) !important;
+    min-height: 180px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto {
+    grid-template-columns: minmax(260px, .66fr) minmax(560px, 1.34fr);
+    gap: 5px;
+    margin: 4px 0;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__bloque {
+    padding: 4px;
+    border-radius: 8px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__grid {
+    gap: 3px 5px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__campo--cuota,
+#modalProductosSolicitudCredito .solicitud-producto__campo--descuento,
+#modalProductosSolicitudCredito .solicitud-producto__campo--entrega {
+    grid-column: span 4;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__campo {
+    gap: 1px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__label {
+    font-size: 9px;
+    line-height: 1.1;
+    letter-spacing: .2px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__input,
+#modalProductosSolicitudCredito .solicitud-producto__select,
+#modalProductosSolicitudCredito .solicitud-producto__boton {
+    height: 30px;
+    min-height: 30px;
+    border-radius: 7px;
+    font-size: 11px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__input {
+    padding-right: 7px;
+    padding-left: 7px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__precio-wrap .solicitud-producto__input {
+    border-radius: 7px 0 0 7px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__select {
+    width: 30px;
+    border-radius: 0 7px 7px 0;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__check-wrap {
+    height: 30px;
+    gap: 5px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__checkbox {
+    width: 16px;
+    height: 16px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__check-text {
+    font-size: 10px;
+    line-height: 1.1;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__accion-wrap {
+    gap: 4px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__accion-wrap .solicitud-producto__input {
+    max-width: 72px;
+}
+
+#modalProductosSolicitudCredito .solicitud-producto__boton {
+    padding: 0 10px;
+}
+
+#modalProductosSolicitudCredito .td_registro {
+    height: 34px;
+    padding: 3px 5px;
+    font-size: 10px;
+    line-height: 1.1;
+}
+
+#modalProductosSolicitudCredito .divTablesScrool {
+    height: clamp(190px, 27vh, 300px) !important;
+    min-height: 160px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones {
+    gap: 4px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-acciones .btn4 {
+    min-height: 32px;
+    margin-top: 4px !important;
+    border-radius: 8px;
+    font-size: 11px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__pie {
+    min-height: 46px;
+    gap: 8px;
+    padding: 5px 11px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__pie p {
+    font-size: 10px;
+}
+
+#modalProductosSolicitudCredito .solicitud-productos-modal__volver {
+    min-height: 34px;
+    padding: 0 13px;
+    border-radius: 9px;
+    font-size: 11px;
+}
+
+@media (max-width: 900px) {
+    #modalProductosSolicitudCredito .solicitud-productos-modal__dialogo {
+        width: calc(100vw - 8px) !important;
+        height: calc(100vh - 8px) !important;
+        height: calc(100dvh - 8px) !important;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-producto {
+        grid-template-columns: 1fr;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-producto__campo--cuota,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--descuento,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--entrega,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--codigo,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--nombre,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--precio,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--cantidad {
+        grid-column: span 6;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-productos-modal__pie p {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    #modalProductosSolicitudCredito .solicitud-productos-modal__cabecera p {
+        display: none;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-producto__campo--cuota,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--descuento,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--entrega,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--codigo,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--nombre,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--precio,
+    #modalProductosSolicitudCredito .solicitud-producto__campo--cantidad {
+        grid-column: span 12;
+    }
+
+    #modalProductosSolicitudCredito .solicitud-producto__input,
+    #modalProductosSolicitudCredito .solicitud-producto__select,
+    #modalProductosSolicitudCredito .solicitud-producto__boton,
+    #modalProductosSolicitudCredito .solicitud-productos-modal__volver {
+        height: 38px;
+        min-height: 38px;
+    }
+}

@@ -1,0 +1,592 @@
+/* Cargar Compras: estructura visual equivalente a Nueva Venta. */
+#divAbmCompra.compra-profesional {
+    --compra-fondo: #eaf1fa;
+    --compra-superficie: rgba(255, 255, 255, .72);
+    --compra-superficie-fuerte: rgba(255, 255, 255, .88);
+    --compra-borde: rgba(138, 154, 176, .30);
+    --compra-texto: #1c2433;
+    --compra-muted: #647087;
+    --compra-primario: #007aff;
+    --compra-exito: #2da75d;
+    --compra-advertencia: #ed8b00;
+    --compra-peligro: #e5484d;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12000 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    isolation: isolate;
+    color: var(--compra-texto);
+    background:
+        radial-gradient(circle at 8% 12%, rgba(0, 122, 255, .18), transparent 29%),
+        radial-gradient(circle at 92% 4%, rgba(90, 200, 250, .20), transparent 27%),
+        linear-gradient(145deg, #e8f0fa 0%, #f5f7fb 46%, #e6eef8 100%) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif !important;
+}
+
+#divAbmCompra *,
+#divAbmCompra *::before,
+#divAbmCompra *::after {
+    box-sizing: border-box;
+}
+
+/* Selectores y operaciones abiertas desde Cargar Compras. El formulario
+ * principal trabaja en z-index 12000; estas ventanas legacy quedaban activas
+ * por debajo y daban la impresion de que los botones no respondian. */
+#divVistaCompras,
+#divVistaProveedor,
+#divOpcionesDetallesCmpra,
+#divOpcionesEliminarCompra,
+#divCargarPagosCompra {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 14000 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+/* Alta rapida invocada desde el selector de proveedores. */
+#divAbmProveedorVista {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 14100 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    pointer-events: auto !important;
+}
+
+#divAbmCompra .compra-efecto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    text-align: left;
+}
+
+#divAbmCompra .compra-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#divAbmCompra .compra-header {
+    flex: 0 0 auto;
+    width: calc(100% - 12px) !important;
+    min-height: 56px;
+    margin: 6px 6px 0 !important;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .82) !important;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, .66) !important;
+    box-shadow: 0 16px 38px rgba(52, 72, 105, .12), inset 0 1px 0 rgba(255, 255, 255, .85) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(175%);
+    backdrop-filter: blur(26px) saturate(175%);
+}
+
+#divAbmCompra .compra-header tr {
+    height: 54px;
+}
+
+#divAbmCompra .compra-header td {
+    padding: 4px !important;
+    vertical-align: middle;
+}
+
+#divAbmCompra .compra-header td:first-child {
+    padding-left: 12px !important;
+}
+
+#divAbmCompra .compra-identidad__titulo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#divAbmCompra .compra-identidad__titulo span {
+    color: var(--compra-muted);
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+#divAbmCompra .compra-identidad__titulo strong {
+    color: var(--compra-texto);
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.025em;
+}
+
+#divAbmCompra .compra-header .iconoBtn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    padding: 7px !important;
+    border: 1px solid rgba(255, 255, 255, .86) !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, .74) !important;
+    box-shadow: 0 10px 24px rgba(55, 74, 103, .12), inset 0 1px 0 rgba(255, 255, 255, .88) !important;
+    transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+#divAbmCompra .compra-header .iconoBtn:hover {
+    border-color: rgba(0, 122, 255, .25) !important;
+    background: rgba(255, 255, 255, .94) !important;
+    box-shadow: 0 12px 28px rgba(35, 74, 120, .16) !important;
+    transform: translateY(-2px) scale(1.02);
+}
+
+#divAbmCompra .compra-main {
+    position: relative;
+    flex: 1 1 0;
+    display: block;
+    width: 100%;
+    height: auto !important;
+    min-height: 0;
+    padding: 0;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+#divAbmCompra .compra-contenido {
+    position: relative;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 5px 9px 28px 7px;
+    overflow: visible !important;
+}
+
+#divAbmCompra .compra-card {
+    width: 100% !important;
+    margin: 0 0 5px !important;
+    padding: 6px !important;
+    border: 1px solid rgba(255, 255, 255, .78) !important;
+    border-radius: 12px !important;
+    color: var(--compra-texto) !important;
+    background: rgba(255, 255, 255, .58) !important;
+    box-shadow: 0 9px 24px rgba(48, 66, 95, .08), inset 0 1px 0 rgba(255, 255, 255, .78) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+}
+
+#divAbmCompra .compra-datos-principal::before,
+#divAbmCompra .compra-operacion::before {
+    display: flex;
+    align-items: center;
+    min-height: 20px;
+    margin: 0 2px 3px;
+    color: #26374d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+}
+
+#divAbmCompra .compra-datos-principal::before {
+    content: "1. Datos de la compra y del proveedor";
+}
+
+#divAbmCompra .compra-operacion::before {
+    content: "2. Productos y resumen de la compra";
+}
+
+#divAbmCompra .compra-datos {
+    padding: 4px 6px 5px !important;
+}
+
+#divAbmCompra .compra-datos-principal {
+    margin-bottom: 0 !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+#divAbmCompra .compra-datos-secundarios {
+    margin-top: 0 !important;
+    border-top: 0 !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+#divAbmCompra .compra-datos .row {
+    margin: 0;
+}
+
+#divAbmCompra .compra-datos .row,
+#divAbmCompra .compra-producto-editor .row,
+#divAbmCompra .compra-resumen .row {
+    --bs-gutter-x: .4rem;
+    --bs-gutter-y: .25rem;
+}
+
+#divAbmCompra .compra-datos .text-white,
+#divAbmCompra .compra-datos .pTituloC {
+    color: var(--compra-texto) !important;
+}
+
+#divAbmCompra .pTituloC {
+    color: var(--compra-texto) !important;
+    margin-bottom: 2px !important;
+    font-size: 10.5px !important;
+    font-weight: 720 !important;
+}
+
+#divAbmCompra input.form-control,
+#divAbmCompra select.form-select,
+#divAbmCompra input.inputText,
+#divAbmCompra input.inputTextDisable {
+    min-height: 32px;
+    height: 32px;
+    padding: 4px 9px !important;
+    border: 1px solid var(--compra-borde) !important;
+    border-radius: 9px !important;
+    color: var(--compra-texto) !important;
+    background: rgba(255, 255, 255, .66) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .70), 0 4px 14px rgba(54, 71, 98, .04) !important;
+    outline: 0;
+}
+
+#divAbmCompra input:focus,
+#divAbmCompra select:focus,
+#divAbmCompra button:focus-visible,
+#divAbmCompra .iconoBtn:focus-visible {
+    border-color: rgba(0, 122, 255, .55) !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, .13) !important;
+    outline: 0 !important;
+}
+
+#divAbmCompra input:disabled,
+#divAbmCompra select:disabled {
+    color: #6f7d91 !important;
+    background: rgba(232, 238, 247, .72) !important;
+    opacity: 1;
+}
+
+#divAbmCompra button,
+#divAbmCompra .btn4,
+#divAbmCompra .btn1,
+#divAbmCompra .btn5 {
+    min-height: 32px;
+    height: 32px;
+    padding: 4px 10px !important;
+    border: 0 !important;
+    border-radius: 9px !important;
+    color: #fff !important;
+    background: linear-gradient(180deg, #148cff, #0075e8) !important;
+    box-shadow: 0 8px 18px rgba(0, 122, 255, .18) !important;
+    font: inherit;
+    font-size: 11px !important;
+    font-weight: 760 !important;
+    transition: filter .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+#divAbmCompra button:hover,
+#divAbmCompra .btn4:hover,
+#divAbmCompra .btn1:hover,
+#divAbmCompra .btn5:hover {
+    filter: brightness(.96);
+    transform: translateY(-1px);
+}
+
+#divAbmCompra #btnEditarCompas,
+#divAbmCompra #btneditarprecioscompras,
+#divAbmCompra #btneditarproductocompras {
+    background: linear-gradient(180deg, #637188, #4d5b70) !important;
+}
+
+#divAbmCompra #btnEliminarCompas {
+    background: linear-gradient(180deg, #ed5a61, #d93f48) !important;
+}
+
+#divAbmCompra #btnAgregarArchivoCompra {
+    background: linear-gradient(180deg, #f59a16, #df7b00) !important;
+}
+
+#divAbmCompra .compra-operacion {
+    display: block;
+    text-align: left;
+}
+
+#divAbmCompra .compra-productos-vista {
+    width: 100%;
+    margin: 0 0 5px !important;
+}
+
+#divAbmCompra .tableCabeceraRegistro {
+    width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 9px 9px 0 0 !important;
+    background: #1f6389 !important;
+}
+
+#divAbmCompra .tableCabeceraRegistro .td_registro {
+    height: 30px !important;
+    padding: 4px 6px !important;
+    border-color: rgba(255, 255, 255, .34) !important;
+    color: #fff !important;
+    background: #1f6389 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+}
+
+#divAbmCompra #table_vista_producto_compra,
+#divAbmCompra #table_abm_detalle_compra {
+    width: 100%;
+    min-height: 0;
+    overflow: auto !important;
+    border: 1px solid var(--compra-borde) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 9px 9px;
+    background: rgba(255, 255, 255, .60) !important;
+}
+
+#divAbmCompra #table_vista_producto_compra {
+    height: clamp(180px, 24vh, 250px) !important;
+}
+
+#divAbmCompra #table_abm_detalle_compra {
+    height: clamp(345px, 48vh, 495px) !important;
+}
+
+#divAbmCompra #table_vista_producto_compra:empty::before,
+#divAbmCompra #table_abm_detalle_compra:empty::before {
+    display: grid;
+    min-height: 100%;
+    place-items: center;
+    padding: 24px;
+    color: var(--compra-muted);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+#divAbmCompra #table_vista_producto_compra:empty::before {
+    content: "Busque un producto para comenzar";
+}
+
+#divAbmCompra #table_abm_detalle_compra:empty::before {
+    content: "Todavía no hay productos agregados a la compra";
+}
+
+#divAbmCompra .compra-producto-editor,
+#divAbmCompra .compra-resumen {
+    width: 100%;
+    margin: 5px 0 !important;
+    padding: 5px 6px !important;
+    border: 1px solid rgba(255, 255, 255, .78) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, .58) !important;
+    box-shadow: 0 8px 22px rgba(48, 66, 95, .07) !important;
+}
+
+#divAbmCompra .compra-producto-editor .row,
+#divAbmCompra .compra-resumen .row {
+    margin: 0;
+}
+
+#divAbmCompra .compra-detalle-cabecera {
+    margin-top: 5px !important;
+}
+
+#divAbmCompra .compra-resumen {
+    margin-bottom: 0 !important;
+}
+
+#divAbmCompra .compra-main::-webkit-scrollbar,
+#divAbmCompra .compra-contenido::-webkit-scrollbar,
+#divAbmCompra .div_cuerpo_table::-webkit-scrollbar {
+    width: 11px;
+    height: 9px;
+}
+
+#divAbmCompra .compra-main::-webkit-scrollbar-track,
+#divAbmCompra .compra-contenido::-webkit-scrollbar-track {
+    margin: 4px 0;
+    border-radius: 999px;
+    background: rgba(116, 132, 153, .12);
+}
+
+#divAbmCompra .compra-main::-webkit-scrollbar-thumb,
+#divAbmCompra .compra-contenido::-webkit-scrollbar-thumb,
+#divAbmCompra .div_cuerpo_table::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: #8ba0b4;
+    background-clip: padding-box;
+}
+
+#divAbmCompra .compra-main::-webkit-scrollbar-thumb,
+#divAbmCompra .compra-contenido::-webkit-scrollbar-thumb {
+    min-height: 44px;
+    background-color: #657b92;
+}
+
+body.dark #divAbmCompra.compra-profesional,
+body.modo-oscuro #divAbmCompra.compra-profesional {
+    --compra-superficie: rgba(37, 45, 56, .76);
+    --compra-superficie-fuerte: rgba(42, 51, 64, .90);
+    --compra-borde: rgba(154, 170, 190, .23);
+    --compra-texto: #e7edf5;
+    --compra-muted: #aeb9c8;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(22, 119, 190, .15), transparent 30%),
+        radial-gradient(circle at 90% 0%, rgba(64, 156, 214, .10), transparent 28%),
+        linear-gradient(145deg, #171c24, #202731 55%, #19212a) !important;
+}
+
+body.dark #divAbmCompra .compra-header,
+body.dark #divAbmCompra .compra-card,
+body.dark #divAbmCompra .compra-producto-editor,
+body.dark #divAbmCompra .compra-resumen,
+body.modo-oscuro #divAbmCompra .compra-header,
+body.modo-oscuro #divAbmCompra .compra-card,
+body.modo-oscuro #divAbmCompra .compra-producto-editor,
+body.modo-oscuro #divAbmCompra .compra-resumen {
+    border-color: rgba(154, 170, 190, .20) !important;
+    background: rgba(37, 45, 56, .68) !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+body.dark #divAbmCompra input.form-control,
+body.dark #divAbmCompra select.form-select,
+body.modo-oscuro #divAbmCompra input.form-control,
+body.modo-oscuro #divAbmCompra select.form-select {
+    color: #e7edf5 !important;
+    border-color: #3b4858 !important;
+    background: rgba(33, 41, 51, .82) !important;
+}
+
+body.dark #divAbmCompra .compra-datos-principal::before,
+body.dark #divAbmCompra .compra-operacion::before,
+body.dark #divAbmCompra .compra-datos .text-white,
+body.dark #divAbmCompra .compra-datos .pTituloC,
+body.modo-oscuro #divAbmCompra .compra-datos-principal::before,
+body.modo-oscuro #divAbmCompra .compra-operacion::before,
+body.modo-oscuro #divAbmCompra .compra-datos .text-white,
+body.modo-oscuro #divAbmCompra .compra-datos .pTituloC {
+    color: #e7edf5 !important;
+}
+
+@media (max-width: 900px) {
+    #divAbmCompra .compra-header {
+        width: calc(100% - 14px) !important;
+        min-height: 62px;
+        margin: 7px 7px 0 !important;
+        border-radius: 16px !important;
+    }
+
+    #divAbmCompra .compra-header tr {
+        height: 60px;
+    }
+
+    #divAbmCompra .compra-header td:first-child {
+        padding-left: 10px !important;
+    }
+
+    #divAbmCompra .compra-identidad__titulo span {
+        display: none;
+    }
+
+    #divAbmCompra .compra-identidad__titulo strong {
+        font-size: 18px;
+    }
+
+    #divAbmCompra .compra-header .iconoBtn {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px;
+        padding: 7px !important;
+        border-radius: 12px !important;
+    }
+
+    #divAbmCompra .compra-contenido {
+        padding: 7px;
+    }
+}
+
+@media (min-width: 901px) and (max-height: 800px) {
+    #divAbmCompra .compra-header {
+        min-height: 48px;
+        margin-top: 4px !important;
+    }
+
+    #divAbmCompra .compra-header tr {
+        height: 46px;
+    }
+
+    #divAbmCompra .compra-header .iconoBtn {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px;
+        padding: 6px !important;
+    }
+
+    #divAbmCompra .compra-contenido {
+        padding-top: 3px;
+    }
+
+    #divAbmCompra #table_vista_producto_compra {
+        height: 156px !important;
+    }
+
+    #divAbmCompra #table_abm_detalle_compra {
+        height: 306px !important;
+    }
+}
+
+@media (max-width: 640px) {
+    #divAbmCompra .compra-header td:nth-child(3),
+    #divAbmCompra .compra-header td:nth-child(4) {
+        display: none;
+    }
+
+    #divAbmCompra .compra-card,
+    #divAbmCompra .compra-producto-editor,
+    #divAbmCompra .compra-resumen {
+        padding: 8px !important;
+        border-radius: 13px !important;
+    }
+
+    #divAbmCompra .compra-producto-editor .d-flex,
+    #divAbmCompra .compra-resumen .d-flex {
+        flex-wrap: wrap;
+    }
+
+    #divAbmCompra #table_vista_producto_compra,
+    #divAbmCompra #table_abm_detalle_compra {
+        min-width: 720px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #divAbmCompra button,
+    #divAbmCompra .btn4,
+    #divAbmCompra .btn1,
+    #divAbmCompra .btn5,
+    #divAbmCompra .iconoBtn {
+        transition: none !important;
+    }
+}

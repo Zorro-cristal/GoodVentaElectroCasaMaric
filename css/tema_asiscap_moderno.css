@@ -1,0 +1,185 @@
+:root {
+  --app-bg-modern: #f3f7fa;
+  --app-surface-modern: #ffffff;
+  --app-text-modern: #172033;
+  --app-muted-modern: #667085;
+  --app-border-modern: #d8e2ee;
+  --app-primary-modern: #1178b3;
+  --app-primary-dark-modern: #0d6091;
+  --app-shadow-modern: 0 8px 22px rgba(15, 23, 42, .09);
+}
+
+html,
+body,
+.principal {
+  background: var(--app-bg-modern) !important;
+  color: var(--app-text-modern);
+  font-family: "Segoe UI", Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.imgFondoapp {
+  background: linear-gradient(145deg, #edf5fa 0%, #f8fafc 52%, #eef3f7 100%) !important;
+}
+
+.divMenub {
+  box-sizing: border-box;
+  border: 1px solid #e0e7ef !important;
+  border-radius: 12px !important;
+  background: var(--app-surface-modern) !important;
+  box-shadow: var(--app-shadow-modern) !important;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.divMenub:hover,
+.divMenub:active {
+  border-color: #afd2e5 !important;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, .12) !important;
+  transform: translateY(-2px);
+}
+
+.divMenub .imgIconoMenu {
+  filter: saturate(.9);
+}
+
+.pTituloMenu,
+.pTitulo1,
+.pTituloAbm {
+  color: var(--app-text-modern) !important;
+  font-family: "Segoe UI", Arial, sans-serif !important;
+}
+
+.pTituloMenu {
+  font-weight: 800 !important;
+}
+
+.PtituloInfo {
+  color: var(--app-muted-modern) !important;
+  line-height: 1.35;
+}
+
+.divDetalles,
+.divVentana,
+.divVentana1,
+.modal-content {
+  box-sizing: border-box;
+  border: 1px solid #e0e7ef !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: var(--app-text-modern) !important;
+  box-shadow: var(--app-shadow-modern) !important;
+}
+
+.inputAbm,
+.inputText,
+.inputBuscador,
+.inputSelect,
+.textarea1 {
+  box-sizing: border-box;
+  min-height: 42px;
+  border: 1px solid var(--app-border-modern) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  color: var(--app-text-modern) !important;
+  outline: none !important;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.inputAbm:focus,
+.inputText:focus,
+.inputBuscador:focus,
+.inputSelect:focus,
+.textarea1:focus {
+  border-color: var(--app-primary-modern) !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(17, 120, 179, .14) !important;
+}
+
+.btnappA,
+.btn1,
+.btn2,
+.btn3,
+.btn4,
+.btnSelecct3 {
+  min-height: 42px;
+  border: 1px solid var(--app-primary-modern) !important;
+  border-radius: 9px !important;
+  background: var(--app-primary-modern) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 3px 8px rgba(17, 120, 179, .20);
+  transition: background-color .18s ease, transform .12s ease, box-shadow .18s ease;
+}
+
+.btnappA:hover,
+.btn1:hover,
+.btn2:hover,
+.btn3:hover,
+.btn4:hover,
+.btnSelecct3:hover {
+  background: var(--app-primary-dark-modern) !important;
+  box-shadow: 0 6px 14px rgba(17, 120, 179, .24);
+  transform: translateY(-1px);
+}
+
+.btnappA:focus-visible,
+.btn1:focus-visible,
+.btn2:focus-visible,
+.btn3:focus-visible,
+.btn4:focus-visible,
+.inputAbm:focus-visible,
+.inputText:focus-visible,
+.inputBuscador:focus-visible,
+.inputSelect:focus-visible {
+  outline: 3px solid rgba(17, 120, 179, .20) !important;
+  outline-offset: 2px;
+}
+
+.imgIconMenuA,
+.iconoBtn {
+  border: 1px solid #e0e7ef !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, .08);
+}
+
+.tableRegistro,
+tr[name="tdDetalle"] {
+  border-bottom: 1px solid #e8edf3 !important;
+  background: #fff;
+  color: var(--app-text-modern);
+}
+
+.tableRegistro:hover,
+tr[name="tdDetalle"]:hover {
+  background: #eef6fb !important;
+}
+
+.tableRegistroSelec,
+.tableRegistroSelec td {
+  background: #dceefa !important;
+  color: #123d57 !important;
+}
+
+@media (max-width: 600px) {
+  #divMenuApp {
+    gap: 10px;
+  }
+
+  .divMenub {
+    min-height: 142px;
+    margin: 0 !important;
+  }
+
+  .inputAbm,
+  .inputText,
+  .inputBuscador,
+  .inputSelect,
+  .btnappA,
+  .btn1,
+  .btn2,
+  .btn3,
+  .btn4 {
+    min-height: 44px;
+  }
+}
