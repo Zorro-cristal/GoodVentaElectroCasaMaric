@@ -234,6 +234,28 @@ function renderProductosSolicitudCredito(registros,anexar){
 		tabla.appendChild(fila); fragmento.appendChild(tabla);
 	});
 	cuerpo.appendChild(fragmento);
+	actualizarVistaProductosSolicitudCredito();
+}
+function actualizarVistaProductosSolicitudCredito(){
+	if (typeof window.actualizarResumenProductosSolicitudCredito === "function") {
+		window.actualizarResumenProductosSolicitudCredito();
+	}
+}
+function mostrarListadoProductosSolicitudCredito(){
+	var cuerpo=document.getElementById("table_Solicitud_Credito_Producto");
+	if(!cuerpo){return;}
+	var contenedor=cuerpo.parentNode;
+	if(contenedor){
+		contenedor.scrollTop=contenedor.scrollHeight;
+		if(typeof contenedor.scrollIntoView === "function"){
+			contenedor.scrollIntoView({block:"nearest",inline:"nearest"});
+		}
+	}
+	var filas=cuerpo.querySelectorAll('tr[name="tdDetalleSolicitudCredito"]');
+	var ultima=filas.length ? filas[filas.length-1] : null;
+	if(ultima && typeof ultima.scrollIntoView === "function"){
+		ultima.scrollIntoView({block:"nearest",inline:"nearest"});
+	}
 }
 function renderVistaSolicitudCredito(registros){
 	var cuerpo=document.getElementById("table_vista_SoliCredito");
@@ -289,6 +311,7 @@ function renderDetalleVentaDesdeSolicitud(registros){
 	(registros || []).forEach(function(registro,indice){
 		var tabla=crearTablaSecundariaSolicitud(indice); tabla.id="tdDetalleVenta_"+(registro.id_fila || indice+1);
 		var fila=document.createElement("tr"); fila.id="tbSelecRegistro"; fila.setAttribute("name","tdDetalleVentaOffline");
+		fila.setAttribute("data-origen","solicitud");
 		fila.addEventListener("click",function(){obtenerdatosdetalleventasolicitudcredito(fila);});
 		agregarCeldaSolicitud(fila,"td_id_1",registro.codigo_producto,null,true);
 		agregarCeldaSolicitud(fila,"td_id_2",registro.id_fila,null,true);
@@ -684,10 +707,12 @@ function LimpiarRefSolicitudCredito(){
 
 
 var cantidadCuotaSolicitud=""
+var codLocalPrecioProductoSolicitud=""
 var listadoVistaProductoSolicitudCredito = null;
 function iniciarListadoVistaProductoSolicitudCredito() {
 	if (listadoVistaProductoSolicitudCredito) return listadoVistaProductoSolicitudCredito;
 	if (typeof window.crearListadoVistaProductos !== "function") return null;
+	window.obtenerdatosvistaproductodesdeSolicitudCredito = seleccionarProductoVistaSolicitudCredito;
 	listadoVistaProductoSolicitudCredito = window.crearListadoVistaProductos({
 		nombre: "vista_producto_solicitud_credito",
 		idCuerpo: "table_vista_ProDuc_Solicitud_Credito",
@@ -705,6 +730,95 @@ function iniciarListadoVistaProductoSolicitudCredito() {
 		]
 	});
 	return listadoVistaProductoSolicitudCredito;
+}
+function obtenerCeldaVistaProductoSolicitudCredito(datostr, idCelda) {
+	var celda = $(datostr).children('td[id="' + idCelda + '"]');
+	var valor = celda.length ? celda.html() : "";
+	return valor == null || valor == undefined ? "" : valor;
+}
+function precioValidoSolicitudCredito(valor) {
+	var precio = valor == null || valor == undefined ? "" : String(valor).replace(/\s+/g, "").trim();
+	var numero = parseInt(precio.replace(/[^0-9-]/g, ""), 10);
+	return precio !== "" && !isNaN(numero) && numero > 0;
+}
+function obtenerLocalPrecioSolicitudCredito() {
+	var localSolicitud = document.getElementById("inptLocalVentaSolicitudCredito");
+	if (codLocalPrecioProductoSolicitud != "") {
+		return codLocalPrecioProductoSolicitud;
+	}
+	if (localSolicitud && localSolicitud.value != "") {
+		return localSolicitud.value;
+	}
+	return typeof cod_localFKUSer !== "undefined" ? cod_localFKUSer : "";
+}
+function obtenerCuotasDisponiblesSolicitudCredito() {
+	var selector = document.getElementById("inpTPrecioSolicitud");
+	var cuotas = [];
+	if (!selector) {
+		return "";
+	}
+	for (var i = 0; i < selector.options.length; i++) {
+		var cuota = selector.options[i].getAttribute("id");
+		if (cuota != "" && cuota != null && cuotas.indexOf(cuota) === -1) {
+			cuotas.push(cuota);
+		}
+	}
+	return cuotas.join(", ");
+}
+function aplicarPrecioOpcionSolicitudCredito(cuota, permitirPrimeraOpcion) {
+	var selector = document.getElementById("inpTPrecioSolicitud");
+	if (!selector || selector.options.length === 0) {
+		return false;
+	}
+	var cuotaTexto = cuota == null || cuota == undefined ? "" : String(cuota).trim();
+	var opcion = null;
+	if (cuotaTexto != "") {
+		for (var i = 0; i < selector.options.length; i++) {
+			if (String(selector.options[i].getAttribute("id")) === cuotaTexto) {
+				opcion = selector.options[i];
+				break;
+			}
+		}
+	} else if (permitirPrimeraOpcion) {
+		opcion = selector.options[selector.selectedIndex >= 0 ? selector.selectedIndex : 0];
+	}
+	if (!opcion || !precioValidoSolicitudCredito(opcion.value)) {
+		return false;
+	}
+	selector.value = opcion.value;
+	document.getElementById("inptRefproductoPrecio").value = opcion.value;
+	if (opcion.getAttribute("id") != "" && opcion.getAttribute("id") != null) {
+		document.getElementById("inptCantidadCuotaSolicitud").value = opcion.getAttribute("id");
+	}
+	return true;
+}
+function mostrarErrorPrecioSolicitudCredito(cuota) {
+	var cuotasDisponibles = obtenerCuotasDisponiblesSolicitudCredito();
+	var detalleCuota = cuota != "" && cuota != null && cuota != undefined ? " PARA " + cuota + " CUOTAS" : "";
+	var detalleDisponibles = cuotasDisponibles != "" ? ". CUOTAS DISPONIBLES: " + cuotasDisponibles : "";
+	ver_vetana_informativa("NO SE ENCONTRO PRECIO" + detalleCuota + " EN EL LOCAL SELECCIONADO" + detalleDisponibles);
+}
+function seleccionarProductoVistaSolicitudCredito(datostr) {
+	$("tr[id=tbSelecRegistro]").each(function(i, td){
+		td.className = "";
+	});
+	datostr.className = "tableRegistroSelec";
+	idFkProducto = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_id");
+	codLocalPrecioProductoSolicitud = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_datos_7");
+	document.getElementById('inptRefCodProducto').value = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_datos_13");
+	document.getElementById('inptRefNombreProducto').value = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_datos_1");
+	document.getElementById('inpTPrecioSolicitud').innerHTML = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_datos_11");
+	document.getElementById('inptRefproductoPrecio').value = obtenerCeldaVistaProductoSolicitudCredito(datostr, "td_datos_4");
+	document.getElementById('inptRefCantidadProducto').value = "1";
+	if (!aplicarPrecioOpcionSolicitudCredito(document.getElementById('inptCantidadCuotaSolicitud').value, true)) {
+		document.getElementById('inptRefproductoPrecio').value = "";
+	}
+	buscardetallespreciossolicitud();
+	document.getElementById('btnADDProductoSolicitudCredito').style.backgroundColor = "#2196F3";
+	document.getElementById('inptRefCantidadProducto').focus();
+}
+function obtenerdatosvistaproductodesdeSolicitudCredito(datostr) {
+	seleccionarProductoVistaSolicitudCredito(datostr);
 }
 function buscarvistaventaSolicitud() {
 	var buscador = document.getElementById('inptRefNombreProducto').value
@@ -784,6 +898,13 @@ function buscardetallespreciossolicitud() {
 		ConDescuento="SI";
 	} 
 	cantidadCuotaSolicitud = document.getElementById("inptCantidadCuotaSolicitud").value
+	if(cantidadCuotaSolicitud == ""){
+		if(!aplicarPrecioOpcionSolicitudCredito("", true)){
+			document.getElementById("inptRefproductoPrecio").value = "";
+			ver_vetana_informativa("FALTO INGRESAR CANTIDAD DE CUOTAS")
+		}
+		return;
+	}
 	obtener_datos_user();
 	var datos = {
 		"useru": userid,
@@ -791,7 +912,7 @@ function buscardetallespreciossolicitud() {
 		"navegador": navegador,
 		"cod_productoSolicitud": idFkProducto,
 		"cantidadCuotaSolicitud": cantidadCuotaSolicitud,
-		"cod_localFK": cod_localFKUSer,
+		"cod_localFK": obtenerLocalPrecioSolicitudCredito(),
 		"ConDescuento": ConDescuento,
 		"funt": "buscardetallespreciossolicitud"
 	};
@@ -827,13 +948,19 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 				   
 				  var producto= document.getElementById("inptRefNombreProducto").value
 				   
-				   if(datos_buscados=="" ){
+				   if(!precioValidoSolicitudCredito(datos_buscados) ){
+						if(!aplicarPrecioOpcionSolicitudCredito(cantidadCuotaSolicitud, false)){
 					  	document.getElementById("inptRefproductoPrecio").value = ""
+							mostrarErrorPrecioSolicitudCredito(cantidadCuotaSolicitud)
+						}
 				   }else{
 						document.getElementById("inptRefproductoPrecio").value = datos_buscados
 				   }
 					
 					
+				}else{
+					document.getElementById("inptRefproductoPrecio").value = ""
+					ver_vetana_informativa("NO SE PUDO OBTENER EL PRECIO DEL PRODUCTO")
 				}
 			} catch (error) {
 					ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
@@ -972,6 +1099,7 @@ function cambiarModoProductoProvisionalSolicitudCredito(esProvisional) {
 	var precio = document.getElementById('inptRefproductoPrecio');
 	var selectorPrecio = document.getElementById('inpTPrecioSolicitud');
 	idFkProducto = "";
+	codLocalPrecioProductoSolicitud = "";
 	codigo.value = "";
 	nombre.value = "";
 	precio.value = "";
@@ -995,13 +1123,28 @@ function anhadirProductoSolicitudCredito(){
 	var inptRefCantidadProducto = document.getElementById('inptRefCantidadProducto').value
 	var inptRefproductoPrecio = document.getElementById('inptRefproductoPrecio').value
 	
-	var inpTPrecioSolicitud = document.getElementById('inpTPrecioSolicitud').value
+	var selectorPrecioSolicitud = document.getElementById('inpTPrecioSolicitud')
 	var checkProvisional = document.getElementById('checkProductoProvisionalSolicitudCredito')
 	var esProvisional = checkProvisional && checkProvisional.checked
+	if (!esProvisional && idFkProducto == "") {
+		var filaSeleccionada = document.querySelector('#table_vista_ProDuc_Solicitud_Credito tr.tableRegistroSelec');
+		if (filaSeleccionada) {
+			seleccionarProductoVistaSolicitudCredito(filaSeleccionada);
+			inptRefCodProducto = document.getElementById('inptRefCodProducto').value;
+			inptRefNombreProducto = document.getElementById('inptRefNombreProducto').value;
+			inptRefCantidadProducto = document.getElementById('inptRefCantidadProducto').value;
+			inptRefproductoPrecio = document.getElementById('inptRefproductoPrecio').value;
+		}
+	}
 
 	var valor = document.getElementById('inptCantidadCuotaSolicitud').value;
 
-	if( inptRefproductoPrecio==""){
+	if(!precioValidoSolicitudCredito(inptRefproductoPrecio)){
+		if(!esProvisional && aplicarPrecioOpcionSolicitudCredito(valor, true)){
+			inptRefproductoPrecio = document.getElementById('inptRefproductoPrecio').value
+		}
+	}
+	if(!precioValidoSolicitudCredito(inptRefproductoPrecio)){
 				ver_vetana_informativa("ESTE PRODUCTO NO TIENE PRECIO")
 				return false;
 		}
@@ -1012,7 +1155,7 @@ function anhadirProductoSolicitudCredito(){
 		}
 	
 
-	var CuotaNro =$("select[id=inpTSeleccCosto]").children(":selected").attr("id")
+	var CuotaNro = selectorPrecioSolicitud ? $(selectorPrecioSolicitud).children(":selected").attr("id") : ""
 	if (!esProvisional && idFkProducto == "") {
 		ver_vetana_informativa("FALTO SELECCIONAR UN PRODUCTO")
 		return false;
@@ -1045,14 +1188,16 @@ productosSolicitudModificados = true;
 
 
 recalcularTotalesSolicitudCredito();
+mostrarListadoProductosSolicitudCredito();
 
 
 document.getElementById('inptRefCodProducto').value = ""
 document.getElementById('inptRefCantidadProducto').value = ""
 document.getElementById('inptRefNombreProducto').value = ""
 document.getElementById('inptRefproductoPrecio').value = ""
-document.getElementById('inpTSeleccCosto').innerHTML = ""
+if(selectorPrecioSolicitud){selectorPrecioSolicitud.innerHTML = ""}
 idFkProducto = ""
+codLocalPrecioProductoSolicitud = ""
 if (checkProvisional) {
 	checkProvisional.checked = false
 	cambiarModoProductoProvisionalSolicitudCredito(false)
@@ -1147,9 +1292,15 @@ function CancelarCredito_Producto(){
 function seleccionarsolicitudCredito(datos) {
     var optionSeleccionado = datos.options[datos.selectedIndex];
 
-    if (optionSeleccionado.getAttribute("name") != undefined) {
+    if (!optionSeleccionado) {
+        return;
+    }
+    if (precioValidoSolicitudCredito(datos.value)) {
         document.getElementById("inptRefproductoPrecio").value = datos.value;
-        document.getElementById("inptCantidadCuotaSolicitud").value = optionSeleccionado.getAttribute("id");
+        document.getElementById("inptCantidadCuotaSolicitud").value = optionSeleccionado.getAttribute("id") || "";
+    } else {
+        document.getElementById("inptRefproductoPrecio").value = "";
+        mostrarErrorPrecioSolicitudCredito(optionSeleccionado.getAttribute("id") || "");
     }
 }
 function minimizarsolicitudCredito(){
@@ -1219,6 +1370,7 @@ function limpiarcampossolicitudCredito(){
 	idGaranteFk="6"
 	idFKZona="";
 	idSolicitudCredito="";
+	codLocalPrecioProductoSolicitud="";
 	document.getElementById('btnEditarClientes').style.backgroundColor="#b7b7b7";
 	document.getElementById('inptCantidadCuotaSolicitud').disabled=false;
     document.getElementById('checkDescuentoSolicitudCredito').checked= false;
@@ -2158,13 +2310,15 @@ function obtenerdatosvistaSolicitudCreditoVenta(datostr) {
 
 	datostr.className = 'tableRegistroSelec'
  
+		var idSolicitudSeleccionada = $(datostr).children('td[id="td_id"]').html();
 		limpiarcamposventa()
 		
  
-		codSolcirudFK = $(datostr).children('td[id="td_id"]').html();
+		codSolcirudFK = idSolicitudSeleccionada;
+		idSolicitudCredito = idSolicitudSeleccionada;
 		document.getElementById('inptSolicitudCredito').value = $(datostr).children('td[id="td_datos_3"]').html();
 		
-		buscarDetalleProductoSolicitudParaVentaVistaSolicitud()
+		buscarDetalleProductoSolicitudParaVentaVistaSolicitud(idSolicitudSeleccionada)
 		
 		idFkCliente = $(datostr).children('td[id="td_datos_21"]').html();
 		document.getElementById('inptClienteVenta').value = $(datostr).children('td[id="td_datos_3"]').html();
@@ -2204,6 +2358,7 @@ document.getElementById("inptTotalVenta").value=separadordemilesnumero(totalVent
 document.getElementById("inptTotalVenta2").innerHTML=separadordemilesnumero(totalVenta);
 document.getElementById("inptTotalDescuento").value="0";
 
+tipoDesdeVenta="Solicitud"
 document.getElementById('inptSeleccTipoVenta').value = 'CREDITO';
 OpcionesTipoVenta();
 precargarEntregaSolicitudEnVenta(entregaSolicitud, totalVenta, CuotaNro);
@@ -2246,16 +2401,23 @@ function verCerrarAbmAbrirVentaSoli(){
 		return false;
 	}
 	
+	var idSolicitudSeleccionada=$(datostr).children('td[id="td_id"]').text();
+	if(idSolicitudSeleccionada==""){
+		ver_vetana_informativa("FALTO SELECCIONAR UNA SOLICITUD")
+		return false;
+	}
 	limpiarcamposventa()
+	idSolicitudCredito=idSolicitudSeleccionada
+	codSolcirudFK=idSolicitudSeleccionada
+	tipoDesdeVenta="Solicitud"
 	
-	buscarDetalleProductoSolicitudParaVenta()
+	buscarDetalleProductoSolicitudParaVenta(idSolicitudSeleccionada)
 	
 	document.getElementById('inptClienteVenta').value=$(datostr).children('td[id="td_datos_3"]').text();
 	document.getElementById('inptDocClienteVenta').value=$(datostr).children('td[id="td_datos_1"]').text();
 	document.getElementById('inptDocGaranteVenta').value=$(datostr).children('td[id="td_datos_29"]').text();
 	document.getElementById('inptGaranteVenta').value=$(datostr).children('td[id="td_datos_18"]').text();
 	
-	codSolcirudFK = $(datostr).children('td[id="td_id"]').text();
 	document.getElementById('inptSolicitudCredito').value = $(datostr).children('td[id="td_datos_3"]').text();
 	
 	idFkCliente=$(datostr).children('td[id="td_datos_21"]').text();
@@ -2305,17 +2467,23 @@ document.getElementById("btnCancelarVenta").style.display=""
 function comprobarCantidadCuota(){
 	
 }
-function buscarDetalleProductoSolicitudParaVenta() {
+function buscarDetalleProductoSolicitudParaVenta(idSolicitudSeleccionada) {
 
 	document.getElementById("table_abm_detalle_venta").innerHTML = paginacargando;
 	obtener_datos_user();
+	var solicitudBuscar = idSolicitudSeleccionada || codSolcirudFK || idSolicitudCredito;
+	if(solicitudBuscar==""){
+		document.getElementById("table_abm_detalle_venta").innerHTML = "";
+		ver_vetana_informativa("FALTO SELECCIONAR UNA SOLICITUD")
+		return false;
+	}
 	var datos = new FormData();
 	obtener_datos_user();
 	datos.append("useru", userid)
 	datos.append("passu", passuser)
 	datos.append("navegador", navegador)
 	datos.append("funt", "buscarDetalleProductoSolicitudParaVenta")
-	datos.append("buscar", idSolicitudCredito) 
+	datos.append("buscar", solicitudBuscar)
 	datos.append("cod_localFK", cod_localFKUSer) 
 	datos.append("formato", "json")
 		var OpAjax = $.ajax({
@@ -2369,15 +2537,21 @@ function buscarDetalleProductoSolicitudParaVenta() {
 	});
 
 	}
-function buscarDetalleProductoSolicitudParaVentaVistaSolicitud() {
+function buscarDetalleProductoSolicitudParaVentaVistaSolicitud(idSolicitudSeleccionada) {
 	document.getElementById("table_abm_detalle_venta").innerHTML = paginacargando;
 	obtener_datos_user();
+	var solicitudBuscar = idSolicitudSeleccionada || codSolcirudFK || idSolicitudCredito;
+	if(solicitudBuscar==""){
+		document.getElementById("table_abm_detalle_venta").innerHTML = "";
+		ver_vetana_informativa("FALTO SELECCIONAR UNA SOLICITUD")
+		return false;
+	}
 	var datos = new FormData();
 	datos.append("useru", userid)
 	datos.append("passu", passuser)
 	datos.append("navegador", navegador)
 	datos.append("funt", "buscarDetalleProductoSolicitudParaVentaVistaSolicitud")
-	datos.append("buscar", codSolcirudFK) 
+	datos.append("buscar", solicitudBuscar)
 	datos.append("cod_localFK", cod_localFKUSer) 
 	datos.append("formato", "json")
 		var OpAjax = $.ajax({

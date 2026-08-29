@@ -53,6 +53,14 @@ $editPrecioLista = utf8_decode($editPrecioLista);
 $precioLista=$_POST['precioLista'];
 $precioLista = quitarseparadormiles($precioLista);
 
+$tipocompra=isset($_POST['tipocompra']) ? utf8_decode($_POST['tipocompra']) : "";
+$timbrado=isset($_POST['timbrado']) ? utf8_decode($_POST['timbrado']) : "";
+$tipofactura=isset($_POST['tipofactura']) ? utf8_decode($_POST['tipofactura']) : "";
+$fecha_compra=isset($_POST['fecha_compra']) ? utf8_decode($_POST['fecha_compra']) : "";
+$cod_proveedorFK=isset($_POST['cod_proveedorFK']) ? utf8_decode($_POST['cod_proveedorFK']) : "";
+$num_comprobante=isset($_POST['num_comprobante']) ? utf8_decode($_POST['num_comprobante']) : "";
+$descuento=isset($_POST['descuento']) ? quitarseparadormiles($_POST['descuento']) : 0;
+
 if($cod_local==""){
 $controllocal=controldeaccesoacasas($user,"CAMBIARLOCAL"," u.accion='SI' ");
 	if($controllocal==0){

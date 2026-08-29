@@ -754,8 +754,6 @@ function BuscarBalanceGeneral() {
 		"fecha2": fecha2,
 		"fecha_corte": fecha2,
 		"estado": estado, 	 
-		"formato_salida": "nodos",
-		"formato_nodos_campos": "2",
 		"funt": "balance"
 	};
 	$.ajax({

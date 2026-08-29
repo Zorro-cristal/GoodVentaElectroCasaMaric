@@ -314,7 +314,7 @@ controlDetalle=1;
 	   });
 	   
 	   if(tipoDesdeVenta=="Solicitud"){
-		   $("tr[name=tdDetalleVentaOfflineSolicitud]").each(function(i, elementohtml){
+		   $("tr[name=tdDetalleVentaOffline], tr[name=tdDetalleVentaOfflineSolicitud]").each(function(i, elementohtml){
 				controlDetalle=0;
 			});
 		   

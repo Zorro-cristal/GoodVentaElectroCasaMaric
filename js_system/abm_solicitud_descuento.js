@@ -2423,6 +2423,10 @@ function verCerrarVentanaConfirmarEgresoParcial(d){
 
 
 function obtenerdatosvistaproductodesdeSolicitudCredito(datostr) {
+	if (typeof seleccionarProductoVistaSolicitudCredito === "function") {
+		seleccionarProductoVistaSolicitudCredito(datostr);
+		return;
+	}
 	$("tr[id=tbSelecRegistro]").each(function (i, td) {
 		td.className = ''
 

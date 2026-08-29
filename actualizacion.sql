@@ -1,0 +1,1 @@
+update cliente set accesocredito = 'Confirmado' where estado like '%';

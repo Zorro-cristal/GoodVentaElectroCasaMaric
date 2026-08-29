@@ -2190,7 +2190,7 @@ $plan = utf8_encode($valor['plan']);
 $idSolicitudCreditoFK = utf8_encode($valor['idSolicitudCreditoFK']); 
 $producto = utf8_encode($valor['producto']); 
 $cod_Barra = utf8_encode($valor['cod_Barra']); 
-$tipo = utf8_encode($valor['tipo']);    
+$tipo = strtoupper(trim(utf8_encode($valor['tipo'])));
 $es_provisional = (int)$valor['es_provisional'];
 $cod_localFK = utf8_encode($valor['cod_localFK']); 
 $observacion_general = utf8_encode($valor['observacion_general']);
@@ -3839,7 +3839,7 @@ $plan = utf8_encode($valor['plan']);
 
 $cod_Barra = utf8_encode($valor['cod_Barra']);   
 $codProducto = utf8_encode($valor['codProducto']);    
-$tipo = utf8_encode($valor['tipo']);    
+$tipo = strtoupper(trim(utf8_encode($valor['tipo'])));
 $es_provisional = (int)$valor['es_provisional'];
 $local = utf8_encode($valor['local']);    
 
@@ -4519,7 +4519,7 @@ $idSolicitudCreditoFK = utf8_encode($valor['idSolicitudCreditoFK']);
 
 
 
-if($tipo =='' || $tipo == 'NORMAL' || $tipo == 'undefined'){
+if($tipo != 'COMBO'){
 	
 
 if( $cuotas=="" || $cuotas=="0" || $cuotas=="contado" || $cuotas=="undefined"){

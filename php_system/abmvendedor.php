@@ -269,6 +269,7 @@ if($operacion=="nuevo")
 	$idvendedor= obtenerUltimaId() ;
 }
 
+asegurarDetalleVendedorLocal($mysqli,$idvendedor,$cod_localfk);
 cargarFotos($idvendedor);
 
 
@@ -343,6 +344,39 @@ if ( ! $stmt->execute()) {
    exit;
 }
 	 mysqli_close($mysqli);
+}
+
+function asegurarDetalleVendedorLocal($mysqli,$idvendedor,$cod_localfk)
+{
+	if($idvendedor=="" || $cod_localfk==""){
+		return;
+	}
+
+	$consulta="Select count(*) as contador from detallevendedor where cod_localFK=? and cod_vendedorFK=? ";
+	$stmt = $mysqli->prepare($consulta);
+	$ss='ss';
+	$stmt->bind_param($ss,$cod_localfk,$idvendedor);
+	if ( ! $stmt->execute()) {
+		echo "Error";
+		exit;
+	}
+
+	$result = $stmt->get_result();
+	$contador=0;
+	if ($valor= mysqli_fetch_assoc($result))
+	{
+		$contador=$valor['contador'];
+	}
+
+	if($contador=="0"){
+		$consulta1="Insert into detallevendedor (cod_localFK,cod_vendedorFK,accion) values(?,?,'SI')";
+		$stmt1 = $mysqli->prepare($consulta1);
+		$stmt1->bind_param($ss,$cod_localfk,$idvendedor);
+		if (!$stmt1->execute()) {
+			echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
+			exit;
+		}
+	}
 }
 
 
@@ -603,19 +637,55 @@ function buscarvista($buscar,$codlocal)
 	 $filas=array();
 	 $condicionlocal="";
 if($codlocal!=""){
-	$condicionlocal=" and dt.cod_localfk = '".$codlocal."'";
+	$condicionlocal=" and (
+		exists (
+			select 1 from detallevendedor dt
+			where dt.cod_vendedorFK = v.idvendedor
+			and dt.cod_localFK = ?
+			and dt.accion='SI'
+			limit 1
+		)
+		or (
+			v.cod_localfk = ?
+			and not exists (
+				select 1 from detallevendedor dt2
+				where dt2.cod_vendedorFK = v.idvendedor
+				and dt2.cod_localFK = ?
+				limit 1
+			)
+		)
+	)";
+}else{
+	$condicionlocal=" and (
+		exists (
+			select 1 from detallevendedor dt
+			where dt.cod_vendedorFK = v.idvendedor
+			and dt.accion='SI'
+			limit 1
+		)
+		or not exists (
+			select 1 from detallevendedor dt2
+			where dt2.cod_vendedorFK = v.idvendedor
+			limit 1
+		)
+	)";
 }
-		$sql= "Select * from vendedor inner join detallevendedor dt on cod_vendedorFK = idvendedor
-		where nombre like ?  and estado='Activo' and accion='SI' ".$condicionlocal." group by  idvendedor asc ";
+		$sql= "Select v.* from vendedor v
+		where v.nombre like ? and v.estado='Activo' ".$condicionlocal." order by v.idvendedor asc ";
 		
    // echo($sql);
    // exit;
    
    $stmt = $mysqli->prepare($sql);
-  	$s='s';
 $buscar="%".$buscar."%";
 //$buscar="".$buscar."";
-$stmt->bind_param($s,$buscar);
+if($codlocal!=""){
+  	$ssss='ssss';
+	$stmt->bind_param($ssss,$buscar,$codlocal,$codlocal,$codlocal);
+}else{
+  	$s='s';
+	$stmt->bind_param($s,$buscar);
+}
 
 if ( ! $stmt->execute()) {
    echo "Error";
@@ -1385,6 +1455,7 @@ function buscarVendedorLocales($cod_localvendedor,$formato='')
 	$mysqli=conectar_al_servidor();
 	$pagina='';
 	$filas=array();
+	$cod_local_principal=buscarLocalPrincipalVendedor($mysqli,$cod_localvendedor);
 	
 	$sql= " select *  from local  where estado='Activo' ";
 	
@@ -1429,9 +1500,12 @@ $totalregistro=$valor2;
 	 
 	 if($contador=="0"){
 	
-	$consulta1="Insert into detallevendedor (cod_localFK,cod_vendedorFK,accion) values($cod_local,$cod_localvendedor,'NO')";
+	$accionInicial=($cod_local_principal!="" && $cod_local_principal==$cod_local) ? "SI" : "NO";
+	$consulta1="Insert into detallevendedor (cod_localFK,cod_vendedorFK,accion) values(?,?,?)";
 	
 		$stmt1 = $mysqli->prepare($consulta1);
+		$sss='sss';
+		$stmt1->bind_param($sss,$cod_local,$cod_localvendedor,$accionInicial);
 		if (!$stmt1->execute()) {
 		echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
 		exit;
@@ -1508,6 +1582,31 @@ echo json_encode($informacion);
 exit;
 
 
+}
+
+
+function buscarLocalPrincipalVendedor($mysqli,$cod_localvendedor)
+{
+	$cod_local_principal="";
+	if($cod_localvendedor==""){
+		return $cod_local_principal;
+	}
+
+	$sql= "Select cod_localfk from vendedor where idvendedor=? limit 1";
+	$stmt = $mysqli->prepare($sql);
+	$s='s';
+	$stmt->bind_param($s,$cod_localvendedor);
+	if ( ! $stmt->execute()) {
+		echo "Error";
+		exit;
+	}
+	$result = $stmt->get_result();
+	if ($valor= mysqli_fetch_assoc($result))
+	{
+		$cod_local_principal=$valor['cod_localfk'];
+	}
+
+	return $cod_local_principal;
 }
 
 

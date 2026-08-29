@@ -1094,6 +1094,7 @@ body.modo-oscuro #divAbmVenta #table_abm_detalle_venta > table {
  * Nueva Venta trabaja en z-index 10000; estos overlays legacy estaban en 6000
  * y se abrian correctamente, pero quedaban ocultos detras del formulario. */
 #divVistaCliente,
+#divVistaCobrador,
 #divVistaVendedor,
 #divVistaSolicitudCredito,
 #divVistaVentas {
@@ -1104,6 +1105,10 @@ body.modo-oscuro #divAbmVenta #table_abm_detalle_venta > table {
     height: 100vh !important;
     height: 100dvh !important;
     pointer-events: auto !important;
+}
+
+#divVistaCobrador {
+    z-index: 12400 !important;
 }
 
 /* Pantallas que pueden abrirse desde los selectores anteriores. */

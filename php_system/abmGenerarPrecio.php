@@ -11,6 +11,108 @@ function solicitarFormatoJsonGenerarPrecio()
 {
 	return isset($_POST['formato']) && utf8_decode($_POST['formato'])=='json';
 }
+
+function fallarGenerarPrecio($mysqli,$stmt=null)
+{
+	$errno = $stmt ? $stmt->errno : $mysqli->errno;
+	$error = $stmt ? $stmt->error : $mysqli->error;
+	echo trigger_error('The query execution failed; MySQL said ('.$errno.') '.$error, E_USER_ERROR);
+	exit;
+}
+
+function ejecutarGenerarPrecio($mysqli,$sql,$tipos='',$parametros=array())
+{
+	$stmt = $mysqli->prepare($sql);
+	if (!$stmt) {
+		fallarGenerarPrecio($mysqli);
+	}
+	if ($tipos != '') {
+		$referencias = array($tipos);
+		for ($i = 0; $i < count($parametros); $i++) {
+			$referencias[] = &$parametros[$i];
+		}
+		if (!call_user_func_array(array($stmt,'bind_param'), $referencias)) {
+			fallarGenerarPrecio($mysqli,$stmt);
+		}
+	}
+	if (!$stmt->execute()) {
+		fallarGenerarPrecio($mysqli,$stmt);
+	}
+	return $stmt;
+}
+
+function contadorGenerarPrecio($mysqli,$sql,$tipos='',$parametros=array())
+{
+	$stmt = ejecutarGenerarPrecio($mysqli,$sql,$tipos,$parametros);
+	$result = $stmt->get_result();
+	$fila = $result ? $result->fetch_assoc() : null;
+	$total = $fila && isset($fila['total']) ? $fila['total'] : 0;
+	$stmt->close();
+	return $total;
+}
+
+function asegurarIndiceGenerarPrecio($mysqli,$tabla,$indice,$columnas)
+{
+	$sql = "SELECT COUNT(*) as total
+	FROM information_schema.statistics
+	WHERE table_schema = DATABASE()
+	AND table_name = ?
+	AND index_name = ?";
+	$stmt = ejecutarGenerarPrecio($mysqli,$sql,'ss',array($tabla,$indice));
+	$result = $stmt->get_result();
+	$fila = $result ? $result->fetch_assoc() : null;
+	$stmt->close();
+	if ($fila && $fila['total'] > 0) {
+		return;
+	}
+	$mysqli->query("ALTER TABLE ".$tabla." ADD INDEX ".$indice." (".$columnas.")");
+}
+
+function asegurarIndicesGenerarPrecio($mysqli)
+{
+	asegurarIndiceGenerarPrecio($mysqli,'detalle_listado_precio_producto','idx_dlpp_lista_producto_cuota','cod_lista_precio_productoFK,cod_producto,Cuota');
+	asegurarIndiceGenerarPrecio($mysqli,'detalle_listado_precio_producto','idx_dlpp_producto_lista','cod_producto,cod_lista_precio_productoFK');
+	asegurarIndiceGenerarPrecio($mysqli,'detalle_listado_precio','idx_dlp_lista_cuota','cod_lista_precio_productoFK,cuota');
+	asegurarIndiceGenerarPrecio($mysqli,'categoria_lista_precio','idx_clp_lista_accion_categoria','cod_lista_precio_productoFK,accion,cod_categoriaFK');
+	asegurarIndiceGenerarPrecio($mysqli,'producto','idx_producto_categoria_precio','cod_categoriaFK,estado,condicion_precio,precio_compra');
+}
+
+function sqlProductosGenerarPrecio()
+{
+	return "SELECT DISTINCT pr.cod_producto, pr.precio_compra
+	FROM producto pr
+	INNER JOIN categoria_lista_precio clp ON clp.cod_categoriaFK = pr.cod_categoriaFK
+	WHERE clp.cod_lista_precio_productoFK = ?
+	AND clp.accion = 'SI'
+	AND pr.estado = 'Activo'
+	AND pr.precio_compra != 0
+	AND pr.condicion_precio = 'SI'
+	AND pr.precio_compra BETWEEN ? AND ?";
+}
+
+function expresionesCalculoGenerarPrecio($tipo)
+{
+	if ($tipo == "PORCENTAJE") {
+		$base = "(pr.precio_compra * (100 + IFNULL(dlp.porcentaje,0)) / 100)";
+	} else {
+		$base = "(pr.precio_compra + IFNULL(dlp.porcentaje,0))";
+	}
+
+	$preciocuota = "(CEIL(((".$base." / NULLIF(dlp.cuota,0)) / 1000)) * 1000)";
+	$precioTotal = "(".$preciocuota." * dlp.cuota)";
+	if ($tipo == "PORCENTAJE") {
+		$conDescuento = "(".$precioTotal." - (".$precioTotal." * IFNULL(dlp.descuento,0) / 100))";
+	} else {
+		$conDescuento = "(".$precioTotal." - IFNULL(dlp.descuento,0))";
+	}
+	$cuotaConDescuento = "(CEIL(((".$conDescuento." / NULLIF(dlp.cuota,0)) / 1000)) * 1000)";
+
+	return array(
+		"precio_total" => $precioTotal,
+		"precio_cuota" => $preciocuota,
+		"cuota_descuento" => $cuotaConDescuento
+	);
+}
 function ObtenerDatos($operacion)
 {
 
@@ -68,44 +170,107 @@ exit;
 
 function  ActualizarPrecioProductoDetalleCategoria($idAbmCategoriaPrecio,$desde,$hasta,$tipo)
 {
-$mysqli=conectar_al_servidor();
+	$mysqli=conectar_al_servidor();
+	$idAbmCategoriaPrecio = intval($idAbmCategoriaPrecio);
+	$desde = floatval($desde);
+	$hasta = floatval($hasta);
 
-$sql= "select cod_detalle_listado_precio,cuota,descuento,porcentaje,dlp.descripcion
-from detalle_listado_precio dlp  
- where cod_lista_precio_productoFK='".$idAbmCategoriaPrecio."' order by dlp.cuota asc";
+	if ($idAbmCategoriaPrecio <= 0) {
+		$informacion =array("1" => "camposvacio");
+		echo json_encode($informacion);
+		exit;
+	}
 
- 
-$stmt = $mysqli->prepare($sql);
+	asegurarIndicesGenerarPrecio($mysqli);
 
-if ( ! $stmt->execute()) {
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
-exit;
-}
+	$sqlProductos = sqlProductosGenerarPrecio();
+	$expresiones = expresionesCalculoGenerarPrecio($tipo);
 
-$result = $stmt->get_result();
-$valor= mysqli_num_rows($result);
-$nroRegistro=$valor;
-$styleName="tableRegistroSearch";
+	$totalDetalles = contadorGenerarPrecio(
+		$mysqli,
+		"SELECT COUNT(*) as total FROM detalle_listado_precio WHERE cod_lista_precio_productoFK = ? AND cuota > 0",
+		'i',
+		array($idAbmCategoriaPrecio)
+	);
+	$totalProductos = contadorGenerarPrecio(
+		$mysqli,
+		"SELECT COUNT(*) as total FROM (".$sqlProductos.") productos",
+		'idd',
+		array($idAbmCategoriaPrecio,$desde,$hasta)
+	);
 
+	if ($totalDetalles <= 0 || $totalProductos <= 0) {
+		mysqli_close($mysqli);
+		$informacion =array("1" => "exito","2" => 0,"3" => 0,"4" => $totalProductos,"5" => $totalDetalles);
+		echo json_encode($informacion);
+		exit;
+	}
 
-if ($valor>0)
-{
-while ($valor= mysqli_fetch_assoc($result))
-{  
- 
-$cod_detalle_listado_precio = utf8_encode($valor['cod_detalle_listado_precio']);    
-$cuota = utf8_encode($valor['cuota']);    
-$descuento = utf8_encode($valor['descuento']);    
-$porcentaje = utf8_encode($valor['porcentaje']);    
-$descripcion = utf8_encode($valor['descripcion']);    
+	$mysqli->autocommit(false);
 
-BuscarCategoriaListaDetallePrecio($idAbmCategoriaPrecio,$cod_detalle_listado_precio,$cuota,$descuento,$porcentaje,$descripcion,$desde,$hasta,$tipo);
-}
-}
-  mysqli_close($mysqli);
-$informacion =array("1" => "exito");
-echo json_encode($informacion);	
-exit;
+	$sqlEliminarOtros = "DELETE dlpp
+	FROM detalle_listado_precio_producto dlpp
+	INNER JOIN (".$sqlProductos.") pr ON pr.cod_producto = dlpp.cod_producto
+	WHERE dlpp.cod_lista_precio_productoFK != ?";
+	$stmtEliminar = ejecutarGenerarPrecio($mysqli,$sqlEliminarOtros,'iddi',array($idAbmCategoriaPrecio,$desde,$hasta,$idAbmCategoriaPrecio));
+	$totalEliminados = $stmtEliminar->affected_rows;
+	$stmtEliminar->close();
+
+	$sqlActualizar = "UPDATE detalle_listado_precio_producto dlpp
+	INNER JOIN detalle_listado_precio dlp ON dlp.cod_lista_precio_productoFK = ? AND dlp.cuota = dlpp.Cuota
+	INNER JOIN (".$sqlProductos.") pr ON pr.cod_producto = dlpp.cod_producto
+	SET dlpp.precio = ".$expresiones['precio_total'].",
+		dlpp.Porcentaje = dlp.porcentaje,
+		dlpp.Cuota = dlp.cuota,
+		dlpp.preciocuota = ".$expresiones['precio_cuota'].",
+		dlpp.descuento = ".$expresiones['cuota_descuento'].",
+		dlpp.descripcion = dlp.descripcion,
+		dlpp.cod_detalle_listado_precioFK = dlp.cod_detalle_listado_precio,
+		dlpp.cod_lista_precio_productoFK = dlp.cod_lista_precio_productoFK
+	WHERE dlpp.cod_lista_precio_productoFK = ?
+	AND dlp.cuota > 0";
+	$stmtActualizar = ejecutarGenerarPrecio($mysqli,$sqlActualizar,'iiddi',array($idAbmCategoriaPrecio,$idAbmCategoriaPrecio,$desde,$hasta,$idAbmCategoriaPrecio));
+	$totalActualizados = $stmtActualizar->affected_rows;
+	$stmtActualizar->close();
+
+	$sqlInsertar = "INSERT INTO detalle_listado_precio_producto
+	(precio,Porcentaje,Cuota,preciocuota,cod_detalle_listado_precioFK,cod_producto,descripcion,comision,descuento,cod_lista_precio_productoFK)
+	SELECT ".$expresiones['precio_total'].",
+		dlp.porcentaje,
+		dlp.cuota,
+		".$expresiones['precio_cuota'].",
+		dlp.cod_detalle_listado_precio,
+		pr.cod_producto,
+		dlp.descripcion,
+		0,
+		".$expresiones['cuota_descuento'].",
+		dlp.cod_lista_precio_productoFK
+	FROM detalle_listado_precio dlp
+	INNER JOIN (".$sqlProductos.") pr
+	LEFT JOIN detalle_listado_precio_producto existente ON existente.cod_producto = pr.cod_producto
+		AND existente.Cuota = dlp.cuota
+		AND existente.cod_lista_precio_productoFK = dlp.cod_lista_precio_productoFK
+	WHERE dlp.cod_lista_precio_productoFK = ?
+	AND dlp.cuota > 0
+	AND existente.cod_detalle_listado_precio_producto IS NULL";
+	$stmtInsertar = ejecutarGenerarPrecio($mysqli,$sqlInsertar,'iddi',array($idAbmCategoriaPrecio,$desde,$hasta,$idAbmCategoriaPrecio));
+	$totalInsertados = $stmtInsertar->affected_rows;
+	$stmtInsertar->close();
+
+	$mysqli->commit();
+	$mysqli->autocommit(true);
+	mysqli_close($mysqli);
+
+	$informacion =array(
+		"1" => "exito",
+		"2" => $totalInsertados,
+		"3" => $totalActualizados,
+		"4" => $totalProductos,
+		"5" => $totalDetalles,
+		"6" => $totalEliminados
+	);
+	echo json_encode($informacion);	
+	exit;
 }
 
 

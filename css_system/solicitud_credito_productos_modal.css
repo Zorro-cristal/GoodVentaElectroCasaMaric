@@ -125,6 +125,11 @@ body.solicitud-productos-modal-abierto {
     text-align: center;
 }
 
+.solicitud-productos-resumen__vacio[hidden],
+.solicitud-productos-resumen__lista[hidden] {
+    display: none !important;
+}
+
 .solicitud-productos-resumen__vacio-icono {
     width: 48px;
     height: 48px;

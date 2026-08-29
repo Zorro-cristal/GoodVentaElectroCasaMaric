@@ -636,11 +636,12 @@ $tipo = utf8_encode($valor['tipo']);
 }
 }
 
+}
+
 /*Retornamos los datos obtenidos mediante el JSON */      
 $informacion =array("1" => "exito","2" => ($formato=='json' ? $filas : $pagina),"3" => $nroRegistro);
 echo json_encode($informacion);	
 exit;
-}
 }
    
 /*Funcion para insertar,modificar o eliminar registros*/

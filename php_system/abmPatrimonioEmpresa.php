@@ -2,6 +2,10 @@
 
 $operacion = $_POST['funt'];
 $operacion = utf8_decode($operacion);
+if ($operacion == "balance") {
+	// El balance puede devolver muchos detalles; el conversor a nodos duplica mucho la memoria.
+	unset($_POST['formato_salida'], $_POST['formato_nodos_campos'], $_POST['formato']);
+}
 
 include('quitarseparadormiles.php');
 require("conexion.php");

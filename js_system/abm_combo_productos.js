@@ -922,7 +922,8 @@ var controlStock = false;
 	}
 	
 
-	var CuotaNro =$("select[id=inpTSeleccCosto]").children(":selected").attr("id")
+	var selectorPrecioSolicitud = document.getElementById('inpTPrecioSolicitud');
+	var CuotaNro = selectorPrecioSolicitud ? $(selectorPrecioSolicitud).children(":selected").attr("id") : "";
 	/* if (idFkProducto == "") {
 		ver_vetana_informativa("FALTO SELECCIONAR UN PRODUCTO")
 		return false;
@@ -962,13 +963,16 @@ if(control){
 
 
 recalcularTotalesSolicitudCredito();
+if (typeof mostrarListadoProductosSolicitudCredito === "function") {
+	mostrarListadoProductosSolicitudCredito();
+}
 
 
 document.getElementById('inptRefCodProducto').value = ""
 document.getElementById('inptRefCantidadProducto').value = ""
 document.getElementById('inptRefNombreProducto').value = ""
 document.getElementById('inptRefproductoPrecio').value = ""
-document.getElementById('inpTSeleccCosto').innerHTML = ""
+if(selectorPrecioSolicitud){selectorPrecioSolicitud.innerHTML = ""}
 idFkProducto = ""
 
 vercerrarvistacombo("2","")

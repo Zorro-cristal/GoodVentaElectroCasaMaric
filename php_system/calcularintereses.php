@@ -152,7 +152,7 @@ if($nroCancelado==0){
 	$diff=$diff*-1;
 	if($actualizar=="si"){
 		editarDiasAtrazadosdesdecalcularcredito($cod_clienteFK,$diff);
-		actualizardiasatrasadocredito($idcredito,$diff);
+		actualizardiasatrazadocredito($idcredito,$diff);
 	}
 	}else{
 	$diff=0;
