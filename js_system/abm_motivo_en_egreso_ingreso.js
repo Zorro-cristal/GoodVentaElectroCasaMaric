@@ -81,7 +81,11 @@ function crearListadoProductosEstructurado(configuracion) {
 	if (configuracion.crearFila) opciones.crearFila = configuracion.crearFila;
 	else opciones.fila = configuracion.fila;
 	var listado = window.AbmListadoCore.crear(opciones);
-	listado.iniciar();
+	if (listado.columnasActivas && listado.columnasActivas().length === 0 && listado.restablecerColumnas) {
+		listado.restablecerColumnas();
+	} else {
+		listado.iniciar();
+	}
 	return listado;
 }
 
@@ -606,7 +610,7 @@ var listadoStockProductosImpresion = null;
 function iniciarListadoStockProductos() {
 	if (!listadoStockProductos) {
 		listadoStockProductos = crearListadoProductosEstructurado({
-			nombre: "stock_productos", idCuerpo: "table_comision_productosStock", indiceCabecera: 1, ordenInicial: "producto",
+			nombre: "stock_productos", idCuerpo: "table_comision_productosStock", idCabecera: "tdTituloStock", ordenInicial: "producto",
 			columnas: [
 				{ campo: "codigo_barra", titulo: "COD. PRODUCTO", ancho: "10%" }, { campo: "producto", titulo: "PRODUCTO", ancho: "30%" },
 				{ campo: "categoria", titulo: "CATEGORIA", ancho: "10%" }, { campo: "marca", titulo: "MARCA", ancho: "10%" },

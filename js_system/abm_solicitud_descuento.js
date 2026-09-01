@@ -1799,12 +1799,15 @@ function iniciarListadoInformeMovimientoStock() {
 	if (listadoInformeMovimientoStock || !window.AbmListadoCore) return listadoInformeMovimientoStock;
 	var cuerpo = document.getElementById("table_informe_movimientostock");
 	if (!cuerpo) return null;
-	var cabecera = cuerpo.previousElementSibling;
-	while (cabecera && (cabecera.tagName !== "TABLE" || cabecera.querySelector("input, select, textarea"))) {
-		cabecera = cabecera.previousElementSibling;
+	var cabecera = document.getElementById("tdTituloInformeMovimientoStock");
+	if (!cabecera) {
+		cabecera = cuerpo.previousElementSibling;
+		while (cabecera && (cabecera.tagName !== "TABLE" || cabecera.querySelector("input, select, textarea"))) {
+			cabecera = cabecera.previousElementSibling;
+		}
+		if (cabecera) cabecera.id = "tdTituloInformeMovimientoStock";
 	}
 	if (!cabecera) return null;
-	cabecera.id = "cabeceraInformeMovimientoStock";
 	listadoInformeMovimientoStock = window.AbmListadoCore.crear({
 		nombre: "informe_movimiento_stock",
 		idCabecera: cabecera.id,
@@ -1834,7 +1837,11 @@ function iniciarListadoInformeMovimientoStock() {
 			{ campo: "estado", tecnica: true }
 		] }
 	});
-	listadoInformeMovimientoStock.iniciar();
+	if (listadoInformeMovimientoStock.columnasActivas && listadoInformeMovimientoStock.columnasActivas().length === 0 && listadoInformeMovimientoStock.restablecerColumnas) {
+		listadoInformeMovimientoStock.restablecerColumnas();
+	} else {
+		listadoInformeMovimientoStock.iniciar();
+	}
 	return listadoInformeMovimientoStock;
 }
 function verCerrarInformeMovimientoStock(){

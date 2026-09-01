@@ -2951,19 +2951,19 @@ if($local!=""){
 
 $condicionexistencia="";
 if($existencia=="1"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) > (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) > IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="2"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="3"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) = (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) = IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="4"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) <= (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) <= IFNULL(sm.stockMinimo,0)";
 }
 
 
@@ -2977,7 +2977,7 @@ $condicioncod_admin_locales="";
 
 if($cod_admin_locales!=""){
  
-	$condicioncod_admin_locales = " and idadmin_local='".$cod_admin_locales."'";
+	$condicioncod_admin_locales = " and al.idadmin_local='".$cod_admin_locales."'";
 	$group=' group by pr.cod_barra asc';
 }
 
@@ -2985,12 +2985,12 @@ if($cod_admin_locales!=""){
 
 $sql= "SELECT 
     pr.cod_barra,pr.nombre_producto, pr.descripcion_producto, pr.unidad_producto,   
-    pr.precio_producto, pr.precio_compra, IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) AS stock_producto, stk.cod_localFK, pr.comision, pr.estado, cat.descripcion AS NombreCategoria, mar.descripcion AS NombreMarca, per.nombre_persona AS proveedor, sum(sm.stockMinimo) as stockMinimo, l.Nombre AS local,if( IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < sum(sm.stockMinimo), sum(sm.stockMinimo) - IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0),0 ) as faltante,
-	al.descripcion as admin_local
+    pr.precio_producto, pr.precio_compra, IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) AS stock_producto, stk.cod_localFK, pr.comision, pr.estado, cat.descripcion AS NombreCategoria, mar.descripcion AS NombreMarca, per.nombre_persona AS proveedor, IFNULL(sum(sm.stockMinimo),0) as stockMinimo, l.Nombre AS local,if( IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < IFNULL(sum(sm.stockMinimo),0), IFNULL(sum(sm.stockMinimo),0) - IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0),0 ) as faltante,
+	IFNULL(al.descripcion,l.Nombre) as admin_local
 FROM producto pr
 INNER JOIN stocklocales stk ON stk.cod_productofk = pr.cod_producto
-INNER JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
-INNER JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
+LEFT JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
+LEFT JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
 INNER JOIN local l ON l.cod_local = stk.cod_localFK
 LEFT JOIN categoria cat ON cat.cod_categoria = pr.cod_categoriaFK
 LEFT JOIN marcas mar ON mar.cod_marcas = pr.cod_marcasFK
@@ -3003,8 +3003,7 @@ LEFT JOIN (
 WHERE 
     pr.estado = 'Activo' 
     AND l.estado = 'Activo'
-	AND (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)>0
- ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group limit  150 ";
+  ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group limit  150 ";
  
 
 
@@ -3115,8 +3114,8 @@ $pagina2.="
 $sql= "SELECT  pr.cod_barra 
 FROM producto pr
 INNER JOIN stocklocales stk ON stk.cod_productofk = pr.cod_producto
-INNER JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
-INNER JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
+LEFT JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
+LEFT JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
 INNER JOIN local l ON l.cod_local = stk.cod_localFK
 LEFT JOIN categoria cat ON cat.cod_categoria = pr.cod_categoriaFK
 LEFT JOIN marcas mar ON mar.cod_marcas = pr.cod_marcasFK
@@ -3129,8 +3128,7 @@ LEFT JOIN (
 WHERE 
     pr.estado = 'Activo' 
     AND l.estado = 'Activo'
-	AND (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)>0
- ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group  ";
+  ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group  ";
 
 
 $stmt = $mysqli->prepare($sql);
@@ -3187,19 +3185,19 @@ if($local!=""){
 
 $condicionexistencia="";
 if($existencia=="1"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) > (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) > IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="2"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="3"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) = (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) = IFNULL(sm.stockMinimo,0)";
 }
 
 if($existencia=="4"){
-	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) <= (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)";
+	$condicionexistencia=" and IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) <= IFNULL(sm.stockMinimo,0)";
 }
 
 $group=" group by stk.cod_localFK, pr.cod_barra asc ";
@@ -3212,19 +3210,19 @@ $condicioncod_admin_locales="";
 
 if($cod_admin_locales!=""){
  
-	$condicioncod_admin_locales = " and idadmin_local='".$cod_admin_locales."'";
+	$condicioncod_admin_locales = " and al.idadmin_local='".$cod_admin_locales."'";
 	$group=' group by pr.cod_barra asc';
 }
 
 
 $sql= "SELECT 
     pr.cod_barra,pr.nombre_producto, pr.descripcion_producto, pr.unidad_producto,  
-    pr.precio_producto, pr.precio_compra, IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) AS stock_producto, stk.cod_localFK, pr.comision, pr.estado, cat.descripcion AS NombreCategoria, mar.descripcion AS NombreMarca, per.nombre_persona AS proveedor, sum(sm.stockMinimo) as stockMinimo, l.Nombre AS local,if( IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < sum(sm.stockMinimo), sum(sm.stockMinimo) - IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0),0 ) as faltante,
-	al.descripcion as admin_local
+    pr.precio_producto, pr.precio_compra, IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) AS stock_producto, stk.cod_localFK, pr.comision, pr.estado, cat.descripcion AS NombreCategoria, mar.descripcion AS NombreMarca, per.nombre_persona AS proveedor, IFNULL(sum(sm.stockMinimo),0) as stockMinimo, l.Nombre AS local,if( IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0) < IFNULL(sum(sm.stockMinimo),0), IFNULL(sum(sm.stockMinimo),0) - IFNULL((SELECT sum(entero) FROM stock_producto WHERE cod_stocklocalesFK = stk.idstocklocales),0),0 ) as faltante,
+	IFNULL(al.descripcion,l.Nombre) as admin_local
 FROM producto pr
 INNER JOIN stocklocales stk ON stk.cod_productofk = pr.cod_producto
-INNER JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
-INNER JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
+LEFT JOIN detalle_admin_local dal ON dal.cod_localFK = stk.cod_localFK
+LEFT JOIN admin_local al ON al.idadmin_local = dal.idadmin_localFK
 INNER JOIN local l ON l.cod_local = stk.cod_localFK
 LEFT JOIN categoria cat ON cat.cod_categoria = pr.cod_categoriaFK
 LEFT JOIN marcas mar ON mar.cod_marcas = pr.cod_marcasFK
@@ -3237,8 +3235,7 @@ LEFT JOIN (
 WHERE 
     pr.estado = 'Activo' 
     AND l.estado = 'Activo'
-	AND (select (sm.cantidad) from  stockminimo sm where sm.cod_productoFK= pr.cod_producto and sm.cod_localFK=stk.cod_localFK)>0
- ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group limit ".$registrocargados." , 150 ";
+  ".$condicionexistencia.$condicionproducto.$condicionstock.$condicioncodproducto.$condicioncategoria.$condicionmarca.$condicionlocal.$condicioncod_admin_locales.$condicionproveedor." $group limit ".$registrocargados." , 150 ";
 
 
 
@@ -7610,35 +7607,46 @@ function buscar_informe_movimiento_stock($fecha1,$fecha2,$cod_localFK,$producto,
 
 $condicionfecha="";
 if($fecha!=""){
-	$condicionfecha=" and fecha='$fecha'";
+	$fechaBuscar=$mysqli->real_escape_string($fecha);
+	$condicionfecha=" and DATE(sp.fecha_hora)='$fechaBuscar'";
 }
 
 	 $condicionRangoFecha="";
 if($fecha1!="" && $fecha2!=""){
-	$condicionRangoFecha=" and fecha between '$fecha1' and '$fecha2' ";
+	$fecha1Buscar=$mysqli->real_escape_string($fecha1);
+	$fecha2Buscar=$mysqli->real_escape_string($fecha2);
+	$condicionRangoFecha=" and DATE(sp.fecha_hora) between '$fecha1Buscar' and '$fecha2Buscar' ";
 }
 
 $condicionproducto="";
 if($producto!=""){
-	$condicionproducto=" and (SELECT nombre_producto from producto where cod_producto = cod_productoFK) like '%".$producto."%'";
+	$productoBuscar=$mysqli->real_escape_string($producto);
+	$condicionproducto=" and pr.nombre_producto like '%".$productoBuscar."%'";
 }
 
 $condicionmotivo="";
 if($motivo!=""){
-	$condicionmotivo=" and (SELECT descripcion from motivo_movimiento_stock where idmotivo_movimiento_stock = idmotivo_movimiento_stockFK) = '".$motivo."'";
+	$motivoBuscar=$mysqli->real_escape_string($motivo);
+	$condicionmotivo=" and (sp.tipo like '%".$motivoBuscar."%' or sp.operacion like '%".$motivoBuscar."%')";
 }
 $condicionlocal="";
 if($cod_localFK!=""){
-	$condicionlocal=" and cod_localFK = '".$cod_localFK."'";
+	$codLocalBuscar=$mysqli->real_escape_string($cod_localFK);
+	$condicionlocal=" and stk.cod_localfk = '".$codLocalBuscar."'";
 }
 
 
-$sql= "SELECT cod_user_insert,fecha,cantidad,cod_productoFK,tipo,estado,cod_localFK,idmotivo_movimiento_stockFK,
-(SELECT nombre_persona from persona where cod_persona = cod_user_insert) as usuario,
-(SELECT nombre_producto from producto where cod_producto = cod_productoFK) as producto,
-(SELECT nombre from local where cod_local = cod_localFK) as local,
-(SELECT descripcion from motivo_movimiento_stock where idmotivo_movimiento_stock = idmotivo_movimiento_stockFK) as motivo
-FROM movimiento_stock where estado = 'Activo' ".$condicionfecha.$condicionRangoFecha.$condicionproducto.$condicionmotivo.$condicionlocal." limit 150";
+$sql= "SELECT sp.user_insert as cod_user_insert,DATE(sp.fecha_hora) as fecha,ABS(sp.entero) as cantidad,stk.cod_productofk as cod_productoFK,sp.operacion as tipo,'Activo' as estado,stk.cod_localfk as cod_localFK,sp.tipo as idmotivo_movimiento_stockFK,
+IFNULL(per.nombre_persona,'') as usuario,
+pr.nombre_producto as producto,
+IFNULL(l.Nombre,'') as local,
+sp.tipo as motivo
+FROM stock_producto sp
+inner join stocklocales stk on stk.idstocklocales = sp.cod_stocklocalesFK
+inner join producto pr on pr.cod_producto = stk.cod_productofk
+left join local l on l.cod_local = stk.cod_localfk
+left join persona per on per.cod_persona = sp.user_insert
+where sp.idstock_producto!='' ".$condicionfecha.$condicionRangoFecha.$condicionproducto.$condicionmotivo.$condicionlocal." order by sp.fecha_hora desc, sp.idstock_producto desc limit 150";
 
 
 
