@@ -81,6 +81,10 @@ function limpiarcamposventa(ctrl) {
 		document.getElementById('inptEntregaVenta').value = "0";
 		document.getElementById('inptDocClienteVenta').value = "";
 		document.getElementById('inptDocClienteVenta2').value = "";
+		DireccionRecibo = "";
+		NombreGaranteRecibo = "";
+		DocumentoGaranteRecibo = "";
+		DireccionGaranteRecibo = "";
 	document.getElementById('inptSeleccTipoVenta').value = "CONTADO"
 	document.getElementById('inptSeleccTipoVenta').disabled=false
 	document.getElementById('inptSeleccTipoVenta').style.backgroundColor = ""
@@ -1323,9 +1327,40 @@ var totalCobroCuota="";
 var totalCobroCargoAdministrativo="";
 var totalCobroPagado="";
 
+var esperaImpresionVentaMs = 350;
+
+function esperarDatosVentaParaImpresion(callback) {
+	var promesas = [];
+	if (typeof buscardetallesventa === "function") {
+		var cargaDetalle = buscardetallesventa();
+		if (cargaDetalle && typeof cargaDetalle.then === "function") {
+			promesas.push(cargaDetalle);
+		}
+	}
+	if (typeof buscarImprimirTicketVentaContado === "function") {
+		var cargaTicket = buscarImprimirTicketVentaContado();
+		if (cargaTicket && typeof cargaTicket.then === "function") {
+			promesas.push(cargaTicket);
+		}
+	}
+	var continuar = function () {
+		setTimeout(callback, esperaImpresionVentaMs);
+	};
+	if (promesas.length > 0 && typeof $ !== "undefined" && typeof $.when === "function") {
+		$.when.apply($, promesas)
+			.done(continuar)
+			.fail(function () {
+				ver_vetana_informativa("NO SE PUDO CARGAR LOS DATOS PARA IMPRIMIR");
+			});
+		return;
+	}
+	continuar();
+}
+
 
 
 function buscardetallesventa() {
+	var cargaDetalleVenta = $.Deferred();
 	document.getElementById("table_abm_detalle_venta").innerHTML = paginacargando
 	obtener_datos_user();
 	var datos = {
@@ -1345,6 +1380,7 @@ function buscardetallesventa() {
 		error: function (jqXHR, textstatus, errorThrowm) {
 manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 			document.getElementById("table_abm_detalle_venta").innerHTML = ''
+			cargaDetalleVenta.reject(jqXHR, textstatus, errorThrowm);
 		},
 		success: function (responseText) {
 
@@ -1395,11 +1431,14 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
                     ZonaRecibo=datos[27]
                     telefonoRecinoGarante=datos[28]
                     ZonaReciboGarante=datos[29]
+					NombreGaranteRecibo=datos[52] || ""
+					DireccionGaranteRecibo=datos[51] || ""
                     InteresRecibo=datos[30]
                     DeudaActualRecibo=datos[31]
                     DiasAtrasado=datos[32]
                     RucRecibo=datos[33]
 					CiRecibo=datos[13]
+					DocumentoGaranteRecibo=datos[39]
                     TotalDescuentoRecibo=datos[34]
                     CuotasRestante=datos[35]
 					TipoFactura=datos[40]
@@ -1468,9 +1507,10 @@ cod_ventaReciboFK=idabmVenta
 						 document.getElementById("btnVerCreditos").style.display="none"
 					}
              		  
-				  document.getElementById("btnFinalizarVenta").style.display=""
+					document.getElementById("btnFinalizarVenta").style.display=""
 				  document.getElementById("btnCancelarVenta").style.display=""
 					OpcionesTipoVenta();
+					cargaDetalleVenta.resolve(datos);
 					
 					
 					
@@ -1478,14 +1518,19 @@ cod_ventaReciboFK=idabmVenta
 
 
 				}
+				else {
+					cargaDetalleVenta.reject(Respuesta);
+				}
 			} catch (error) {
 ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 					var titulo="Error: "+error+" \r\n Consola: "+responseText
 				GuardarArchivosLog(titulo)
+				cargaDetalleVenta.reject(error);
 			}
 		}
 	});
 
+	return cargaDetalleVenta.promise();
 
 }
 
@@ -2558,25 +2603,24 @@ NroVentas=PuntoExpedicion+"-"+NroVentas
 }
  
 
+					var finalizarImpresionContado = function () {
+						if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){
+							document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text()
+							document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
+							// document.getElementById("divOpcionesImpresion").style.display="none"
+							document.getElementById("divConfirmarNroDeFactura").style.display=""
+							ImprimirFacrtura1()
+						}
+						limpiarcamposventa()
+						document.getElementById("divVueltoVentaAContado").style.display="";
+					};
+
 					if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
-						buscarImprimirTicketVentaContado();
 						document.getElementById("divOpcionesImpresion").style.display=""
+						esperarDatosVentaParaImpresion(finalizarImpresionContado);
+					}else{
+						finalizarImpresionContado();
 					}
-		   
-		   
-		     if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){  
-					document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text() 
-					document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
-					// document.getElementById("divOpcionesImpresion").style.display="none"
-					document.getElementById("divConfirmarNroDeFactura").style.display=""
-					ImprimirFacrtura1()
-					limpiarcamposventa()
-					 }else{
-					 limpiarcamposventa()
-					 }
-					
-					 
-					 document.getElementById("divVueltoVentaAContado").style.display="";
                       
 				}
 

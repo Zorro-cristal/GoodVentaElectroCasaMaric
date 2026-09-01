@@ -1888,22 +1888,24 @@ NroVentas=PuntoExpedicion+"-"+NroVentas
 
  			
 		   
-		   if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
-						buscarImprimirTicketVentaContado();
-						document.getElementById("divOpcionesImpresion").style.display=""
+		   var finalizarImpresionContado = function () {
+					if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){
+						document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text()
+						document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
+						document.getElementById("divOpcionesImpresion").style.display="none"
+						document.getElementById("divConfirmarNroDeFactura").style.display=""
+						ImprimirFacrtura1()
 					}
-		   
-		     if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){  
-					document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text() 
-					document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
-					document.getElementById("divOpcionesImpresion").style.display="none"
-					document.getElementById("divConfirmarNroDeFactura").style.display=""
-					ImprimirFacrtura1()
 					limpiarcamposventa()
-					 }else{
-					 limpiarcamposventa()
-					 }
-					 document.getElementById("divVueltoVentaAContado").style.display="";
+					document.getElementById("divVueltoVentaAContado").style.display="";
+		   };
+
+		   if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
+						document.getElementById("divOpcionesImpresion").style.display=""
+						esperarDatosVentaParaImpresion(finalizarImpresionContado);
+					}else{
+						finalizarImpresionContado();
+					}
                       
 				}
 

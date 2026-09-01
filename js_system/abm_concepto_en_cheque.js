@@ -234,7 +234,7 @@ function buscarImprimirTicketVentaContado() {
 		"cod_venta": idabmVenta,
 		"funt": "buscarImprimirTicketVentaContado"
 	};
-	$.ajax({
+	return $.ajax({
 
 		data: datos,
 		url: "/GoodVentaElectroCasaMaric/php_system/abmpagos.php",

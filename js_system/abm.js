@@ -1239,6 +1239,9 @@ var NombreRecibo=""
 var DireccionRecibo=""
 var ZonaRecibo=""
 var ZonaReciboGarante=""
+var NombreGaranteRecibo=""
+var DireccionGaranteRecibo=""
+var DocumentoGaranteRecibo=""
 var telefonoRecinoGarante=""
 var telefonoRecino=""
 var DocumentoRecibo=""
@@ -1374,7 +1377,22 @@ var facturanroPagare=0;
 var ImportePagare=0;
 
 var EntregaPagare=0;
-function imprimirPagare(){
+function imprimirPagare(datosActualizados){
+	var docClienteActual = obtenerValorCampoPagare("inptDocClienteVenta", CiRecibo || DocumentoRecibo || RucRecibo);
+	if(!datosActualizados && typeof idabmVenta !== "undefined" && idabmVenta != "" && (docClienteActual == "" || DireccionRecibo == "")){
+		if(typeof buscardetallesventa === "function"){
+			var cargaDetallePagare = buscardetallesventa();
+			if(cargaDetallePagare && typeof cargaDetallePagare.then === "function"){
+				cargaDetallePagare.done(function(){
+					setTimeout(function(){
+						imprimirPagare(true);
+					}, 250);
+				});
+				return;
+			}
+		}
+	}
+
 	
 	if(EntregaPagare==""){
 		EntregaPagare="0";
@@ -1435,10 +1453,15 @@ var fecha = new Date(vencimientopagare);
 	var anhoVencimiendo =fecha.getFullYear()
 
 	ImportePagare=totalpagare;
-	var clientePagare = escaparHtmlPagare(document.getElementById("inptClienteVenta").value);
-	var documentoClientePagare = escaparHtmlPagare(document.getElementById("inptDocClienteVenta").value);
-	var garantePagare = escaparHtmlPagare(document.getElementById("inptGaranteVenta").value);
-	var documentoGarantePagare = escaparHtmlPagare(document.getElementById("inptDocGaranteVenta").value);
+	var clientePagare = escaparHtmlPagare(obtenerValorCampoPagare("inptClienteVenta", NombreRecibo));
+	var documentoClientePagare = escaparHtmlPagare(obtenerValorCampoPagare("inptDocClienteVenta", CiRecibo || DocumentoRecibo || RucRecibo));
+	var direccionClientePagare = escaparHtmlPagare(limpiarDireccionPagare(DireccionRecibo));
+	var garanteValorPagare = obtenerValorCampoPagare("inptGaranteVenta", NombreGaranteRecibo);
+	var idGarantePagare = typeof idGaranteFk !== "undefined" ? idGaranteFk : "";
+	var tieneGarantePagare = garanteValorPagare != "" && garanteValorPagare != "SIN GARANTE" && idGarantePagare != "6";
+	var garantePagare = escaparHtmlPagare(tieneGarantePagare ? garanteValorPagare : "");
+	var documentoGarantePagare = escaparHtmlPagare(tieneGarantePagare ? obtenerValorCampoPagare("inptDocGaranteVenta", DocumentoGaranteRecibo) : "");
+	var direccionGarantePagare = escaparHtmlPagare(tieneGarantePagare ? limpiarDireccionPagare(DireccionGaranteRecibo || ZonaReciboGarante) : "");
 	var numeroFacturaPagare = facturanroPagare || nroPagare || "";
 	var fechaVencimientoPagare = dia+"/"+mes+"/"+anhoVencimiendo;
 	var importeFormateadoPagare = separadordemilesnumero(ImportePagare);
@@ -1486,9 +1509,9 @@ var fecha = new Date(vencimientopagare);
 	+"<p class='pagare-recibido'>por igual valor recibido en <span class='pagare-puntos' style='display:inline-block;width:105mm'>&nbsp;</span> A mi (nuestra) entera satisfacción.</p>"
 	+"<p class='pagare-legal'>Queda expresamente convenido que la falta de pago de una cuota (Pagaré) en su vencimiento producirá la caducidad de los plazos de los demás documentos y volverá exigible el total de la obligación, produciéndose la mora de pleno derecho por el solo vencimiento de los plazos acordados. La cantidad de la obligación devengará durante el tiempo de mora el interés del ______% mensual y el interés punitorio del ______% mensual por el simple retardo; sin que esto implique prórroga del plazo de la obligación. Además el deudor abonará una comisión de cobranza del ______% al acreedor, si se vale de la gestión de su cobrador para efectuar las cuotas por falta de pago en las fechas convenidas y en el domicilio del mismo. Se fija expresamente la jurisdicción de los juzgados y tribunales de la Ciudad de Villarrica para entender en los asuntos judiciales que pudieran surgir en lo sucesivo. Pasados los 90 días de atraso se autoriza el registro general de morosos INFORMCONF.</p>"
 	+"<table class='pagare-firmas'><tr><td>"
-	+"<div class='pagare-firma-linea'><span>Firma:</span><span class='pagare-puntos'>&nbsp;</span></div><div class='pagare-firma-linea'><span>Deudor:</span><span class='pagare-puntos'>"+clientePagare+"</span></div><div class='pagare-firma-linea'><span>C.I.N°:</span><span class='pagare-puntos'>"+documentoClientePagare+"</span></div><div class='pagare-firma-linea'><span>Dirección:</span><span class='pagare-puntos'>&nbsp;</span></div>"
+	+"<div class='pagare-firma-linea'><span>Firma:</span><span class='pagare-puntos'>&nbsp;</span></div><div class='pagare-firma-linea'><span>Deudor:</span><span class='pagare-puntos'>"+clientePagare+"</span></div><div class='pagare-firma-linea'><span>C.I.N°:</span><span class='pagare-puntos'>"+documentoClientePagare+"</span></div><div class='pagare-firma-linea'><span>Dirección:</span><span class='pagare-puntos'>"+direccionClientePagare+"</span></div>"
 	+"</td><td>"
-	+"<div class='pagare-firma-linea'><span>Firma:</span><span class='pagare-puntos'>&nbsp;</span></div><div class='pagare-firma-linea'><span>Co Deudor:</span><span class='pagare-puntos'>"+garantePagare+"</span></div><div class='pagare-firma-linea'><span>C.I.N°:</span><span class='pagare-puntos'>"+documentoGarantePagare+"</span></div><div class='pagare-firma-linea'><span>Dirección:</span><span class='pagare-puntos'>&nbsp;</span></div>"
+	+"<div class='pagare-firma-linea'><span>Firma:</span><span class='pagare-puntos'>&nbsp;</span></div><div class='pagare-firma-linea'><span>Co Deudor:</span><span class='pagare-puntos'>"+garantePagare+"</span></div><div class='pagare-firma-linea'><span>C.I.N°:</span><span class='pagare-puntos'>"+documentoGarantePagare+"</span></div><div class='pagare-firma-linea'><span>Dirección:</span><span class='pagare-puntos'>"+direccionGarantePagare+"</span></div>"
 	+"</td></tr></table></section>";
 document.getElementById("divpagare").innerHTML=pagina;
  var documento= document.getElementById("DivImprimirPagares").innerHTML;
@@ -1506,6 +1529,29 @@ function escaparHtmlPagare(valor){
 		.replace(/>/g, "&gt;")
 		.replace(/\"/g, "&quot;")
 		.replace(/'/g, "&#039;");
+}
+
+function obtenerValorCampoPagare(idCampo, respaldo){
+	var campo = document.getElementById(idCampo);
+	var valor = campo ? campo.value : "";
+	if(valor == "" || valor == null){
+		valor = respaldo || "";
+	}
+	return String(valor).trim();
+}
+
+function limpiarDireccionPagare(valor){
+	var direccion = String(valor == null ? "" : valor).trim();
+	if(direccion == ""){
+		return "";
+	}
+	var partes = direccion.split("-");
+	var ultimo = partes[partes.length - 1].trim();
+	if(ultimo.indexOf("@") >= 0){
+		partes.pop();
+		direccion = partes.join("-").trim();
+	}
+	return direccion.replace(/^-+|-+$/g, "").trim();
 }
 
 

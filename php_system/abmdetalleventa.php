@@ -1583,6 +1583,8 @@ IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0
 (Select concat(direccion,'-',email) from persona where  cod_persona=cod_clienteFK) as zonaCliente,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as clientetelefono,
 (Select concat(direccion,'-',email) from persona where  cod_persona=vt.idGaranteFk) as zonaGarante,
+(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.idGaranteFk) as garantenombre,
+(Select direccion from persona where cod_persona=vt.idGaranteFk) as garantedireccion,
 (Select telefono from persona where cod_persona=vt.idGaranteFk) as Garantetelefono,
 (Select ci_cliente from cliente where cod_cliente=vt.idGaranteFk) as nrodocgarante,
 (Select ci_cliente from cliente where cod_cliente=vt.cod_clienteFK) as nrodocliente,
@@ -1606,6 +1608,8 @@ $nrodocgarante = "";
 $zonaCliente = ""; 
 $Garantetelefono = ""; 
 $zonaGarante = ""; 
+$garantenombre = "";
+$garantedireccion = "";
 $TipoVenta = ""; 
 
 $pagina = "";   
@@ -1671,6 +1675,8 @@ $num_factura = utf8_encode($valor['num_factura']);
 $puntoexpedicion = utf8_encode($valor['puntoexpedicion']); 
 $Garantetelefono = utf8_encode($valor['Garantetelefono']); 
 $zonaGarante = utf8_encode($valor['zonaGarante']); 
+$garantenombre = utf8_encode($valor['garantenombre']);
+$garantedireccion = utf8_encode($valor['garantedireccion']);
 $zonaCliente = utf8_encode($valor['zonaCliente']); 
 $ruccliente = utf8_encode($valor['ruccliente']); 
 $nroCouta = utf8_encode($valor['nroCouta']); 
@@ -1866,7 +1872,9 @@ $informacion =array("1" => "exito","2" => $formato=='json' ? $filas : $pagina,"5
 "47"=>$paginaContrato,
 "48"=>number_format($verDetallePago[0],'0',',','.'),
 "49"=>number_format($verDetallePago[1],'0',',','.'),
-"50"=>number_format($verDetallePago[2],'0',',','.'));
+"50"=>number_format($verDetallePago[2],'0',',','.'),
+"51"=>$garantedireccion,
+"52"=>$garantenombre);
 echo json_encode($informacion);	
 exit;
 }
