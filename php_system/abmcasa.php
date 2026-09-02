@@ -43,7 +43,13 @@ $estado=$_POST['estado'];
 $estado = utf8_decode($estado);
 	$cod_local=$_POST['cod_local'];
 $cod_local = utf8_decode($cod_local);
-	abm($nombre,$estado,$cod_local,$operacion);
+$telefono=isset($_POST['telefono']) ? $_POST['telefono'] : "";
+$telefono = utf8_decode($telefono);
+$direccion=isset($_POST['direccion']) ? $_POST['direccion'] : "";
+$direccion = utf8_decode($direccion);
+$ciudad=isset($_POST['ciudad']) ? $_POST['ciudad'] : "";
+$ciudad = utf8_decode($ciudad);
+	abm($nombre,$estado,$cod_local,$operacion,$telefono,$direccion,$ciudad);
 
 }
 
@@ -75,7 +81,7 @@ if($operacion=="buscaroptionlogin")
 
 }
 
-function abm($nombre,$estado,$cod_local,$operacion)
+function abm($nombre,$estado,$cod_local,$operacion,$telefono,$direccion,$ciudad)
 {
 	
 	
@@ -87,15 +93,21 @@ exit;
 
 $mysqli=conectar_al_servidor();
 
+if(asegurarCamposContactoLocalCasa($mysqli)==false){
+	$informacion =array("1" => "ERRORLOCAL");
+	echo json_encode($informacion);
+	exit;
+}
+
 if($operacion=="nuevo")
 {
 
 
-$consulta1="Insert into local (Nombre,estado)
-values(?,?)";
+$consulta1="Insert into local (Nombre,estado,telefono,direccion,ciudad)
+values(?,?,?,?,?)";
 $stmt1 = $mysqli->prepare($consulta1);
-$ss='ss';
-$stmt1->bind_param($ss,$nombre,$estado);
+$sssss='sssss';
+$stmt1->bind_param($sssss,$nombre,$estado,$telefono,$direccion,$ciudad);
 
 
 }
@@ -104,10 +116,10 @@ $stmt1->bind_param($ss,$nombre,$estado);
 if($operacion=="editar")
 {
 
-$consulta1="Update local set Nombre=?,estado=? where cod_local=?";	
+$consulta1="Update local set Nombre=?,estado=?,telefono=?,direccion=?,ciudad=? where cod_local=?";
 $stmt1 = $mysqli->prepare($consulta1);
-$ss='sss';
-$stmt1->bind_param($ss,$nombre,$estado,$cod_local); 
+$ssssss='ssssss';
+$stmt1->bind_param($ssssss,$nombre,$estado,$telefono,$direccion,$ciudad,$cod_local);
 
 }
 
@@ -115,7 +127,7 @@ $stmt1->bind_param($ss,$nombre,$estado,$cod_local);
 
 if (!$stmt1->execute()) {
 	
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
+echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
 exit;
 
 }
@@ -133,6 +145,48 @@ $informacion =array("1" => "exito");
 echo json_encode($informacion);	
 exit;
 	
+}
+
+function asegurarCamposContactoLocalCasa($mysqli)
+{
+	if(asegurarColumnaLocalCasa($mysqli,"telefono","varchar(100) DEFAULT NULL")==false){
+		return false;
+	}
+
+	if(asegurarColumnaLocalCasa($mysqli,"direccion","varchar(255) DEFAULT NULL")==false){
+		return false;
+	}
+
+	if(asegurarColumnaLocalCasa($mysqli,"ciudad","varchar(100) DEFAULT NULL")==false){
+		return false;
+	}
+
+	return true;
+}
+
+function asegurarColumnaLocalCasa($mysqli,$columna,$definicion)
+{
+	$consulta="SHOW COLUMNS FROM `local` LIKE '".$columna."'";
+	$stmt = $mysqli->prepare($consulta);
+
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+
+	if(mysqli_num_rows($result)>0){
+		return true;
+	}
+
+	$consulta="ALTER TABLE `local` ADD COLUMN `".$columna."` ".$definicion;
+	$stmt = $mysqli->prepare($consulta);
+
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	return true;
 }
 
 function relacionar_productos_local($cod_local)
@@ -223,7 +277,7 @@ $stmt1 = $mysqli->prepare($consulta1);
 
 if (!$stmt1->execute()) {
 	
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
+echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
 exit;
 
 }
@@ -237,6 +291,11 @@ return true;
 function buscar($codigo,$nombre,$estado)
 {
 	$mysqli=conectar_al_servidor();
+	if(asegurarCamposContactoLocalCasa($mysqli)==false){
+		$informacion =array("1" => "ERRORLOCAL");
+		echo json_encode($informacion);
+		exit;
+	}
 	 $pagina='';
 	 $registros=array();
 	 $devolverArray=isset($_POST['formato']) && $_POST['formato']==='json';
@@ -274,11 +333,17 @@ if ( ! $stmt->execute()) {
 		      $cod_local=$valor['cod_local'];
 		  	  $nombre=utf8_encode($valor['Nombre']);
 		  	  $estado=utf8_encode($valor['estado']);
-		  	  $registros[]=array(
-		  	  	'codigo'=>$cod_local,
-		  	  	'nombre'=>$nombre,
-		  	  	'estado'=>$estado
-		  	  );
+$telefono=utf8_encode($valor['telefono']);
+$direccion=utf8_encode($valor['direccion']);
+$ciudad=utf8_encode($valor['ciudad']);
+$registros[]=array(
+	'codigo'=>$cod_local,
+	'nombre'=>$nombre,
+	'estado'=>$estado,
+	'telefono'=>$telefono,
+	'direccion'=>$direccion,
+	'ciudad'=>$ciudad
+);
 		  	 
 		  	 
 			  $styleName=CargarStyleTable($styleName);
@@ -288,6 +353,9 @@ if ( ! $stmt->execute()) {
 <td id='td_id' style='width:15%; background-color: #efeded;color:red'>".$cod_local."</td>
 <td  id='td_datos_1' style='width:85%'>".$nombre."</td>
 <td  id='td_datos_2' style='display:none'>".$estado."</td>
+<td  id='td_datos_3' style='display:none'>".$telefono."</td>
+<td  id='td_datos_4' style='display:none'>".$direccion."</td>
+<td  id='td_datos_5' style='display:none'>".$ciudad."</td>
 </tr>
 </table>";
 			  

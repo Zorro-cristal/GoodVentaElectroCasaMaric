@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/listado_clientes.css?x=20260729scrollclientes1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/historial_ventas_moderno.css?x=20260729montominimoexcel1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/historial_compras_moderno.css?x=20260723v4" />
-<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/abm_tablas_modernas.css?x=20260729vistaclienteresponsive1" />
+<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/abm_tablas_modernas.css?x=20260902empresa1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/formularios_titulos_modernos.css?x=20260721orden2" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/botones_sistema_modernos.css?x=20260720v3" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/inputs_texto_modernos.css?x=20260720v1" />
@@ -96,10 +96,10 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_entregador_local.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_vendedor.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_zona.js?x=20260720v1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_administracion_locales.js?x=20260720v1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_administracion_locales.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_caja.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_apertura_cierre_caja.js?x=20260720v1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260720v1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20260901pagare1"></script>
@@ -8340,6 +8340,33 @@ style='background-color:#5bc572;display:none'>
 <table style="width:100%">
 <tbody><tr>
 <td>
+<p class="pTituloC">Telefono :</p>
+<input class="inputText" type="text" placeholder="Telefono del local" id="inptTelefonoAdminLocales">
+</td>
+</tr>
+</tbody></table>
+<br>
+<table style="width:100%">
+<tbody><tr>
+<td>
+<p class="pTituloC">Direccion :</p>
+<input class="inputText" type="text" placeholder="Direccion del local" id="inptDireccionAdminLocales">
+</td>
+</tr>
+</tbody></table>
+<br>
+<table style="width:100%">
+<tbody><tr>
+<td>
+<p class="pTituloC">Ciudad :</p>
+<input class="inputText" type="text" placeholder="Ciudad del local" id="inptCiudadAdminLocales">
+</td>
+</tr>
+</tbody></table>
+<br>
+<table style="width:100%">
+<tbody><tr>
+<td>
 <p class="pTituloC">Estado :</p>
 <select class="inputSelect" id="inptEstadoAdminLocales" style="width:200px">
 <option value="Activo">ACTIVO</option>
@@ -8457,12 +8484,78 @@ id='inptRegistroSeleccAdminLocales' style='width:200px' />
 onclick='verVentanaEditarAdminLocales()'
 style='background-color:#b7b7b7'>
 <input id="btnLocalAdminLocales" type="button" value="Locales" class="btn5" onclick="verCerrarAdminLocalesLocales()" style="background-color:#b7b7b7">
+<input id="btnEmpresaAdminLocales" type="button" value="Empresa" class="btn5" onclick="verCerrarAbmInformEmpresa(true)" style="background-color:#b7b7b7">
 
 </td>
 </tr>
 </table>
 </div>
 </center>
+</div>
+
+<div id='divAbmInforEmpresa' style='display:none' class='divAbms_b inform-empresa-view'>
+<div class='inform-empresa-header'>
+<div class='inform-empresa-title'>
+<i class='bx bx-buildings'></i>
+<span>Datos de la empresa</span>
+</div>
+<button type='button' class='inform-empresa-icon-btn' title='Volver atras' onclick='verCerrarAbmInformEmpresa(false)'>
+<i class='bx bx-right-arrow-alt'></i>
+</button>
+</div>
+
+<div class='inform-empresa-grid'>
+<section class='inform-empresa-panel'>
+<div class='inform-empresa-panel-title'>
+<i class='bx bx-image'></i>
+<span>Logos</span>
+</div>
+<div class='inform-empresa-logos'>
+<div class='inform-empresa-logo-item'>
+<div class='inform-empresa-logo-heading'>
+<label for='inptLogoColorInformEmpresa'>Logo color</label>
+<span class='inform-empresa-file-name'>logo.png</span>
+</div>
+<div class='inform-empresa-preview' data-empty='Sin logo'>
+<img id='imgPreviewLogoColorInformEmpresa' src='/GoodVentaElectroCasaMaric/iconos/logo.png' onerror='ocultarPreviewLogoInformEmpresa(this)' alt='Logo color'>
+</div>
+<input class='inputText inform-empresa-input inform-empresa-file' type='file' id='inptLogoColorInformEmpresa' name='inptLogoColorInformEmpresa' accept='image/png,image/jpeg,image/webp' onchange="leerLogoInformEmpresa(this,'color')">
+</div>
+<div class='inform-empresa-logo-item'>
+<div class='inform-empresa-logo-heading'>
+<label for='inptLogoImpresoInformEmpresa'>Logo impreso</label>
+<span class='inform-empresa-file-name'>logo_impreso.png</span>
+</div>
+<div class='inform-empresa-preview inform-empresa-preview-impreso' data-empty='Sin logo'>
+<img id='imgPreviewLogoImpresoInformEmpresa' src='/GoodVentaElectroCasaMaric/iconos/logo_impreso.png' onerror='ocultarPreviewLogoInformEmpresa(this)' alt='Logo impreso'>
+</div>
+<input class='inputText inform-empresa-input inform-empresa-file' type='file' id='inptLogoImpresoInformEmpresa' name='inptLogoImpresoInformEmpresa' accept='image/png,image/jpeg,image/webp' onchange="leerLogoInformEmpresa(this,'impreso')">
+</div>
+</div>
+</section>
+
+<section class='inform-empresa-panel inform-empresa-panel-datos'>
+<div class='inform-empresa-panel-title'>
+<i class='bx bx-id-card'></i>
+<span>Datos fiscales</span>
+</div>
+<div class='inform-empresa-field'>
+<label for='inptNombreInformEmpresa'>Nombre</label>
+<input class='inputText inform-empresa-input' type='text' placeholder='Obligatorio (*)' id='inptNombreInformEmpresa'>
+</div>
+<div class='inform-empresa-field'>
+<label for='inptRucInformEmpresa'>RUC</label>
+<input class='inputText inform-empresa-input' type='text' placeholder='Obligatorio (*)' id='inptRucInformEmpresa'>
+</div>
+</section>
+
+<div class='inform-empresa-actions'>
+<input type='button' value='Guardar datos' class='btn1 inform-empresa-action inform-empresa-action-primary' onclick='verificarcamposInformEmpresa()' id='btnAbmInformEmpresa'>
+<button type='button' class='inform-empresa-action' onclick='verCerrarAbmInformEmpresa(false)'>
+<span>Cancelar</span>
+</button>
+</div>
+</div>
 </div>
 
 </center>
@@ -10265,6 +10358,42 @@ title='Volver Atras' onclick='verCerrarVentanaAbmCasa("2","")' />
   </div>
 
   <div class="mb-3">
+    <label for="inptTelefonoCasa" class="pTituloC">
+      Telefono :
+    </label>
+    <input
+      type="text"
+      id="inptTelefonoCasa"
+      class="form-control"
+      placeholder="Telefono del local"
+    >
+  </div>
+
+  <div class="mb-3">
+    <label for="inptDireccionCasa" class="pTituloC">
+      Direccion :
+    </label>
+    <input
+      type="text"
+      id="inptDireccionCasa"
+      class="form-control"
+      placeholder="Direccion del local"
+    >
+  </div>
+
+  <div class="mb-3">
+    <label for="inptCiudadCasa" class="pTituloC">
+      Ciudad :
+    </label>
+    <input
+      type="text"
+      id="inptCiudadCasa"
+      class="form-control"
+      placeholder="Ciudad del local"
+    >
+  </div>
+
+  <div class="mb-3">
     <label for="inptEstadoCasa" class="pTituloC">
       Estado :
     </label>
@@ -10419,6 +10548,14 @@ onclick="vaciar('inptBuscarAbmCasa2')" />
           value="Editar"
           class="btn5"
           onclick="verVentanaEditarCasa()"
+          style="background-color:#b7b7b7"
+        >
+        <input
+          id="btnEmpresaCasa"
+          type="button"
+          value="Empresa"
+          class="btn5"
+          onclick="verCerrarEmpresaDesdeLocales()"
           style="background-color:#b7b7b7"
         >
       </div>

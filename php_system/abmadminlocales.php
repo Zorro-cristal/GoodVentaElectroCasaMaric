@@ -58,10 +58,31 @@ $descripcion=$_POST['descripcion'];
 $descripcion = utf8_decode($descripcion);
 $estado=$_POST['estado'];
 $estado = utf8_decode($estado);
+$telefono=isset($_POST['telefono']) ? $_POST['telefono'] : "";
+$telefono = utf8_decode($telefono);
+$direccion=isset($_POST['direccion']) ? $_POST['direccion'] : "";
+$direccion = utf8_decode($direccion);
+$ciudad=isset($_POST['ciudad']) ? $_POST['ciudad'] : "";
+$ciudad = utf8_decode($ciudad);
 
 
 
-	abm($descripcion,$estado,$idadminlocales,$operacion);
+	abm($descripcion,$estado,$idadminlocales,$operacion,$telefono,$direccion,$ciudad);
+
+}
+
+if($operacion=="actualizarDatosEmpresa")
+{
+	$nombre=$_POST['nombre'];
+	$nombre = utf8_decode($nombre);
+	$ruc=$_POST['ruc'];
+	$ruc = utf8_decode($ruc);
+	$ruc_original=isset($_POST['ruc_original']) ? $_POST['ruc_original'] : "";
+	$ruc_original = utf8_decode($ruc_original);
+	$logo_color=isset($_POST['logo_color']) ? $_POST['logo_color'] : "";
+	$logo_impreso=isset($_POST['logo_impreso']) ? $_POST['logo_impreso'] : "";
+
+	actualizarDatosEmpresa($nombre,$ruc,$logo_color,$logo_impreso,$ruc_original);
 
 }
 
@@ -214,7 +235,7 @@ buscarMetas($fecha1,$fecha2,$local,$sector,$tipo,$nombre_vendedor);
 
 }
 
-function abm($descripcion,$estado,$idadmin_local,$operacion)
+function abm($descripcion,$estado,$idadmin_local,$operacion,$telefono,$direccion,$ciudad)
 {
 	
 	
@@ -284,14 +305,505 @@ $stmt1->bind_param($ss,$descripcion,$estado,$idadmin_local);
 
 
 if (!$stmt1->execute()) {
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
+echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
 exit;
+}
+
+if($operacion=="nuevo"){
+	$idadmin_local=mysqli_insert_id($mysqli);
+}
+
+if(guardarDatosContactoLocal($mysqli,$idadmin_local,$descripcion,$estado,$telefono,$direccion,$ciudad)==false){
+	$informacion =array("1" => "ERRORLOCAL");
+	echo json_encode($informacion);
+	exit;
 }
 
 $informacion =array("1" => "exito");
 echo json_encode($informacion);	
 exit;
 	
+}
+
+function asegurarCamposContactoLocal($mysqli)
+{
+	if(asegurarColumnaLocal($mysqli,"telefono","varchar(100) DEFAULT NULL")==false){
+		return false;
+	}
+
+	if(asegurarColumnaLocal($mysqli,"direccion","varchar(255) DEFAULT NULL")==false){
+		return false;
+	}
+
+	if(asegurarColumnaLocal($mysqli,"ciudad","varchar(100) DEFAULT NULL")==false){
+		return false;
+	}
+
+	return true;
+}
+
+function asegurarColumnaLocal($mysqli,$columna,$definicion)
+{
+	$consulta="SHOW COLUMNS FROM `local` LIKE '".$columna."'";
+	$stmt = $mysqli->prepare($consulta);
+
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+
+	if(mysqli_num_rows($result)>0){
+		return true;
+	}
+
+	$consulta="ALTER TABLE `local` ADD COLUMN `".$columna."` ".$definicion;
+	$stmt = $mysqli->prepare($consulta);
+
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	return true;
+}
+
+function guardarDatosContactoLocal($mysqli,$cod_local,$nombre,$estado,$telefono,$direccion,$ciudad)
+{
+	if($cod_local==""){
+		return true;
+	}
+
+	if(asegurarCamposContactoLocal($mysqli)==false){
+		return false;
+	}
+
+	$consulta="Select cod_local from `local` where cod_local=? limit 1";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt){
+		return false;
+	}
+	$ss='s';
+	$stmt->bind_param($ss,$cod_local);
+
+	if(!$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+
+	if(mysqli_num_rows($result)>0){
+		$consulta="Update `local` set telefono=?, direccion=?, ciudad=? where cod_local=?";
+		$stmt1 = $mysqli->prepare($consulta);
+		if(!$stmt1){
+			return false;
+		}
+		$ssss='ssss';
+		$stmt1->bind_param($ssss,$telefono,$direccion,$ciudad,$cod_local);
+	}else{
+		$consulta="Insert into `local` (cod_local,Nombre,estado,telefono,direccion,ciudad) values (?,?,?,?,?,?)";
+		$stmt1 = $mysqli->prepare($consulta);
+		if(!$stmt1){
+			return false;
+		}
+		$ssssss='ssssss';
+		$stmt1->bind_param($ssssss,$cod_local,$nombre,$estado,$telefono,$direccion,$ciudad);
+	}
+
+	if(!$stmt1->execute()){
+		return false;
+	}
+
+	return true;
+}
+
+function sincronizarAdminLocalesDesdeLocales($mysqli)
+{
+	$consulta="Select lo.cod_local, lo.Nombre, lo.estado
+		from `local` lo
+		left join admin_local al on al.idadmin_local=lo.cod_local
+		where al.idadmin_local is null";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+	$locales=array();
+
+	while($valor=mysqli_fetch_assoc($result)){
+		$locales[]=$valor;
+	}
+
+	while($valor=array_shift($locales)){
+		$cod_local=$valor['cod_local'];
+		$nombre=$valor['Nombre'];
+		$estado=$valor['estado'];
+
+		if($nombre==""){
+			$nombre="LOCAL ".$cod_local;
+		}
+		if($estado==""){
+			$estado="Activo";
+		}
+
+		$consultaInsert="Insert into admin_local (idadmin_local,descripcion,estado) values (?,?,?)";
+		$stmtInsert = $mysqli->prepare($consultaInsert);
+		if(!$stmtInsert){
+			return false;
+		}
+		$sss='sss';
+		$stmtInsert->bind_param($sss,$cod_local,$nombre,$estado);
+		if(!$stmtInsert->execute()){
+			return false;
+		}
+
+		if(asegurarRelacionAdminLocalBase($mysqli,$cod_local,$cod_local)==false){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function asegurarRelacionAdminLocalBase($mysqli,$idadmin_localFK,$cod_localFK)
+{
+	$consulta="Select count(iddetalle_admin_local) as cantidad
+		from detalle_admin_local
+		where idadmin_localFK=? and cod_localFK=?";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt){
+		return false;
+	}
+	$ss='ss';
+	$stmt->bind_param($ss,$idadmin_localFK,$cod_localFK);
+	if(!$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+	$nro_total=$result->fetch_assoc();
+	if($nro_total && $nro_total['cantidad']>0){
+		return true;
+	}
+
+	$consultaInsert="Insert into detalle_admin_local (idadmin_localFK,cod_localFK) values (?,?)";
+	$stmtInsert = $mysqli->prepare($consultaInsert);
+	if(!$stmtInsert){
+		return false;
+	}
+	$stmtInsert->bind_param($ss,$idadmin_localFK,$cod_localFK);
+	return $stmtInsert->execute();
+}
+
+function actualizarDatosEmpresa($nombre,$ruc,$logo_color,$logo_impreso,$ruc_original)
+{
+	if($nombre=="" || $ruc==""){
+		$informacion =array("1" => "CAMPOSVACIOS");
+		echo json_encode($informacion);
+		exit;
+	}
+
+	$mysqli=conectar_al_servidor();
+
+	if(asegurarDatosEmpresaRucPrimaryKey($mysqli)==false){
+		mysqli_close($mysqli);
+		$informacion =array("1" => "RUCPK");
+		echo json_encode($informacion);
+		exit;
+	}
+
+	actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_color,$logo_impreso);
+}
+
+function asegurarDatosEmpresaRucPrimaryKey($mysqli)
+{
+	$consulta="CREATE TABLE IF NOT EXISTS `datos_empresa` (
+		`ruc` varchar(100) NOT NULL,
+		`nombre` varchar(100) DEFAULT NULL,
+		PRIMARY KEY (`ruc`)
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+	if(ejecutarConsultaDatosEmpresa($mysqli,$consulta)==false){
+		return false;
+	}
+
+	if(columnaDatosEmpresaExiste($mysqli,"ruc")==false){
+		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` ADD COLUMN `ruc` varchar(100) NOT NULL")==false){
+			return false;
+		}
+	}
+
+	if(columnaDatosEmpresaExiste($mysqli,"nombre")==false){
+		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` ADD COLUMN `nombre` varchar(100) DEFAULT NULL")==false){
+			return false;
+		}
+	}
+
+	$totalVacios=contarConsultaDatosEmpresa($mysqli,"SELECT COUNT(*) FROM `datos_empresa` WHERE `ruc` IS NULL OR TRIM(`ruc`)=''");
+	if($totalVacios<0 || $totalVacios>0){
+		return false;
+	}
+
+	$totalDuplicados=contarConsultaDatosEmpresa($mysqli,"SELECT COUNT(*) FROM (SELECT `ruc` FROM `datos_empresa` GROUP BY `ruc` HAVING COUNT(*)>1) gv_duplicados");
+	if($totalDuplicados<0 || $totalDuplicados>0){
+		return false;
+	}
+
+	if(datosEmpresaRucEsPrimaryKey($mysqli)){
+		return eliminarIdDatosEmpresaSiExiste($mysqli);
+	}
+
+	if(quitarAutoIncrementDatosEmpresa($mysqli)==false){
+		return false;
+	}
+
+	if(datosEmpresaTienePrimaryKey($mysqli)){
+		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` DROP PRIMARY KEY")==false){
+			return false;
+		}
+	}
+
+	if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` MODIFY `ruc` varchar(100) NOT NULL")==false){
+		return false;
+	}
+
+	if(datosEmpresaRucEsPrimaryKey($mysqli)){
+		return eliminarIdDatosEmpresaSiExiste($mysqli);
+	}
+
+	if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` ADD PRIMARY KEY (`ruc`)")==false){
+		return false;
+	}
+
+	return eliminarIdDatosEmpresaSiExiste($mysqli);
+}
+
+function ejecutarConsultaDatosEmpresa($mysqli,$consulta)
+{
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+	return true;
+}
+
+function contarConsultaDatosEmpresa($mysqli,$consulta)
+{
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return -1;
+	}
+	$result = $stmt->get_result();
+	if(!$result){
+		return -1;
+	}
+	$fila=$result->fetch_row();
+	return intval($fila[0]);
+}
+
+function columnaDatosEmpresaExiste($mysqli,$columna)
+{
+	$columna=mysqli_real_escape_string($mysqli,$columna);
+	$consulta="SHOW COLUMNS FROM `datos_empresa` LIKE '".$columna."'";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+	$result = $stmt->get_result();
+	return mysqli_num_rows($result)>0;
+}
+
+function datosEmpresaTienePrimaryKey($mysqli)
+{
+	$total=contarConsultaDatosEmpresa($mysqli,"SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='datos_empresa' AND CONSTRAINT_NAME='PRIMARY'");
+	return $total>0;
+}
+
+function datosEmpresaRucEsPrimaryKey($mysqli)
+{
+	$total=contarConsultaDatosEmpresa($mysqli,"SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='datos_empresa' AND CONSTRAINT_NAME='PRIMARY'");
+	if($total!=1){
+		return false;
+	}
+
+	$totalRuc=contarConsultaDatosEmpresa($mysqli,"SELECT COUNT(*) FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='datos_empresa' AND CONSTRAINT_NAME='PRIMARY' AND COLUMN_NAME='ruc'");
+	return $totalRuc==1;
+}
+
+function eliminarIdDatosEmpresaSiExiste($mysqli)
+{
+	if(columnaDatosEmpresaExiste($mysqli,"iddatos_empresa")==false){
+		return true;
+	}
+
+	return ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` DROP COLUMN `iddatos_empresa`");
+}
+
+function quitarAutoIncrementDatosEmpresa($mysqli)
+{
+	$consulta="SELECT COLUMN_NAME, COLUMN_TYPE, IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='datos_empresa' AND EXTRA LIKE '%auto_increment%'";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	$result = $stmt->get_result();
+	while($valor= mysqli_fetch_assoc($result)){
+		$columna=$valor['COLUMN_NAME'];
+		$tipo=$valor['COLUMN_TYPE'];
+		$nullable=$valor['IS_NULLABLE']=="YES" ? "NULL" : "NOT NULL";
+
+		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` MODIFY `".$columna."` ".$tipo." ".$nullable)==false){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_color,$logo_impreso)
+{
+	$cambiar_ruc=($ruc_original!="" && $ruc_original!=$ruc);
+
+	if($cambiar_ruc){
+		$sql="Select ruc from datos_empresa where ruc=? limit 1";
+		$stmt = $mysqli->prepare($sql);
+		if(!$stmt){
+			echo "Error";
+			exit;
+		}
+		$ss='s';
+		$stmt->bind_param($ss,$ruc);
+
+		if ( ! $stmt->execute()) {
+		   echo "Error";
+		   exit;
+		}
+
+		$result = $stmt->get_result();
+		if(mysqli_num_rows($result)>0){
+			mysqli_close($mysqli);
+			$informacion =array("1" => "EX");
+			echo json_encode($informacion);
+			exit;
+		}
+	}
+
+	if(!guardarLogosInformEmpresa($logo_color,$logo_impreso)){
+		mysqli_close($mysqli);
+		$informacion =array("1" => "IMG");
+		echo json_encode($informacion);
+		exit;
+	}
+
+	if($cambiar_ruc){
+		$consulta="Update datos_empresa set ruc=?, nombre=? where ruc=?";
+		$stmt1 = $mysqli->prepare($consulta);
+		if(!$stmt1){
+			echo "Error";
+			exit;
+		}
+		$sss='sss';
+		$stmt1->bind_param($sss,$ruc,$nombre,$ruc_original);
+	}else{
+		$sql="Select ruc from datos_empresa where ruc=? limit 1";
+		$stmt = $mysqli->prepare($sql);
+		if(!$stmt){
+			echo "Error";
+			exit;
+		}
+		$ss='s';
+		$stmt->bind_param($ss,$ruc);
+
+		if ( ! $stmt->execute()) {
+		   echo "Error";
+		   exit;
+		}
+
+		$result = $stmt->get_result();
+		if(mysqli_num_rows($result)>0){
+			$consulta="Update datos_empresa set nombre=? where ruc=?";
+			$stmt1 = $mysqli->prepare($consulta);
+			if(!$stmt1){
+				echo "Error";
+				exit;
+			}
+			$ss='ss';
+			$stmt1->bind_param($ss,$nombre,$ruc);
+		}else{
+			$consulta="Insert into datos_empresa (ruc,nombre) values (?,?)";
+			$stmt1 = $mysqli->prepare($consulta);
+			if(!$stmt1){
+				echo "Error";
+				exit;
+			}
+			$ss='ss';
+			$stmt1->bind_param($ss,$ruc,$nombre);
+		}
+	}
+
+	if (!$stmt1->execute()) {
+		echo trigger_error('The query execution failed; MySQL said ('.$stmt1->errno.') '.$stmt1->error, E_USER_ERROR);
+		exit;
+	}
+
+	mysqli_close($mysqli);
+	$informacion =array("1" => "exito");
+	echo json_encode($informacion);
+	exit;
+}
+
+function guardarLogosInformEmpresa($logo_color,$logo_impreso)
+{
+	if($logo_color!="" && guardarLogoInformEmpresa($logo_color,"logo.png")==false){
+		return false;
+	}
+
+	if($logo_impreso!="" && guardarLogoInformEmpresa($logo_impreso,"logo_impreso.png")==false){
+		return false;
+	}
+
+	return true;
+}
+
+function guardarLogoInformEmpresa($dataUrl,$nombreArchivo)
+{
+	$partes = explode(",",$dataUrl,2);
+
+	if(count($partes)!=2){
+		return false;
+	}
+
+	$encabezado=strtolower($partes[0]);
+
+	if(strpos($encabezado,"data:image/png;base64")!==0){
+		return false;
+	}
+
+	$imagen=base64_decode($partes[1],true);
+
+	if($imagen===false){
+		return false;
+	}
+
+	if(strlen($imagen)>6291456){
+		return false;
+	}
+
+	if(substr($imagen,0,8)!="\x89PNG\r\n\x1a\n"){
+		return false;
+	}
+
+	$directorio=dirname(__DIR__)."/iconos/";
+
+	if(!is_dir($directorio)){
+		if(!mkdir($directorio,0777,true)){
+			return false;
+		}
+	}
+
+	$ruta=$directorio.$nombreArchivo;
+
+	return file_put_contents($ruta,$imagen)!==false;
 }
 
 
@@ -369,21 +881,34 @@ if ( ! $stmt->execute()) {
 function buscar($codigo,$descripcion,$estado)
 {
 	$mysqli=conectar_al_servidor();
+	if(asegurarCamposContactoLocal($mysqli)==false){
+		$informacion =array("1" => "ERRORLOCAL");
+		echo json_encode($informacion);
+		exit;
+	}
+	if(sincronizarAdminLocalesDesdeLocales($mysqli)==false){
+		$informacion =array("1" => "ERRORLOCAL");
+		echo json_encode($informacion);
+		exit;
+	}
 	 $pagina='';
 	 $filas=array();
 	 $formato=isset($_POST['formato']) ? $_POST['formato'] : '';
 	$condicioncodigo="";
 if($codigo!=""){
-	$condicioncodigo=" and idadmin_local ='".$codigo."'";
+	$condicioncodigo=" and al.idadmin_local ='".$codigo."'";
 }
 
 $condiciondescripcion="";
 if($descripcion!=""){
-	$condiciondescripcion=" and descripcion  like '%".$descripcion."%'";
+	$condiciondescripcion=" and al.descripcion  like '%".$descripcion."%'";
 }
 	 
-		$sql= "Select idadmin_local, descripcion, estado
-		from admin_local where estado=? ".$condicioncodigo.$condiciondescripcion;
+		$sql= "Select al.idadmin_local, al.descripcion, al.estado,
+		IFNULL(lo.telefono,'') as telefono, IFNULL(lo.direccion,'') as direccion, IFNULL(lo.ciudad,'') as ciudad
+		from admin_local al
+		left join `local` lo on lo.cod_local=al.idadmin_local
+		where al.estado=? ".$condicioncodigo.$condiciondescripcion;
 		
    
    
@@ -411,10 +936,16 @@ if ( ! $stmt->execute()) {
 		  	  $descripcion=utf8_encode($valor['descripcion']);
 		  	 
 		  	  $estado=utf8_encode($valor['estado']);
+			  $telefono=utf8_encode($valor['telefono']);
+			  $direccion=utf8_encode($valor['direccion']);
+			  $ciudad=utf8_encode($valor['ciudad']);
 			  $filas[]=array(
 				  "codigo" => $idadmin_local,
 				  "descripcion" => $descripcion,
-				  "estado" => $estado
+				  "estado" => $estado,
+				  "telefono" => $telefono,
+				  "direccion" => $direccion,
+				  "ciudad" => $ciudad
 			  );
 		  	
 		  	 
@@ -426,6 +957,9 @@ if ( ! $stmt->execute()) {
 <td id='td_id' style='width:10%; background-color: #efeded;color:red'>".$idadmin_local."</td>
 <td  id='td_datos_1' style='width:90%'>".$descripcion."</td>
 <td  id='td_datos_3' style='display:none'>".$estado."</td>
+<td  id='td_datos_4' style='display:none'>".$telefono."</td>
+<td  id='td_datos_5' style='display:none'>".$direccion."</td>
+<td  id='td_datos_6' style='display:none'>".$ciudad."</td>
 </tr>
 </table>";
 			}
@@ -446,6 +980,11 @@ exit;
 function buscarselect()
 {
 	$mysqli=conectar_al_servidor();
+	if(sincronizarAdminLocalesDesdeLocales($mysqli)==false){
+		$informacion =array("1" => "ERRORLOCAL");
+		echo json_encode($informacion);
+		exit;
+	}
 	$pagina='';
 	$pagina.="<option  value='' >SELECCIONAR</option>";   
 	$sql= "Select idadmin_local, descripcion from admin_local where estado='Activo' ";	   
@@ -532,12 +1071,16 @@ function buscarvista($buscar,$codlocal)
 {
 	$mysqli=conectar_al_servidor();
 	 $pagina='';
-	 $condicionlocal="";
+$condicionlocal="";
 if($codlocal!=""){
-	$condicionlocal=" and dt.cod_localfk = '".$codlocal."'";
+	$condicionlocal=" and (v.cod_localfk = '".$codlocal."' or dt.cod_localFK = '".$codlocal."')";
 }
-		$sql= "Select * from vendedor inner join detallevendedor dt on cod_vendedorFK = idvendedor
-		where nombre like ?  and estado='Activo' and accion='SI' ".$condicionlocal." group by  idvendedor asc ";
+		$sql= "Select v.idvendedor, v.nombre, v.nrotelef, v.estado
+		from vendedor v
+		left join detallevendedor dt on dt.cod_vendedorFK = v.idvendedor and dt.accion='SI'
+		where v.nombre like ?  and v.estado='Activo' ".$condicionlocal."
+		group by v.idvendedor, v.nombre, v.nrotelef, v.estado
+		order by v.nombre asc ";
 		
    // echo($sql);
    // exit;
@@ -603,12 +1146,16 @@ function buscarLoteamientoVendedor($cod_local)
 
 $condicionlocal="";
 if($cod_local!=""){
-	$condicionlocal=" and cod_localfk = '".$cod_local."'";
+	$condicionlocal=" and (v.cod_localfk = '".$cod_local."' or dt.cod_localFK = '".$cod_local."')";
 }
 	 
-		$sql= "Select idvendedor, nombre, nrotelef, estado, cod_localfk,
-		(select Nombre from local where cod_local=cod_localfk limit 1 ) as local
-		from vendedor where estado!='' ".$condicionlocal;
+		$sql= "Select v.idvendedor, v.nombre, v.nrotelef, v.estado, v.cod_localfk,
+		IFNULL((select Nombre from local where cod_local=v.cod_localfk limit 1 ),'') as local
+		from vendedor v
+		left join detallevendedor dt on dt.cod_vendedorFK = v.idvendedor and dt.accion='SI'
+		where v.estado!='' ".$condicionlocal."
+		group by v.idvendedor, v.nombre, v.nrotelef, v.estado, v.cod_localfk
+		order by v.nombre asc";
 		
  
    

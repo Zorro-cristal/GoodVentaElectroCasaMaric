@@ -28,7 +28,10 @@ function iniciarListadoAbmAdminLocales() {
 			celdas: [
 				{ id: "td_id", campo: "codigo", columna: "codigo" },
 				{ id: "td_datos_1", campo: "descripcion", columna: "descripcion" },
-				{ id: "td_datos_3", campo: "estado", tecnica: true }
+				{ id: "td_datos_3", campo: "estado", tecnica: true },
+				{ id: "td_datos_4", campo: "telefono", tecnica: true },
+				{ id: "td_datos_5", campo: "direccion", tecnica: true },
+				{ id: "td_datos_6", campo: "ciudad", tecnica: true }
 			]
 		}
 	});
@@ -47,6 +50,7 @@ function verCerrarAbmAdminLocales(){
 if(controlacceso("VERLISTADOADMINLOCALES","accion")==false){return;}	
 mostrarSoloUno("divAbmAdminLocales")		
 		document.getElementById("divAbmAdminLocales").style.display=""
+		mostrarVistaAbmAdminLocales("lista")
 		
 	}
 }
@@ -72,12 +76,12 @@ function verCerrarVentanaAbmAdminLocales(d, l) {
 			if(controlacceso("INSERTARLISTADOVENDEDORES","accion")==false){return;}	
 			limpiarcamposAdminLocales()
 		}
+		mostrarVistaAbmAdminLocales("editor")
 		$("div[id=divAbmAdminLocales2]").fadeIn(250)
-		document.getElementById('divAbmAdminLocales1').style.display = "none"
 		
 	} else {
+		mostrarVistaAbmAdminLocales("lista")
 		$("div[id=divAbmAdminLocales1]").fadeIn(250)
-		document.getElementById('divAbmAdminLocales2').style.display = "none"
 	}
 }
 function verVentanaEditarAdminLocales() {
@@ -99,12 +103,17 @@ function obtenerdatosabmAdminLocales(datostr) {
 
 	datostr.className = 'tableRegistroSelec'
 	document.getElementById('inptDescripcionAdminLocales').value = $(datostr).children('td[id="td_datos_1"]').html();
-	document.getElementById('inptDescripcionAdminLocales').value = $(datostr).children('td[id="td_datos_1"]').html();
+	document.getElementById('inptTelefonoAdminLocales').value = $(datostr).children('td[id="td_datos_4"]').html() || "";
+	document.getElementById('inptDireccionAdminLocales').value = $(datostr).children('td[id="td_datos_5"]').html() || "";
+	document.getElementById('inptCiudadAdminLocales').value = $(datostr).children('td[id="td_datos_6"]').html() || "";
 	document.getElementById('inptEstadoAdminLocales').value = $(datostr).children('td[id="td_datos_3"]').html();
 	idAbmAdminLocales = $(datostr).children('td[id="td_id"]').html();
 document.getElementById('btnAbmAdminLocales').value = "Editar datos";
 document.getElementById('btnEditarAdminLocales').style.backgroundColor="";
 document.getElementById('btnLocalAdminLocales').style.backgroundColor="";
+if (document.getElementById('btnEmpresaAdminLocales')) {
+	document.getElementById('btnEmpresaAdminLocales').style.backgroundColor="";
+}
 cod_adminlocalesLocal=$(datostr).children('td[id="td_id"]').html();
 
 
@@ -173,6 +182,9 @@ function abmAdminLocalesLocales(d) {
 function verificarcamposAdminLocales() {
 
 	var inptDescripcionAdminLocales = document.getElementById('inptDescripcionAdminLocales').value
+	var inptTelefonoAdminLocales = document.getElementById('inptTelefonoAdminLocales').value
+	var inptDireccionAdminLocales = document.getElementById('inptDireccionAdminLocales').value
+	var inptCiudadAdminLocales = document.getElementById('inptCiudadAdminLocales').value
 	
 	var inptEstadoAdminLocales = document.getElementById('inptEstadoAdminLocales').value
 
@@ -196,9 +208,9 @@ if (inptEstadoAdminLocales == "") {
 		if(controlacceso("INSERTARLISTADOADMINLOCALES","accion")==false){return;}	
 		accion = "nuevo";
 	}
-	abmadminlocales(inptDescripcionAdminLocales, inptEstadoAdminLocales, idAbmAdminLocales, accion);
+	abmadminlocales(inptDescripcionAdminLocales, inptEstadoAdminLocales, idAbmAdminLocales, accion, inptTelefonoAdminLocales, inptDireccionAdminLocales, inptCiudadAdminLocales);
 }
-function abmadminlocales(descripcion, estado, idadminlocales, accion) {
+function abmadminlocales(descripcion, estado, idadminlocales, accion, telefono, direccion, ciudad) {
 
 	verCerrarEfectoCargando("1")
 	var datos = new FormData();
@@ -210,6 +222,9 @@ function abmadminlocales(descripcion, estado, idadminlocales, accion) {
 	datos.append("idadminlocales", idadminlocales)
 	datos.append("estado", estado)
 	datos.append("descripcion", descripcion)
+	datos.append("telefono", telefono)
+	datos.append("direccion", direccion)
+	datos.append("ciudad", ciudad)
 	var OpAjax = $.ajax({
 
 		data: datos,
@@ -317,6 +332,9 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 					
 					document.getElementById("btnEditarAdminLocales").style.backgroundColor="#b7b7b7";
 					document.getElementById("btnLocalAdminLocales").style.backgroundColor="#b7b7b7";
+					if (document.getElementById("btnEmpresaAdminLocales")) {
+						document.getElementById("btnEmpresaAdminLocales").style.backgroundColor="#b7b7b7";
+					}
 
 				}
 			} catch (error) {
@@ -403,12 +421,384 @@ ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 function limpiarcamposAdminLocales() {
 	document.getElementById('inptRegistroSeleccAdminLocales').value = "";
 	document.getElementById('inptDescripcionAdminLocales').value = "";
+	document.getElementById('inptTelefonoAdminLocales').value = "";
+	document.getElementById('inptDireccionAdminLocales').value = "";
+	document.getElementById('inptCiudadAdminLocales').value = "";
 
 	document.getElementById('inptEstadoAdminLocales').value = "Activo";
 	document.getElementById('btnAbmAdminLocales').value = "Guardar datos";
 	document.getElementById('btnEditarAdminLocales').style.backgroundColor="#b7b7b7"
 	document.getElementById('btnLocalAdminLocales').style.backgroundColor="#b7b7b7"
+	if (document.getElementById('btnEmpresaAdminLocales')) {
+		document.getElementById('btnEmpresaAdminLocales').style.backgroundColor="#b7b7b7"
+	}
 	idAbmAdminLocales = "";
+}
+
+function mostrarVistaAbmAdminLocales(vista) {
+	var contenedor = document.getElementById("divAbmAdminLocales");
+	var lista = document.getElementById("divAbmAdminLocales1");
+	var editor = document.getElementById("divAbmAdminLocales2");
+	var empresa = document.getElementById("divAbmInforEmpresa");
+
+	if (contenedor) {
+		contenedor.classList.remove("inform-empresa-activa");
+		if (vista === "empresa") {
+			contenedor.classList.add("inform-empresa-activa");
+		}
+	}
+
+	if (lista) {
+		lista.style.display = vista === "lista" ? "" : "none";
+	}
+	if (editor) {
+		editor.style.display = vista === "editor" ? "" : "none";
+	}
+	if (empresa) {
+		empresa.style.display = vista === "empresa" ? "" : "none";
+	}
+}
+
+var logoColorInformEmpresa = "";
+var logoImpresoInformEmpresa = "";
+var rucOriginalInformEmpresa = "";
+var rutaLogoColorInformEmpresa = "/GoodVentaElectroCasaMaric/iconos/logo.png";
+var rutaLogoImpresoInformEmpresa = "/GoodVentaElectroCasaMaric/iconos/logo_impreso.png";
+
+function setValueSiExiste(id, valor) {
+	var elemento = document.getElementById(id);
+
+	if (elemento) {
+		elemento.value = valor;
+	}
+}
+
+function verCerrarAbmInformEmpresa(mostrar) {
+	var panel = document.getElementById("divAbmInforEmpresa");
+
+	if (!panel) {
+		return;
+	}
+
+	if (mostrar) {
+		mostrarVistaAbmAdminLocales("empresa");
+		logoColorInformEmpresa = "";
+		logoImpresoInformEmpresa = "";
+		rucOriginalInformEmpresa = "";
+		limpiarInputsLogoInformEmpresa();
+		cargarPreviewLogosInformEmpresa();
+		setValueSiExiste("inptNombreInformEmpresa", "");
+		setValueSiExiste("inptRucInformEmpresa", "");
+		buscarDatosInformEmpresa();
+		if (document.getElementById("btnEmpresaAdminLocales")) {
+			document.getElementById("btnEmpresaAdminLocales").style.backgroundColor = "";
+		}
+	} else {
+		mostrarVistaAbmAdminLocales("lista");
+		$("div[id=divAbmAdminLocales1]").fadeIn(250);
+	}
+}
+
+function limpiarInputsLogoInformEmpresa() {
+	var inputColor = document.getElementById("inptLogoColorInformEmpresa");
+	var inputImpreso = document.getElementById("inptLogoImpresoInformEmpresa");
+
+	if (inputColor) {
+		inputColor.value = "";
+	}
+
+	if (inputImpreso) {
+		inputImpreso.value = "";
+	}
+}
+
+function obtenerContenedorPreviewLogoInformEmpresa(imagen) {
+	if (!imagen) {
+		return null;
+	}
+
+	if (imagen.closest) {
+		return imagen.closest(".inform-empresa-preview");
+	}
+
+	return imagen.parentNode;
+}
+
+function ocultarPreviewLogoInformEmpresa(imagen) {
+	if (!imagen) {
+		return;
+	}
+
+	var contenedor = obtenerContenedorPreviewLogoInformEmpresa(imagen);
+
+	if (contenedor) {
+		contenedor.classList.add("is-empty");
+	}
+
+	imagen.style.display = "none";
+}
+
+function actualizarPreviewLogoInformEmpresa(idImagen, origen) {
+	var imagen = document.getElementById(idImagen);
+
+	if (!imagen || origen === "") {
+		return;
+	}
+
+	var contenedor = obtenerContenedorPreviewLogoInformEmpresa(imagen);
+
+	if (contenedor) {
+		contenedor.classList.remove("is-empty");
+	}
+
+	imagen.style.filter = "";
+	imagen.style.display = "";
+	imagen.src = origen;
+}
+
+function cargarPreviewLogosInformEmpresa() {
+	var cache = new Date().getTime();
+	actualizarPreviewLogoInformEmpresa("imgPreviewLogoColorInformEmpresa", rutaLogoColorInformEmpresa + "?x=" + cache);
+	actualizarPreviewLogoInformEmpresa("imgPreviewLogoImpresoInformEmpresa", rutaLogoImpresoInformEmpresa + "?x=" + cache);
+}
+
+function obtenerRucBusquedaInformEmpresa(rucBuscado) {
+	if (rucBuscado) {
+		return rucBuscado;
+	}
+
+	if (rucOriginalInformEmpresa) {
+		return rucOriginalInformEmpresa;
+	}
+
+	if (typeof ruc !== "undefined" && ruc) {
+		return ruc;
+	}
+
+	return "";
+}
+
+function cargarDatosRecuperadosInformEmpresa(datos) {
+	var nombreEmpresa = datos[2] || datos.nombre || "";
+	var rucEmpresa = datos[3] || datos.ruc || "";
+
+	setValueSiExiste("inptNombreInformEmpresa", nombreEmpresa);
+	setValueSiExiste("inptRucInformEmpresa", rucEmpresa);
+	rucOriginalInformEmpresa = rucEmpresa;
+
+	if (typeof tituloRecibo !== "undefined") {
+		tituloRecibo = nombreEmpresa;
+	}
+	if (typeof ruc !== "undefined") {
+		ruc = rucEmpresa;
+	}
+
+	cargarPreviewLogosInformEmpresa();
+}
+
+function buscarDatosInformEmpresa(rucBuscado) {
+	obtener_datos_user();
+	var datos = {
+		"useru": userid,
+		"passu": passuser,
+		"navegador": navegador,
+		"funt": "buscarDatosEmpresa",
+		"ruc": obtenerRucBusquedaInformEmpresa(rucBuscado)
+	};
+
+	$.ajax({
+		data: datos,
+		url: "/GoodVentaElectroCasaMaric/php_system/empresa.php",
+		type: "post",
+
+		error: function (jqXHR, textstatus, errorThrowm) {
+			manejadordeerroresjquery(jqXHR.status, textstatus, "buscarDatosInformEmpresa");
+		},
+		success: function (responseText) {
+			try {
+				var datos = $.parseJSON(responseText);
+				var respuesta = respuestaJqueryAjax(datos["1"]);
+
+				if (respuesta == true) {
+					cargarDatosRecuperadosInformEmpresa(datos);
+				}
+			} catch (error) {
+				ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ");
+				var titulo = "Error: " + error + " \r\n Consola: " + responseText;
+				GuardarArchivosLog(titulo);
+			}
+		}
+	});
+}
+
+function leerLogoInformEmpresa(input, tipo) {
+	var file = input && input.files && input.files.length > 0 ? input.files[0] : null;
+	var esLogoImpreso = tipo == "impreso" || tipo == "bn";
+
+	if (!file) {
+		return false;
+	}
+
+	if (file.size > 5000000) {
+		ver_vetana_informativa("LA IMAGEN NO PUEDE EXCEDER LOS 5Mb");
+		input.value = "";
+		return false;
+	}
+
+	var nombre = file.name || "";
+	var extension = nombre.substring(nombre.lastIndexOf(".") + 1).toLowerCase();
+
+	if (extension != "jpeg" && extension != "jpg" && extension != "png" && extension != "webp") {
+		ver_vetana_informativa("LA IMAGEN SELECCIONADA DEBE SER JPG, PNG O WEBP");
+		input.value = "";
+		return false;
+	}
+
+	var reader = new FileReader();
+	reader.onload = function (e) {
+		generarLogoPngInformEmpresa(e.target.result, esLogoImpreso, function (dataUrl) {
+			if (esLogoImpreso) {
+				logoImpresoInformEmpresa = dataUrl;
+				actualizarPreviewLogoInformEmpresa("imgPreviewLogoImpresoInformEmpresa", dataUrl);
+				return;
+			}
+
+			logoColorInformEmpresa = dataUrl;
+			actualizarPreviewLogoInformEmpresa("imgPreviewLogoColorInformEmpresa", dataUrl);
+
+			var inputImpreso = document.getElementById("inptLogoImpresoInformEmpresa");
+			var sinLogoImpresoSeleccionado = !inputImpreso || !inputImpreso.files || inputImpreso.files.length === 0;
+
+			if (sinLogoImpresoSeleccionado) {
+				generarLogoPngInformEmpresa(e.target.result, true, function (dataUrlImpreso) {
+					logoImpresoInformEmpresa = dataUrlImpreso;
+					actualizarPreviewLogoInformEmpresa("imgPreviewLogoImpresoInformEmpresa", dataUrlImpreso);
+				});
+			}
+		});
+	};
+
+	reader.readAsDataURL(file);
+}
+
+function generarLogoPngInformEmpresa(origen, blancoNegro, callback) {
+	var imagen = new Image();
+
+	imagen.onload = function () {
+		var maximo = 1600;
+		var ancho = imagen.naturalWidth || imagen.width;
+		var alto = imagen.naturalHeight || imagen.height;
+		var escala = Math.min(1, maximo / Math.max(ancho, alto));
+		var canvas = document.createElement("canvas");
+		var contexto = canvas.getContext("2d");
+
+		canvas.width = Math.max(1, Math.round(ancho * escala));
+		canvas.height = Math.max(1, Math.round(alto * escala));
+		contexto.clearRect(0, 0, canvas.width, canvas.height);
+		contexto.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+		if (blancoNegro) {
+			var datosImagen = contexto.getImageData(0, 0, canvas.width, canvas.height);
+			var datos = datosImagen.data;
+
+			for (var i = 0; i < datos.length; i += 4) {
+				var gris = Math.round((datos[i] * 0.299) + (datos[i + 1] * 0.587) + (datos[i + 2] * 0.114));
+				datos[i] = gris;
+				datos[i + 1] = gris;
+				datos[i + 2] = gris;
+			}
+
+			contexto.putImageData(datosImagen, 0, 0);
+		}
+
+		callback(canvas.toDataURL("image/png"));
+	};
+
+	imagen.onerror = function () {
+		ver_vetana_informativa("NO SE PUDO LEER LA IMAGEN SELECCIONADA");
+	};
+
+	imagen.src = origen;
+}
+
+function verificarcamposInformEmpresa() {
+	var inptNombreEmpresa = document.getElementById('inptNombreInformEmpresa').value;
+	var inptRucEmpresa = document.getElementById('inptRucInformEmpresa').value;
+
+	if (inptNombreEmpresa === "") {
+		ver_vetana_informativa("FALTO INGRESAR EL NOMBRE DE LA EMPRESA", "#");
+		return false;
+	}
+	if (inptRucEmpresa === "") {
+		ver_vetana_informativa("FALTO INGRESAR EL RUC DE LA EMPRESA", "#");
+		return false;
+	}
+
+	verCerrarEfectoCargando("1");
+	var datos = new FormData();
+	obtener_datos_user();
+	datos.append("useru", userid);
+	datos.append("passu", passuser);
+	datos.append("navegador", navegador);
+	datos.append("funt", "actualizarDatosEmpresa");
+	datos.append("nombre", inptNombreEmpresa);
+	datos.append("ruc", inptRucEmpresa);
+	datos.append("ruc_original", rucOriginalInformEmpresa);
+	datos.append("logo_color", logoColorInformEmpresa);
+	datos.append("logo_impreso", logoImpresoInformEmpresa);
+
+	$.ajax({
+		data: datos,
+		url: "/GoodVentaElectroCasaMaric/php_system/abmadminlocales.php",
+		type: "post",
+		cache: false,
+		contentType: false,
+		processData: false,
+
+		error: function (jqXHR, textstatus, errorThrowm) {
+			verCerrarEfectoCargando("");
+			manejadordeerroresjquery(jqXHR.status, textstatus, "actualizarDatosEmpresa");
+			return false;
+		},
+		success: function (responseText) {
+			verCerrarEfectoCargando("");
+			try {
+				var datos = $.parseJSON(responseText);
+				var respuesta = datos["1"];
+
+				if (respuesta == "IMG") {
+					ver_vetana_informativa("NO SE PUDO GUARDAR EL LOGO. VERIFIQUE LA IMAGEN.");
+					return false;
+				}
+				if (respuesta == "EX") {
+					ver_vetana_informativa("EL RUC INGRESADO YA EXISTE.");
+					return false;
+				}
+				if (respuesta == "RUCPK") {
+					ver_vetana_informativa("NO SE PUDO DEJAR EL RUC COMO LLAVE PRIMARIA. REVISE RUC VACIOS O DUPLICADOS EN DATOS_EMPRESA.");
+					return false;
+				}
+
+				respuesta = respuestaJqueryAjax(respuesta);
+
+				if (respuesta == true) {
+					ver_vetana_informativa("DATOS CARGADO CORRECTAMENTE...");
+					tituloRecibo = inptNombreEmpresa;
+					ruc = inptRucEmpresa;
+					rucOriginalInformEmpresa = inptRucEmpresa;
+					logoColorInformEmpresa = "";
+					logoImpresoInformEmpresa = "";
+					limpiarInputsLogoInformEmpresa();
+					cargarPreviewLogosInformEmpresa();
+					buscarDatosInformEmpresa(inptRucEmpresa);
+				}
+			} catch (error) {
+				ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ");
+				var titulo = "Error: " + error + " \r\n Consola: " + responseText;
+				GuardarArchivosLog(titulo);
+			}
+		}
+	});
 }
 
 /* ADMIN LOCAL CON LOCALES */

@@ -61,13 +61,20 @@ function obtenerdatosabmCasa(datostr) {
 	document.getElementById('inptNombreCasa').value = $(datostr).children('td[id="td_datos_1"]').html();
 	document.getElementById('inptRegistroSeleccCasa').value = $(datostr).children('td[id="td_datos_1"]').html();
 	document.getElementById('inptEstadoCasa').value = $(datostr).children('td[id="td_datos_2"]').html();
+	document.getElementById('inptTelefonoCasa').value = $(datostr).children('td[id="td_datos_3"]').html() || "";
+	document.getElementById('inptDireccionCasa').value = $(datostr).children('td[id="td_datos_4"]').html() || "";
+	document.getElementById('inptCiudadCasa').value = $(datostr).children('td[id="td_datos_5"]').html() || "";
 	document.getElementById('btnEditarCasas').style.backgroundColor="";
+	document.getElementById('btnEmpresaCasa').style.backgroundColor="";
 	document.getElementById('btnAbmCasa').value = "Editar datos";
 	idAbmCasa = $(datostr).children('td[id="td_id"]').html();
 }
 function verificarcamposCasa() {
 	var inptNombreCasa = document.getElementById('inptNombreCasa').value
 	var inptEstadoCasa = document.getElementById('inptEstadoCasa').value
+	var inptTelefonoCasa = document.getElementById('inptTelefonoCasa').value
+	var inptDireccionCasa = document.getElementById('inptDireccionCasa').value
+	var inptCiudadCasa = document.getElementById('inptCiudadCasa').value
 	if (inptNombreCasa == "") {
 		ver_vetana_informativa("FALTO INGRESAR EL NOMBRE DEL LOCAL")
 		return false;
@@ -80,9 +87,9 @@ function verificarcamposCasa() {
 		accion = "nuevo";
 		if(controlacceso("INSERTARLISTADODELOCALES","accion")==false){return;}
 	}
-	abmcasa(inptNombreCasa, inptEstadoCasa, idAbmCasa, accion);
+	abmcasa(inptNombreCasa, inptEstadoCasa, idAbmCasa, accion, inptTelefonoCasa, inptDireccionCasa, inptCiudadCasa);
 }
-function abmcasa(nombre, estado, cod_local, accion) {
+function abmcasa(nombre, estado, cod_local, accion, telefono, direccion, ciudad) {
 	verCerrarEfectoCargando("1")
 	var datos = new FormData();
 	obtener_datos_user();
@@ -93,6 +100,9 @@ function abmcasa(nombre, estado, cod_local, accion) {
 	datos.append("cod_local", cod_local)
 	datos.append("nombre", nombre)
 	datos.append("estado", estado)
+	datos.append("telefono", telefono)
+	datos.append("direccion", direccion)
+	datos.append("ciudad", ciudad)
 	var OpAjax = $.ajax({
 		data: datos,
 		url: "/GoodVentaElectroCasaMaric/php_system/abmcasa.php",
@@ -174,7 +184,10 @@ function inicializarListadoAbmCasa() {
 				celdas: [
 					{ id: 'td_id', columna: 'codigo', campo: 'codigo' },
 					{ id: 'td_datos_1', columna: 'nombre', campo: 'nombre' },
-					{ id: 'td_datos_2', tecnica: true, campo: 'estado' }
+					{ id: 'td_datos_2', tecnica: true, campo: 'estado' },
+					{ id: 'td_datos_3', tecnica: true, campo: 'telefono' },
+					{ id: 'td_datos_4', tecnica: true, campo: 'direccion' },
+					{ id: 'td_datos_5', tecnica: true, campo: 'ciudad' }
 				]
 			}
 		});
@@ -251,11 +264,26 @@ ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 }
 function limpiarcamposCasa() {
 	document.getElementById('inptNombreCasa').value = "";
+	document.getElementById('inptTelefonoCasa').value = "";
+	document.getElementById('inptDireccionCasa').value = "";
+	document.getElementById('inptCiudadCasa').value = "";
 	document.getElementById('inptRegistroSeleccCasa').value = "";
 	document.getElementById('btnEditarCasas').style.backgroundColor="#b7b7b7";
+	document.getElementById('btnEmpresaCasa').style.backgroundColor="#b7b7b7";
 	document.getElementById('inptEstadoCasa').value = "Activo";
 	document.getElementById('btnAbmCasa').value = "Guardar datos";
 	idAbmCasa = "";
+}
+
+function verCerrarEmpresaDesdeLocales() {
+	if (document.getElementById("divAbmCasa")) {
+		$("div[id=divAbmCasa]").fadeOut(250);
+	}
+	mostrarSoloUno("divAbmAdminLocales");
+	document.getElementById("divAbmAdminLocales").style.display = "";
+	if (typeof verCerrarAbmInformEmpresa === "function") {
+		verCerrarAbmInformEmpresa(true);
+	}
 }
 function buscarabmCasaOption() {
 	document.getElementById("inptlocaluser").innerHTML = "";
