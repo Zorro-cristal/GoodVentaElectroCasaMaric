@@ -3052,9 +3052,9 @@ var buscar=document.getElementById('inptBuscarClientes').value
 			 	try{
 				var datos = $.parseJSON(Respuesta); 
           Respuesta=datos["1"];  
-			 if (Respuesta=="usuarioincorrecto")
+			 if (Respuesta=="UI" || Respuesta=="usuarioincorrecto")
 			{
-				window.location="/GoodVentaElectroCasaMaric/login.html";
+				window.location="/GoodVentaElectroCasaMaric/app/login.html";
 				ver_vetana_informativa("USUARIO INCORRECTO VUELVA A INICIAR SESION...","alert")
 						return false;
 				}  
@@ -3858,9 +3858,9 @@ var tipo=document.getElementById('inputTipoCuenta').value
 			 	try{
 				var datos = $.parseJSON(Respuesta); 
           Respuesta=datos["1"];  
-			 if (Respuesta=="usuarioincorrecto")
+			 if (Respuesta=="UI" || Respuesta=="usuarioincorrecto")
 			{
-				window.location="/GoodVentaElectroCasaMaric/login.html";
+				window.location="/GoodVentaElectroCasaMaric/app/login.html";
 				ver_vetana_informativa("USUARIO INCORRECTO VUELVA A INICIAR SESION...","alert")
 						return false;
 				}  
@@ -5954,9 +5954,9 @@ var buscar=document.getElementById('inptBuscarFechaMisRecaudaciones').value
 			 	try{
 				var datos = $.parseJSON(Respuesta); 
           Respuesta=datos["1"];  
-			 if (Respuesta=="usuarioincorrecto")
+			 if (Respuesta=="UI" || Respuesta=="usuarioincorrecto")
 			{
-				window.location="/GoodVentaElectroCasaMaric/login.html";
+				window.location="/GoodVentaElectroCasaMaric/app/login.html";
 				ver_vetana_informativa("USUARIO INCORRECTO VUELVA A INICIAR SESION...","alert")
 						return false;
 				}  

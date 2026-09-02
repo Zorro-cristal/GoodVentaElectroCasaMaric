@@ -3,7 +3,17 @@
 
 function calcularintereses($buscar,$fecha1,$fecha2,$filtro1,$filtro2,$filtro3,$actualizar)
 {
-$mysqli=conectar_al_servidor();
+$cerrarconexion=true;
+if($actualizar=="no"){
+	static $mysqli_sololectura=null;
+	if($mysqli_sololectura==null){
+		$mysqli_sololectura=conectar_al_servidor();
+	}
+	$mysqli=$mysqli_sololectura;
+	$cerrarconexion=false;
+}else{
+	$mysqli=conectar_al_servidor();
+}
 $fechahoy=date('Y-m-d');	
 $condicion="";
 
@@ -149,8 +159,10 @@ if($nroCancelado==0){
 	//CONDICION PARA SABER SI HAY DIAS ATRAZADOS
 	if($diff<0 && $diff!=""){
 	$diff=$diff*-1;
+	if($actualizar=="si"){
 	editarDiasAtrazadosdesdecalcularcredito($cod_clienteFK,$diff);
 	actualizardiasatrazadocredito($idcredito,$diff);
+	}
 	}else{
 	$diff=0;
     }
@@ -336,7 +348,9 @@ $datos[14]=$tinteres;
 $datos[15]=$DiasAtrazo;
 $datos[16]=$SumadeudaInteres;
 
+if($cerrarconexion==true){
  mysqli_close($mysqli);
+}
 return $datos;
 }
 

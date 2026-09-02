@@ -155,17 +155,20 @@ exit;
 function buscarregistro($buscar,$lat,$lot,$buscarpor,$buscar2,$tipo,$idzona,$cod_cobradorFK)
 {
 $mysqli=conectar_al_servidor();
+$sql="";
 $condicionzona="";
 $condicionCuenta="";
+$sqlClienteOcasional="case when vt.cod_clienteFK=10 or cl.ci_cliente='XXXX' then 1 else 0 end";
+$ordenClienteOcasional=" es_ocasional asc ";
 if($idzona!=""){
 	$condicionzona=" and cl.idzonaFk='$idzona' ";
 }
 
 	 $sqlcoordenads=",(6371 * ACOS(SIN(RADIANS(cl.lat)) * SIN(RADIANS(".$lat."))+COS(RADIANS(cl.lot - ".$lot.")) * COS(RADIANS(cl.lat))* COS(RADIANS(".$lat.")))) AS distance ";
-	$oderbycoordenadas=" order by distance asc ";
+	$oderbycoordenadas=" order by ".$ordenClienteOcasional.", distance asc ";
 if($lat=="" || $lot==""){
 	$sqlcoordenads="";
-	$oderbycoordenadas="";
+	$oderbycoordenadas=" order by ".$ordenClienteOcasional.", vt.cod_venta desc ";
 }
 
 $condicionCobrado=" and vt.cod_cobradorFK='$cod_cobradorFK' ";
@@ -185,8 +188,9 @@ if($buscarpor=="cliente"){
 	
 	
 	 $sql= "Select vt.idGaranteFk,vt.fecha_venta,vt.total_venta,vt.cod_usuarioFK,vt.cod_clienteFK,vt.num_factura,
-	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads."
-		 ,cl.lat,cl.lot,cl.ci_cliente,concat(pr.nombre_persona,' ',pr.apellido_persona) as clientenombre,
+	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads.",
+	 ".$sqlClienteOcasional." as es_ocasional
+		 ,cl.lat,cl.lot,cl.ci_cliente,concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,'')) as clientenombre,
 		(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
 		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
 		(Select direccion from persona where cod_persona=cod_clienteFK) as direccion,
@@ -195,7 +199,7 @@ if($buscarpor=="cliente"){
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
-		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
+		(Select concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,'')) from persona where cod_persona=idGaranteFk) as Garante,
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta dtv1 where dtv1.cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
@@ -211,20 +215,23 @@ if($buscarpor=="cliente"){
 		from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona 
 		inner join venta vt  on vt.cod_clienteFK=cl.cod_cliente
 		 inner join credito cr on vt.cod_venta=cr.cod_venta
-		where IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and ".$condicionCuenta."  concat(pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente,' ',pr.telefono) like '%".$buscar."%' ".$condicionzona." group by  vt.cod_venta ".$oderbycoordenadas." limit 300";
+		where IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and ".$condicionCuenta."  concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,''),' ',IFNULL(cl.ci_cliente,''),' ',IFNULL(pr.telefono,'')) like '%".$buscar."%' ".$condicionzona." group by  vt.cod_venta ".$oderbycoordenadas." limit 300";
 	
 	
 
 
 }
 
-if($buscarpor=="entrefecha"){
-	
+if($buscarpor=="fecha" || $buscarpor=="solohoy"){
+	if($buscarpor=="solohoy"){
+		$buscar=date('Y-m-d');
+	}
 	
 	 $sql= "Select vt.idGaranteFk,vt.fecha_venta,vt.total_venta,vt.cod_usuarioFK,vt.cod_clienteFK,vt.num_factura,
-	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads."
-		 ,cl.lat,cl.lot,cl.ci_cliente,concat(pr.nombre_persona,' ',pr.apellido_persona) as clientenombre,
-		((Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
+	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads.",
+	 ".$sqlClienteOcasional." as es_ocasional
+		 ,cl.lat,cl.lot,cl.ci_cliente,concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,'')) as clientenombre,
+		(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
 		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
 		(Select direccion from persona where cod_persona=cod_clienteFK) as direccion,
 		(Select telefono from persona where cod_persona=cod_clienteFK) as telefono,
@@ -232,7 +239,43 @@ if($buscarpor=="entrefecha"){
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
-		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
+		(Select concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,'')) from persona where cod_persona=idGaranteFk) as Garante,
+		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
+		(Select count(cod_detalle) from detalle_venta dtv1 where dtv1.cod_ventaFK=vt.cod_venta) as nrodetalle,
+		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
+		(Select count(fechapago) from credito cr1 where cr1.cod_venta=vt.cod_venta) as cantidadcuota,
+		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
+		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
+		IFNULL((Select Monto from credito  cr1 where cr1.cod_venta=vt.cod_venta  limit 1),0) as Monto,
+		(Select count(fechapago) from credito  cr1 where cr1.cod_venta=vt.cod_venta and plazo!='ENTREGA' limit 1) as nroCouta,
+		(Select fechapago from credito cr1 where cr1.cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
+		IFNULL((select sum(cr.descuento) from credito cr1 where cr1.cod_venta=vt.cod_venta limit 1),0) as totaldescuento,
+		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk limit 1),0) as totalpagado
+		,cr.deudaInteres,(totalinteres + deudaInteres) as totalinteres
+		from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona 
+		inner join venta vt  on vt.cod_clienteFK=cl.cod_cliente
+		 inner join credito cr on vt.cod_venta=cr.cod_venta
+		where IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and ".$condicionCuenta."  (select count(fechapago) from  credito cr where vt.cod_venta=cr.cod_venta and cr.fechapago<='$buscar' and cr.Monto-cr.descuento>IFNULL((select sum(pg.Monto) from pago pg where cr.idcredito=pg.cod_creditoFK),0))>0  "
+		.$condicionzona." group by  vt.cod_venta ".$oderbycoordenadas." limit 300";
+	
+}
+
+if($buscarpor=="entrefecha"){
+	
+	
+	 $sql= "Select vt.idGaranteFk,vt.fecha_venta,vt.total_venta,vt.cod_usuarioFK,vt.cod_clienteFK,vt.num_factura,
+	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads.",
+	 ".$sqlClienteOcasional." as es_ocasional
+		 ,cl.lat,cl.lot,cl.ci_cliente,concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,'')) as clientenombre,
+		(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
+		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
+		(Select direccion from persona where cod_persona=cod_clienteFK) as direccion,
+		(Select telefono from persona where cod_persona=cod_clienteFK) as telefono,
+		(Select email from persona where cod_persona=cod_clienteFK) as email,
+		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
+		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
+		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
+		(Select concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,'')) from persona where cod_persona=idGaranteFk) as Garante,
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta dtv1 where dtv1.cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
@@ -257,16 +300,17 @@ if($buscarpor=="entrefecha"){
 
 if($buscarpor=="visitas"){
 	if($oderbycoordenadas==""){
-		$oderbycoordenadas==" order by vs.idvisitas asc";
+		$oderbycoordenadas=" order by vs.idvisitas asc";
 			
 	}else{
-		$oderbycoordenadas==",vs.idvisitas asc";
+		$oderbycoordenadas.=",vs.idvisitas asc";
 	}
 	
 
 	$sql= "Select vt.idGaranteFk,vt.fecha_venta,vt.total_venta,vt.cod_usuarioFK,vt.cod_clienteFK,vt.num_factura,
-	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads."
-		 ,cl.lat,cl.lot,cl.ci_cliente,concat(pr.nombre_persona,' ',pr.apellido_persona) as clientenombre,
+	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago ".$sqlcoordenads.",
+	 ".$sqlClienteOcasional." as es_ocasional
+		 ,cl.lat,cl.lot,cl.ci_cliente,concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,'')) as clientenombre,
 	(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
 		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
 		(Select direccion from persona where cod_persona=cod_clienteFK) as direccion,
@@ -275,7 +319,7 @@ if($buscarpor=="visitas"){
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
-		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
+		(Select concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,'')) from persona where cod_persona=idGaranteFk) as Garante,
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta dtv1 where dtv1.cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
@@ -302,6 +346,12 @@ if($buscarpor=="visitas"){
 
 $pagina = "";   
 
+if($sql==""){
+$informacion =array("1" => "error");
+echo json_encode($informacion);	
+exit;
+}
+
  $stmt = $mysqli->prepare($sql);
 
 
@@ -312,7 +362,7 @@ exit;
 
 $result = $stmt->get_result();
 $valor= mysqli_num_rows($result);
-$nroRegistro=0;
+$nroRegistro=$valor;
  $TotalVentas=0;
  $TotalPagos= 0;
  $TotalDeuda= 0;
@@ -364,7 +414,7 @@ while ($valor= mysqli_fetch_assoc($result))
 			   
 			    $styleCancelado="";
 				
-				  $datos=calcularintereses($cod_venta,0,0,"2","2","2","si");
+				  $datos=calcularintereses($cod_venta,0,0,"2","2","2","no");
 				$totaldescuento=$datos[0];
                 $totalinteres=$datos[12];
                 $totalpagado=$datos[3];
@@ -478,7 +528,7 @@ if($idzona!=""){
 	
 	 $sql= "Select vt.idGaranteFk,vt.fecha_venta,vt.total_venta,vt.cod_usuarioFK,vt.cod_clienteFK,vt.num_factura,
 	 vt.cod_cobradorFK,vt.TipoVenta,vt.TipoPago,vt.Vendedor1,vt.Vendedor2 ,vt.cod_venta,vt.comision,vt.cod_local,vt.pago 
-		 ,cl.lat,cl.lot,cl.ci_cliente,concat(pr.nombre_persona,' ',pr.apellido_persona) as clientenombre,
+		 ,cl.lat,cl.lot,cl.ci_cliente,concat(IFNULL(pr.nombre_persona,''),' ',IFNULL(pr.apellido_persona,'')) as clientenombre,
 		(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
 		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
@@ -487,7 +537,7 @@ if($idzona!=""){
 		(Select telefono from persona where cod_persona=cod_clienteFK) as telefono,
 		(Select email from persona where cod_persona=cod_clienteFK) as email,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
-		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
+		(Select concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,'')) from persona where cod_persona=idGaranteFk) as Garante,
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
@@ -572,7 +622,7 @@ while ($valor= mysqli_fetch_assoc($result))
 			    $styleCancelado="";
 				
 				 
-			 $datos=calcularintereses($cod_venta,0,0,"2","2","2","si");
+			 $datos=calcularintereses($cod_venta,0,0,"2","2","2","no");
 				$totaldescuento=$datos[0];
                 $totalinteres=$datos[12];
                 $totalpagado=$datos[3];
@@ -946,7 +996,11 @@ return $pagina;
 /*Buscar */
 function buscar_detalles_venta($buscar)
 {
-$mysqli=conectar_al_servidor();
+static $mysqli_detalles_venta=null;
+if($mysqli_detalles_venta==null){
+	$mysqli_detalles_venta=conectar_al_servidor();
+}
+$mysqli=$mysqli_detalles_venta;
 
 $sql= "select pr.nombre_producto,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra,
@@ -999,7 +1053,6 @@ $a=$a+1;
 }
 $datos[0]=$pagina1;
 $datos[1]=$pagina2;
- mysqli_close($mysqli); 
 return $datos;
 }
 
