@@ -3418,7 +3418,7 @@ style='display:none' />
 <table class='tableMenupane2' id='divEncabezadofixed' style='display:none'>
 <tr>
 <td>
-<p class='pTituloPanel3'   >Good - Technology Py - Ventas -  <b style='font-size: 30px;' >Elim S.A.</b></p>
+<p class='pTituloPanel3'   >Good - Technology Py - Ventas -  <b style='font-size: 30px;' id='lblEmpresaCabeceraSistema'></b></p>
 <p class='pTituloPanel3' style='font-size:14px'  id='pUsuarioCabecera' >Cargando...</p>
 </td>
 </tr>
@@ -3451,7 +3451,7 @@ style='color:#673ab7'>Soft</span></p>
 
 <p class='pTituloC' style='text-align:center'>Producto autorizado a
 :</p>
-<p class='pTituloC' style='text-align:center'>ELIM S.A.</p>
+<p class='pTituloC' style='text-align:center' id='lblEmpresaAutorizadaSistema'></p>
 
 </td>
 </tr>
@@ -8546,6 +8546,10 @@ style='background-color:#b7b7b7'>
 <div class='inform-empresa-field'>
 <label for='inptRucInformEmpresa'>RUC</label>
 <input class='inputText inform-empresa-input' type='text' placeholder='Obligatorio (*)' id='inptRucInformEmpresa'>
+</div>
+<div class='inform-empresa-field'>
+<label for='inptTelefonoInformEmpresa'>Teléfono</label>
+<input class='inputText inform-empresa-input' type='text' placeholder='Teléfono de la empresa' id='inptTelefonoInformEmpresa'>
 </div>
 </section>
 
@@ -52289,7 +52293,7 @@ onclick='finalizarventanasminizados()' />
 <center>
 <div id='DivImprimirExtr'>
  
-<img src='/GoodVentaElectroCasaMaric/iconos/LogoEmpresa.JPG' style='width:170px'>
+<img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:170px'>
  
 <br>
 <h1 class='pTituloD' style='font-size:25px' >INFORME DE CUENTA CLIENTE</h1><br>
@@ -52452,13 +52456,14 @@ style='width:88%'></div>
 
 <div class="membrete clearfix">
   <div class="logo">
-    <img src="/GoodVentaElectroCasaMaric/iconos/LogoSA.JPG" alt="Logo Grupo Elim" style="height: 75px;">
+    <img src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Logo empresa" style="height: 75px;">
   </div>
   <div class="empresa-info">
-    <strong>Venta de Electrodomésticos y Muebles en General</strong><br>
-    Calle 1º de Marzo c/ Iturbe<br>
-    Tel: 0984 107 021 - 0971 452 582<br>
-    Cnel. Oviedo - Paraguay
+    <strong id='ContratoEmpresaNombre'></strong><br>
+    Venta de Electrodomésticos y Muebles en General<br>
+    <span id='ContratoEmpresaDireccion'></span><br>
+    Tel: <span id='ContratoEmpresaTelefono'></span><br>
+    <span id='ContratoEmpresaCiudad'></span>
   </div>
 </div>
 
@@ -52473,7 +52478,7 @@ style='width:88%'></div>
     </tr>
     <tr>
       <td><strong>RUC o C.I.:</strong> <b id='ContratoRuc'> 5.524.793 </b></td>
-      <td><strong>TELÉFONO:</strong> <b id='ContratoTelefono'> 0984107021 </b></td>
+      <td><strong>TELÉFONO:</strong> <b id='ContratoTelefono'></b></td>
     </tr>
     <tr>
       <td><strong>NOMBRE:</strong>  <b id='ContratoNombre'> GUSTAVO DANIEL ACOSTA DELGADO </b></td>
@@ -52530,7 +52535,7 @@ style='width:88%'></div>
  <br> 
  
 
-  <p>Entre <strong>"ELIM SA"</strong> domiciliado en la casa de la calle 1º de Marzo c/ Iturbe de la ciudad de Cnel. Oviedo, en adelante se denominará el VENDEDOR y el titular de la presente factura, que se determina en adelante COMPRADOR, que se regirá por las cláusulas del presente CONTRATO.</p>
+  <p>Entre <strong id='ContratoEmpresaNombreTexto'></strong> <span id='ContratoEmpresaDomicilioTexto'></span>, en adelante se denominará el VENDEDOR y el titular de la presente factura, que se determina en adelante COMPRADOR, que se regirá por las cláusulas del presente CONTRATO.</p>
 
   <p><strong>PRIMERA:</strong> El vendedor vende al comprador y este lo acepta, el (los) artículo(s) mencionado(s) en esta factura con todos sus accesorios, que en adelante se denomina LO VENDIDO, y que el comprador recibe en este acto en perfecto estado de funcionamiento y sin defecto de ninguna clase.</p>
 
@@ -52548,7 +52553,7 @@ style='width:88%'></div>
 
   <div class="firmas">
     <div>
-      <strong>ELIM SA</strong><br>VENDEDOR
+      <strong id='ContratoEmpresaFirma'></strong><br>VENDEDOR
     </div>
     <div>
       <strong id='ContratoClienteFirma' >GUSTAVO DANIEL ACOSTA DELGADO</strong><br><b id='ContratoCiFirma' > C.I. Nº: 5524793 - COMPRADOR</b> 
@@ -52582,7 +52587,7 @@ style='width:88%'></div>
 <div class='principal2' style='background-color:#fff;display:none'>
 <center>
 <div id='DivImprimirExpediente'>
-<center><img src='/GoodVentaElectroCasaMaric/iconos/LogoEmpresa.JPG' style='width:170px'>
+<center><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:170px'>
 </center>
 <center>
 <br>
@@ -55432,7 +55437,7 @@ ESTADO
 <div class='principal2' style='background-color:#fff;display:none'>
 <center>
 <div id='DivImpresiones'>
-<center><img src='/GoodVentaElectroCasaMaric/iconos/LogoEmpresa.JPG' style='width:170px'>
+<center><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:170px'>
 </center>
 <center>
 <div id='divCabeceraImpresiones' style='width:90%'></div>
@@ -55452,11 +55457,11 @@ style='width:100%'></div>
 <div class='divCuerpoRecibo' style='margin-left: 12px;' >
 <div style='display:flex'>
 <div class='divCabeceraRecibo'>
-<div class='reciboEmpresaMarca'>CASA <strong>MARIC</strong><span>Rápido, fácil y seguro...</span></div>
-<div class='reciboEmpresaDatos'><b>de Walter Fabián Sánchez Ruiz</b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b>14 de Mayo y Joaquín Estigarribia · Cel.: (0985) 712 481<br>Villarrica · Guairá · Py</b></div>
+<div class='reciboEmpresaMarca'><span class='lblEmpresaMarcaRecibo'></span><span>Rápido, fácil y seguro...</span></div>
+<div class='reciboEmpresaDatos'><b class='lblEmpresaNombreRecibo'></b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b class='lblEmpresaContactoRecibo'></b></div>
 </div>
 <div class='divTituloRecibo'>
-<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: 4193548-9</strong><span>N° <b id='lblReciboNumeroLegal1'></b></span></div>
+<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: <span class='lblEmpresaRucRecibo'></span></strong><span>N° <b id='lblReciboNumeroLegal1'></b></span></div>
 </div>
 </div>
 <div class='divCuerpoTitulo' style='display: flex;'>
@@ -55573,11 +55578,11 @@ EXENTAS.
 <div class='divCuerpoRecibo' style='margin-left: 0px;'>
 <div style='display:flex'>
 <div class='divCabeceraRecibo'>
-<div class='reciboEmpresaMarca'>CASA <strong>MARIC</strong><span>Rápido, fácil y seguro...</span></div>
-<div class='reciboEmpresaDatos'><b>de Walter Fabián Sánchez Ruiz</b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b>14 de Mayo y Joaquín Estigarribia · Cel.: (0985) 712 481<br>Villarrica · Guairá · Py</b></div>
+<div class='reciboEmpresaMarca'><span class='lblEmpresaMarcaRecibo'></span><span>Rápido, fácil y seguro...</span></div>
+<div class='reciboEmpresaDatos'><b class='lblEmpresaNombreRecibo'></b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b class='lblEmpresaContactoRecibo'></b></div>
 </div>
 <div class='divTituloRecibo'>
-<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: 4193548-9</strong><span>N° <b id='lblReciboNumeroLegal2'></b></span></div>
+<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: <span class='lblEmpresaRucRecibo'></span></strong><span>N° <b id='lblReciboNumeroLegal2'></b></span></div>
 </div>
 </div>
 <div class='divCuerpoTitulo' style='display:flex;'>
@@ -56796,13 +56801,13 @@ onclick='verCerrarFrmPrecioDescripcionBancoEgresoIngresoJuan("1","vistaDescripci
     <div class="empresa">
 		<div class="brand">
           <div class="logo">
-            <img src="/GoodVentaElectroCasaMaric/iconos/iconoEmpresa.JPG" alt="Logo de Elim S.A.">
+            <img src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Logo empresa">
           </div>
           <div class="title">
-			  <h1>ELIM S.A.</h1>
+			  <h1 id="pvEmpresaNombre"></h1>
 			  <p><strong>Propuesta Comercial de Electrodomésticos</strong></p>
-			  <p>Dirección: Calle 1° de Marzo c/ Iturbe - Cnel. Oviedo, Paraguay</p>
-			  <p>Teléfono: (0984) 107 021 - (0971) 452 582</p>
+			  <p>Dirección: <span id="pvEmpresaDireccion"></span></p>
+			  <p>Teléfono: <span id="pvEmpresaTelefono"></span></p>
           </div>
         </div>
 	
@@ -56916,7 +56921,7 @@ onclick='verCerrarFrmPrecioDescripcionBancoEgresoIngresoJuan("1","vistaDescripci
   </div>
 
   <div class="footer">
-    ELIM S.A. | Propuesta Comercial 
+    <span id="pvEmpresaFooter"></span> | Propuesta Comercial 
   </div>
 
 </div>

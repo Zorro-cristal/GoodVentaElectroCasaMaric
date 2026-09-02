@@ -1392,6 +1392,9 @@ function rellenarHojaPresupuesto() {
     document.getElementById("pvNumero").innerHTML = generarNumeroPresupuesto();
     document.getElementById("pvFecha").innerHTML = obtenerFechaActual();
     document.getElementById("pvValidez").innerHTML = "15 días";
+    if (typeof actualizarDatosEmpresaPresupuesto === "function") {
+        actualizarDatosEmpresaPresupuesto();
+    }
 
     document.getElementById("pvCliente").innerHTML = datosCliente.cliente;
     document.getElementById("pvRuc").innerHTML = datosCliente.ruc;

@@ -79,10 +79,12 @@ if($operacion=="actualizarDatosEmpresa")
 	$ruc = utf8_decode($ruc);
 	$ruc_original=isset($_POST['ruc_original']) ? $_POST['ruc_original'] : "";
 	$ruc_original = utf8_decode($ruc_original);
+	$telefono_empresa=isset($_POST['telefono']) ? $_POST['telefono'] : "";
+	$telefono_empresa = utf8_decode($telefono_empresa);
 	$logo_color=isset($_POST['logo_color']) ? $_POST['logo_color'] : "";
 	$logo_impreso=isset($_POST['logo_impreso']) ? $_POST['logo_impreso'] : "";
 
-	actualizarDatosEmpresa($nombre,$ruc,$logo_color,$logo_impreso,$ruc_original);
+	actualizarDatosEmpresa($nombre,$ruc,$telefono_empresa,$logo_color,$logo_impreso,$ruc_original);
 
 }
 
@@ -495,7 +497,7 @@ function asegurarRelacionAdminLocalBase($mysqli,$idadmin_localFK,$cod_localFK)
 	return $stmtInsert->execute();
 }
 
-function actualizarDatosEmpresa($nombre,$ruc,$logo_color,$logo_impreso,$ruc_original)
+function actualizarDatosEmpresa($nombre,$ruc,$telefono,$logo_color,$logo_impreso,$ruc_original)
 {
 	if($nombre=="" || $ruc==""){
 		$informacion =array("1" => "CAMPOSVACIOS");
@@ -512,7 +514,7 @@ function actualizarDatosEmpresa($nombre,$ruc,$logo_color,$logo_impreso,$ruc_orig
 		exit;
 	}
 
-	actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_color,$logo_impreso);
+	actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$telefono,$ruc_original,$logo_color,$logo_impreso);
 }
 
 function asegurarDatosEmpresaRucPrimaryKey($mysqli)
@@ -520,6 +522,7 @@ function asegurarDatosEmpresaRucPrimaryKey($mysqli)
 	$consulta="CREATE TABLE IF NOT EXISTS `datos_empresa` (
 		`ruc` varchar(100) NOT NULL,
 		`nombre` varchar(100) DEFAULT NULL,
+		`telefono` varchar(100) DEFAULT NULL,
 		PRIMARY KEY (`ruc`)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1";
 	if(ejecutarConsultaDatosEmpresa($mysqli,$consulta)==false){
@@ -534,6 +537,12 @@ function asegurarDatosEmpresaRucPrimaryKey($mysqli)
 
 	if(columnaDatosEmpresaExiste($mysqli,"nombre")==false){
 		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` ADD COLUMN `nombre` varchar(100) DEFAULT NULL")==false){
+			return false;
+		}
+	}
+
+	if(columnaDatosEmpresaExiste($mysqli,"telefono")==false){
+		if(ejecutarConsultaDatosEmpresa($mysqli,"ALTER TABLE `datos_empresa` ADD COLUMN `telefono` varchar(100) DEFAULT NULL")==false){
 			return false;
 		}
 	}
@@ -660,7 +669,7 @@ function quitarAutoIncrementDatosEmpresa($mysqli)
 	return true;
 }
 
-function actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_color,$logo_impreso)
+function actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$telefono,$ruc_original,$logo_color,$logo_impreso)
 {
 	$cambiar_ruc=($ruc_original!="" && $ruc_original!=$ruc);
 
@@ -696,14 +705,14 @@ function actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_c
 	}
 
 	if($cambiar_ruc){
-		$consulta="Update datos_empresa set ruc=?, nombre=? where ruc=?";
+		$consulta="Update datos_empresa set ruc=?, nombre=?, telefono=? where ruc=?";
 		$stmt1 = $mysqli->prepare($consulta);
 		if(!$stmt1){
 			echo "Error";
 			exit;
 		}
-		$sss='sss';
-		$stmt1->bind_param($sss,$ruc,$nombre,$ruc_original);
+		$ssss='ssss';
+		$stmt1->bind_param($ssss,$ruc,$nombre,$telefono,$ruc_original);
 	}else{
 		$sql="Select ruc from datos_empresa where ruc=? limit 1";
 		$stmt = $mysqli->prepare($sql);
@@ -721,23 +730,23 @@ function actualizarDatosEmpresaPorRuc($mysqli,$nombre,$ruc,$ruc_original,$logo_c
 
 		$result = $stmt->get_result();
 		if(mysqli_num_rows($result)>0){
-			$consulta="Update datos_empresa set nombre=? where ruc=?";
+			$consulta="Update datos_empresa set nombre=?, telefono=? where ruc=?";
 			$stmt1 = $mysqli->prepare($consulta);
 			if(!$stmt1){
 				echo "Error";
 				exit;
 			}
-			$ss='ss';
-			$stmt1->bind_param($ss,$nombre,$ruc);
+			$sss='sss';
+			$stmt1->bind_param($sss,$nombre,$telefono,$ruc);
 		}else{
-			$consulta="Insert into datos_empresa (ruc,nombre) values (?,?)";
+			$consulta="Insert into datos_empresa (ruc,nombre,telefono) values (?,?,?)";
 			$stmt1 = $mysqli->prepare($consulta);
 			if(!$stmt1){
 				echo "Error";
 				exit;
 			}
-			$ss='ss';
-			$stmt1->bind_param($ss,$ruc,$nombre);
+			$sss='sss';
+			$stmt1->bind_param($sss,$ruc,$nombre,$telefono);
 		}
 	}
 

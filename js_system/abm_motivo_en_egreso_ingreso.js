@@ -1538,7 +1538,7 @@ function ImprimirCodigoBarra(){
     pagina="<article class='divCodigobarra etiqueta-precio'>"
 	+"<table class='etiqueta-precio__tabla'><tbody><tr>"
 	+"<td class='etiqueta-precio__logo'>"
-	+"<img src='/GoodVentaElectroCasaMaric/iconos/LogoSA.JPG' alt='Grupo Elim S.A.'/>"
+	+"<img src='/GoodVentaElectroCasaMaric/iconos/logo.png' alt='"+(typeof obtenerNombreEmpresaImpresionHtml === "function" ? obtenerNombreEmpresaImpresionHtml() : "")+"'/>"
 	+"</td>"
 	+"<td class='etiqueta-precio__detalle'>"
 	+"<div class='etiqueta-precio__bloque etiqueta-precio__producto'>"

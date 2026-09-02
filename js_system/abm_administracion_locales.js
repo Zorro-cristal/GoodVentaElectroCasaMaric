@@ -489,6 +489,7 @@ function verCerrarAbmInformEmpresa(mostrar) {
 		cargarPreviewLogosInformEmpresa();
 		setValueSiExiste("inptNombreInformEmpresa", "");
 		setValueSiExiste("inptRucInformEmpresa", "");
+		setValueSiExiste("inptTelefonoInformEmpresa", "");
 		buscarDatosInformEmpresa();
 		if (document.getElementById("btnEmpresaAdminLocales")) {
 			document.getElementById("btnEmpresaAdminLocales").style.backgroundColor = "";
@@ -581,9 +582,15 @@ function obtenerRucBusquedaInformEmpresa(rucBuscado) {
 function cargarDatosRecuperadosInformEmpresa(datos) {
 	var nombreEmpresa = datos[2] || datos.nombre || "";
 	var rucEmpresa = datos[3] || datos.ruc || "";
+	var telefonoEmpresa = datos[4] || datos.telefono || "";
+	var direccionEmpresaRecuperada = datos[5] || datos.direccion || "";
+	var localEmpresaRecuperada = datos[6] || datos.local || "";
+	var codLocalEmpresaRecuperada = datos[7] || datos.cod_local || "";
+	var ciudadEmpresaRecuperada = datos[8] || datos.ciudad || "";
 
 	setValueSiExiste("inptNombreInformEmpresa", nombreEmpresa);
 	setValueSiExiste("inptRucInformEmpresa", rucEmpresa);
+	setValueSiExiste("inptTelefonoInformEmpresa", telefonoEmpresa);
 	rucOriginalInformEmpresa = rucEmpresa;
 
 	if (typeof tituloRecibo !== "undefined") {
@@ -591,6 +598,24 @@ function cargarDatosRecuperadosInformEmpresa(datos) {
 	}
 	if (typeof ruc !== "undefined") {
 		ruc = rucEmpresa;
+	}
+	if (typeof telefono !== "undefined") {
+		telefono = telefonoEmpresa;
+	}
+	if (typeof direccionEmpresa !== "undefined") {
+		direccionEmpresa = direccionEmpresaRecuperada;
+	}
+	if (typeof localEmpresa !== "undefined") {
+		localEmpresa = localEmpresaRecuperada;
+	}
+	if (typeof codLocalEmpresa !== "undefined") {
+		codLocalEmpresa = codLocalEmpresaRecuperada;
+	}
+	if (typeof ciudadEmpresa !== "undefined") {
+		ciudadEmpresa = ciudadEmpresaRecuperada;
+	}
+	if (typeof actualizarTextosEmpresaSistema === "function") {
+		actualizarTextosEmpresaSistema();
 	}
 
 	cargarPreviewLogosInformEmpresa();
@@ -724,6 +749,7 @@ function generarLogoPngInformEmpresa(origen, blancoNegro, callback) {
 function verificarcamposInformEmpresa() {
 	var inptNombreEmpresa = document.getElementById('inptNombreInformEmpresa').value;
 	var inptRucEmpresa = document.getElementById('inptRucInformEmpresa').value;
+	var inptTelefonoEmpresa = document.getElementById('inptTelefonoInformEmpresa').value;
 
 	if (inptNombreEmpresa === "") {
 		ver_vetana_informativa("FALTO INGRESAR EL NOMBRE DE LA EMPRESA", "#");
@@ -743,6 +769,7 @@ function verificarcamposInformEmpresa() {
 	datos.append("funt", "actualizarDatosEmpresa");
 	datos.append("nombre", inptNombreEmpresa);
 	datos.append("ruc", inptRucEmpresa);
+	datos.append("telefono", inptTelefonoEmpresa);
 	datos.append("ruc_original", rucOriginalInformEmpresa);
 	datos.append("logo_color", logoColorInformEmpresa);
 	datos.append("logo_impreso", logoImpresoInformEmpresa);
@@ -785,11 +812,15 @@ function verificarcamposInformEmpresa() {
 					ver_vetana_informativa("DATOS CARGADO CORRECTAMENTE...");
 					tituloRecibo = inptNombreEmpresa;
 					ruc = inptRucEmpresa;
+					telefono = inptTelefonoEmpresa;
 					rucOriginalInformEmpresa = inptRucEmpresa;
 					logoColorInformEmpresa = "";
 					logoImpresoInformEmpresa = "";
 					limpiarInputsLogoInformEmpresa();
 					cargarPreviewLogosInformEmpresa();
+					if (typeof actualizarTextosEmpresaSistema === "function") {
+						actualizarTextosEmpresaSistema();
+					}
 					buscarDatosInformEmpresa(inptRucEmpresa);
 				}
 			} catch (error) {

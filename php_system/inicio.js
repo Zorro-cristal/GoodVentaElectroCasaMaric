@@ -26951,7 +26951,7 @@ function ImprimirCodigoBarra(){
 	+"<div >"
 	+"<table style='width: 100%;' ><tr>"
 	+"<td style='width:40%'>"
-	+" <center><img src='/GoodVentaElectroCasaMaric/iconos/LogoSA.JPG' style='width:220px;'/> </center>"
+	+" <center><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:220px;'/> </center>"
 	+"</td>"
 	+"<td style='width:60%'>"
 	
@@ -55271,7 +55271,9 @@ function obtenerMensajeParaEnviar(nrosms,clienteNombre){
 
 	
 	
-	window.open("https://api.whatsapp.com/send?phone="+nrosms+"&text=Estimado/a%20+"+clienteNombre+"+,%20Escribimos%20para%20recordarte%20sobre%20Su%20cuota%20que%20se%20encuentra%20vencida,%20Aguardamos%20la%20confirmación%20de%20su%20pago por este medio.%20Quedamos%20a%20su%20disposición%20para%20cualquier%20consulta%20adicional.%20Le%20deseamos%20un%20excelente%20resto%20de%20la%20jornada.%20Saludos%20desde%20ELIM S.A.");
+	var nombreEmpresaMensaje = typeof obtenerNombreEmpresaParaUrl === "function" ? obtenerNombreEmpresaParaUrl() : (typeof tituloRecibo !== "undefined" && tituloRecibo ? tituloRecibo : "la empresa");
+	var mensaje = "Estimado/a " + clienteNombre + ", Escribimos para recordarte sobre Su cuota que se encuentra vencida, Aguardamos la confirmación de su pago por este medio. Quedamos a su disposición para cualquier consulta adicional. Le deseamos un excelente resto de la jornada. Saludos desde " + nombreEmpresaMensaje + ".";
+	window.open("https://api.whatsapp.com/send?phone="+nrosms+"&text="+encodeURIComponent(mensaje));
 	
 	// var aux = document.createElement("input");
   // aux.setAttribute("value", mensaje );
@@ -56168,6 +56170,10 @@ function  marcarrevisiondocumentopagarecomoterminado(){
 var tituloRecibo = "";
 var ruc = "";
 var telefono = "";
+var direccionEmpresa = "";
+var ciudadEmpresa = "";
+var localEmpresa = "";
+var codLocalEmpresa = "";
 function buscarDatosEmpresa() {
 
 	obtener_datos_user();
@@ -56204,6 +56210,13 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 				   tituloRecibo = datos[2];
 				   ruc = datos[3];
 				   telefono = datos[4];
+				   direccionEmpresa = datos[5] || datos.direccion || "";
+				   localEmpresa = datos[6] || datos.local || "";
+				   codLocalEmpresa = datos[7] || datos.cod_local || "";
+				   ciudadEmpresa = datos[8] || datos.ciudad || "";
+				   if (typeof actualizarTextosEmpresaSistema === "function") {
+					   actualizarTextosEmpresaSistema();
+				   }
 				}
 			} catch (error) {
 ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
@@ -74724,6 +74737,9 @@ function rellenarHojaPresupuesto() {
     document.getElementById("pvNumero").innerHTML = generarNumeroPresupuesto();
     document.getElementById("pvFecha").innerHTML = obtenerFechaActual();
     document.getElementById("pvValidez").innerHTML = "15 días";
+    if (typeof actualizarDatosEmpresaPresupuesto === "function") {
+        actualizarDatosEmpresaPresupuesto();
+    }
 
     document.getElementById("pvCliente").innerHTML = datosCliente.cliente;
     document.getElementById("pvRuc").innerHTML = datosCliente.ruc;

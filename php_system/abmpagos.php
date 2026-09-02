@@ -10,6 +10,25 @@ include("calcularintereses.php");
 include("classTable.php");
 
 
+function obtenerNombreEmpresaPagos($mysqli)
+{
+	$nombreEmpresa = "";
+	$sql = "SELECT nombre FROM datos_empresa order by ruc asc limit 1";
+	$stmt = $mysqli->prepare($sql);
+
+	if($stmt && $stmt->execute()){
+		$result = $stmt->get_result();
+		if($result && mysqli_num_rows($result)>0){
+			while($valor= mysqli_fetch_assoc($result)){
+				$nombreEmpresa = utf8_encode($valor['nombre']);
+			}
+		}
+	}
+
+	return $nombreEmpresa;
+}
+
+
 function ObtenerDatos($operacion)
 {
 
@@ -5158,10 +5177,18 @@ function abmMensajeParcial($Mensaje, $Monto, $numeroCliente)
 {
 
 	$mysqli = conectar_al_servidor();
+	$nombreEmpresa = obtenerNombreEmpresaPagos($mysqli);
+	$mensajeNotificacion = "MUCHAS GRACIAS POR TU PAGO DE " . $Monto . " Gs. CORRESPONDIENTE A " . $Mensaje;
+	if($nombreEmpresa!=""){
+		$mensajeNotificacion .= " . " . $nombreEmpresa . " LE DESEA FELIZ RESTO DE JORNADA.";
+	}else{
+		$mensajeNotificacion .= " . LE DESEAMOS FELIZ RESTO DE JORNADA.";
+	}
+	$mensajeNotificacion = mysqli_real_escape_string($mysqli,$mensajeNotificacion);
 
 
 	$consulta1 = "INSERT INTO notificaciones (mensaje,numero,estado,fecha,tipo,titulo,estado_mensaje)
-values('MUCHAS GRACIAS POR TU PAGO DE " . $Monto . " Gs. CORRESPONDIENTE A " . $Mensaje . " . CASA TOLEDO LE DESEA FELIZ RESTO DE JORNADA.','$numeroCliente','Activo','2024-03-22','Notificaciones','Pago Parcial','PENDIENTE')";
+values('".$mensajeNotificacion."','$numeroCliente','Activo','2024-03-22','Notificaciones','Pago Parcial','PENDIENTE')";
 	$stmt1 = $mysqli->prepare($consulta1);
 
 	if (!$stmt1->execute()) {

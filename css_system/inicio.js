@@ -25842,7 +25842,7 @@ function ImprimirCodigoBarra(){
 	+"<div >"
 	+"<table style='width: 100%;' ><tr>"
 	+"<td style='width:40%'>"
-	+" <center><img src='/GoodVentaElectroCasaMaric/iconos/LogoSA.JPG' style='width:100px;'/> </center>"
+	+" <center><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:100px;'/> </center>"
 	+"</td>"
 	+"<td style='width:60%'>"
 	

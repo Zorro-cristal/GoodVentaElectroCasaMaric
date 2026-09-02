@@ -11,6 +11,42 @@ include("calcularintereses.php");
 include("classTable.php");
 
 
+function obtenerNombreEmpresaCreditos()
+{
+	static $nombreEmpresa = null;
+
+	if($nombreEmpresa !== null){
+		return $nombreEmpresa;
+	}
+
+	$nombreEmpresa = "";
+	$mysqli = conectar_al_servidor();
+	$sql = "SELECT nombre FROM datos_empresa order by ruc asc limit 1";
+	$stmt = $mysqli->prepare($sql);
+
+	if($stmt && $stmt->execute()){
+		$result = $stmt->get_result();
+		if($result && mysqli_num_rows($result)>0){
+			while($valor= mysqli_fetch_assoc($result)){
+				$nombreEmpresa = utf8_encode($valor['nombre']);
+			}
+		}
+	}
+
+	mysqli_close($mysqli);
+	return $nombreEmpresa;
+}
+
+function completarMensajeEmpresaCreditos($mensaje)
+{
+	$nombreEmpresa = obtenerNombreEmpresaCreditos();
+	if($nombreEmpresa!=""){
+		$mensaje .= " Saludos desde ".$nombreEmpresa.".";
+	}
+	return $mensaje;
+}
+
+
 function verificar($operacion)
 {
 	
@@ -1333,7 +1369,7 @@ if($condicion=="+"){
 }
 
 	
-$mensaje.="Estimado '$clientenombre', escribimos para recordarte sobre SU CUOTA que se encuentra vencida. Aguardamos la confirmación de su pago por este medio. Saludos desde ELIM S.A.";
+$mensaje.=completarMensajeEmpresaCreditos("Estimado '$clientenombre', escribimos para recordarte sobre SU CUOTA que se encuentra vencida. Aguardamos la confirmación de su pago por este medio.");
 
 
 if($telefono!="0" && $telefono!=""){
@@ -1649,7 +1685,7 @@ if($condicion=="+"){
 }
 
 	
-$mensaje.="Estimado '$clientenombre', escribimos para recordarte sobre SU CUOTA que se encuentra vencida. Aguardamos la confirmación de su pago por este medio. Saludos desde ELIM S.A.";
+$mensaje.=completarMensajeEmpresaCreditos("Estimado '$clientenombre', escribimos para recordarte sobre SU CUOTA que se encuentra vencida. Aguardamos la confirmación de su pago por este medio.");
 
 
 if($telefono!="0" && $telefono!=""){

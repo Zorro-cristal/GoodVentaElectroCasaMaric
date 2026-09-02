@@ -1,5 +1,64 @@
 //Cobrador app V1.0
 var imgCargandoA="<img src='/GoodVentaElectroCasaMaric/iconos/cargando.gif' style='width:30px' />"
+var tituloRecibo = "";
+var ruc = "";
+var telefono = "";
+
+function escaparHtmlEmpresaAppConsulta(valor){
+	return String(valor == null ? "" : valor)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function obtenerDatosEmpresaTicketAppConsultaHtml(){
+	var lineas = [];
+	var rucEmpresa = String(ruc == null ? "" : ruc).trim();
+	var telefonoEmpresa = String(telefono == null ? "" : telefono).trim();
+
+	if(rucEmpresa != ""){
+		lineas.push("RUC: " + escaparHtmlEmpresaAppConsulta(rucEmpresa));
+	}
+	if(telefonoEmpresa != ""){
+		lineas.push("Cel: " + escaparHtmlEmpresaAppConsulta(telefonoEmpresa));
+	}
+
+	return lineas.join("<br>");
+}
+
+function obtenerCabeceraTicketEmpresaAppConsulta(){
+	return "<p class='pTituloTicket1' >"+escaparHtmlEmpresaAppConsulta(tituloRecibo)+"</p>"
+		+"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAppConsultaHtml()+"</p>";
+}
+
+function buscarDatosEmpresa(){
+	obtener_datos_user();
+	var datos = {
+		"useru": userid,
+		"passu": passuser,
+		"navegador": navegador,
+		"funt": "buscarDatosEmpresa"
+	};
+
+	$.ajax({
+		data: datos,
+		url: "/GoodVentaElectroCasaMaric/php/empresa.php",
+		type: "post",
+		success: function(responseText){
+			try{
+				var datos = $.parseJSON(responseText);
+				if(respuestaJqueryAjax(datos["1"]) == true){
+					tituloRecibo = datos[2] || "";
+					ruc = datos[3] || "";
+					telefono = datos[4] || "";
+				}
+			}catch(error){
+			}
+		}
+	});
+}
 
  window.onload=function()
 
@@ -49,6 +108,7 @@ var imgCargandoA="<img src='/GoodVentaElectroCasaMaric/iconos/cargando.gif' styl
 
 				
 buscar_datos_del_usuario();
+buscarDatosEmpresa();
  //buscarabmZonaOption()
  buscarabmLocalOption()
 	
@@ -2801,11 +2861,7 @@ function ReimprimirDiv (datos){
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC "
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaAppConsulta()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -2925,11 +2981,7 @@ function imprimirDiv(NroRecibo,totalInteresPagado,DeudaActual,totalpagado,totald
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC "
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaAppConsulta()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -3099,10 +3151,7 @@ function imprimirDivVenta(idCodVenta){
 +"<center>"
 +"<div class='divTicket' >"
 +"<p class='pTituloTicket1' >COMPROBANTE DE PAGO</p>"
-+"<p class='pTituloTicket2'>CASA TOLEDO"
-+"<br>Telf. (0983) 859078"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAppConsultaHtml()+"</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -5525,11 +5574,7 @@ function ReimprimirDivVentaOffline(Subtotal,totalDescuento,totalInteres,nombreCl
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC "
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaAppConsulta()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -5684,11 +5729,7 @@ function imprimirDivVentaOffline(diaatrazado,pagado,cuotasNro,deudaActual,nroRec
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC "
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaAppConsulta()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -5883,7 +5924,7 @@ function imprimirListaOffline(){
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+escaparHtmlEmpresaAppConsulta(tituloRecibo)+"</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Boleta de control:</b></p>"
 +"<table class='tableTicket'>"
@@ -6016,7 +6057,7 @@ function imprimirListadePagod(){
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+escaparHtmlEmpresaAppConsulta(tituloRecibo)+"</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Boleta de control:</b></p>"
 +"<table class='tableTicket'>"

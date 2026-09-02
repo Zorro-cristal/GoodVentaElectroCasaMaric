@@ -6933,7 +6933,7 @@ TELEF.
         overflow:hidden;
         display:flex; align-items:center; justify-content:center;
       ">
-        <img src="/GoodVentaElectroCasaMaric/iconos/elim.jpg"
+        <img src="/GoodVentaElectroCasaMaric/iconos/logo.png"
              style="width:100%; height:100%; object-fit:cover;" alt="logo">
       </div>
 
@@ -6941,11 +6941,9 @@ TELEF.
         <div style="font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.9;">
           Oferta destacada
         </div>
-        <div style="font-size:17px; font-weight:900; margin-top:4px;">
-          GRUPO ELIM S.A.
+        <div style="font-size:17px; font-weight:900; margin-top:4px;" id="lblEmpresaOfertaNombre">
         </div>
-        <div style="font-size:12px; opacity:.9; margin-top:2px;">
-          Cnel. Oviedo · Atención y ventas
+        <div style="font-size:12px; opacity:.9; margin-top:2px;" id="lblEmpresaOfertaUbicacion">
         </div>
       </div>
     </div>
@@ -6961,11 +6959,7 @@ TELEF.
       <div style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; opacity:.9;">
         Consultas
       </div>
-      <div style="font-size:13px; font-weight:800; margin-top:4px;">
-        (0986) 641 961
-      </div>
-      <div style="font-size:13px; font-weight:800;">
-        (0971) 452 582
+      <div style="font-size:13px; font-weight:800; margin-top:4px;" id="lblEmpresaOfertaTelefono">
       </div>
     </div>
   </div>
@@ -7105,8 +7099,8 @@ TELEF.
           font-size:12px;
           line-height:1.35;
         ">
-          <b>Dirección:</b> Calle 1° de Marzo c/ Iturbe<br>
-          <b>Ciudad:</b> Cnel. Oviedo, Paraguay
+          <b>Dirección:</b> <span id="lblEmpresaOfertaDireccion"></span><br>
+          <b>Ciudad:</b> <span id="lblEmpresaOfertaCiudadDetalle"></span>
         </div>
       </div>
     </div>
@@ -7782,8 +7776,9 @@ NRO. TELEF.
 <center style='display:none'>
 <div class='divTicket' >
 <p class='pTituloTicket1' >COMPROBANTE DE VENTA</p>
-<p class='pTituloTicket2'>Dirección del local
-<br>Nro Telef.
+<p class='pTituloTicket2'><span id='lblEmpresaTicketDireccion'></span>
+<br><span id='lblEmpresaTicketCiudad'></span>
+<br><span id='lblEmpresaTicketTelefono'></span>
 </p>
 <div class='divSeparadorTicket' style='margin-bottom:5px'></div>
 <table class='tableTicket'>

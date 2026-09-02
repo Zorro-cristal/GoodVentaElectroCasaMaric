@@ -36,13 +36,19 @@ if($operacion=="buscarDatosEmpresa")
 function buscarDatosEmpresa($user,$ruc_buscar="")
 {
 	$mysqli=conectar_al_servidor();
+	if(asegurarCamposDatosEmpresaEmpresa($mysqli)==false){
+		mysqli_close($mysqli);
+		echo "Error";
+		exit;
+	}
+
 	if($ruc_buscar!=""){
-		$sql= "SELECT nombre, ruc FROM datos_empresa where ruc=? limit 1";
+		$sql= "SELECT nombre, ruc, telefono FROM datos_empresa where ruc=? limit 1";
 		$stmt = $mysqli->prepare($sql);
 		$ss='s';
 		$stmt->bind_param($ss,$ruc_buscar);
 	}else{
-		$sql= "SELECT nombre, ruc FROM datos_empresa order by ruc asc limit 1";
+		$sql= "SELECT nombre, ruc, telefono FROM datos_empresa order by ruc asc limit 1";
 		$stmt = $mysqli->prepare($sql);
 	}
 if ( !$stmt || ! $stmt->execute()) {
@@ -54,7 +60,7 @@ if ( !$stmt || ! $stmt->execute()) {
  $valor= mysqli_num_rows($result);
  if ($valor==0 && $ruc_buscar!="")
  {
-		$sql= "SELECT nombre, ruc FROM datos_empresa order by ruc asc limit 1";
+		$sql= "SELECT nombre, ruc, telefono FROM datos_empresa order by ruc asc limit 1";
 		$stmt = $mysqli->prepare($sql);
 if ( !$stmt || ! $stmt->execute()) {
    echo "Error";
@@ -65,8 +71,8 @@ if ( !$stmt || ! $stmt->execute()) {
  }
  $nombre = "";
  $ruc = "";
+ $telefono = "";
  $datosLocal = buscarDatosLocalEmpresa($mysqli,$user);
- $telefono = $datosLocal["telefono"];
  $direccion = $datosLocal["direccion"];
  $ciudad = $datosLocal["ciudad"];
  $local = $datosLocal["local"];
@@ -78,6 +84,7 @@ if ( !$stmt || ! $stmt->execute()) {
 		  
 		      $nombre=utf8_encode($valor['nombre']);
 		  	  $ruc=utf8_encode($valor['ruc']);
+		  	  $telefono=utf8_encode($valor['telefono']);
 	  }
  }
  
@@ -104,6 +111,60 @@ echo json_encode($informacion);
 exit;
 
 
+}
+
+function asegurarCamposDatosEmpresaEmpresa($mysqli)
+{
+	$consulta="CREATE TABLE IF NOT EXISTS `datos_empresa` (
+		`ruc` varchar(100) DEFAULT NULL,
+		`nombre` varchar(100) DEFAULT NULL,
+		`telefono` varchar(100) DEFAULT NULL
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt || !$stmt->execute()){
+		return false;
+	}
+
+	if(columnaDatosEmpresaExisteEmpresa($mysqli,"ruc")==false){
+		$consulta="ALTER TABLE `datos_empresa` ADD COLUMN `ruc` varchar(100) DEFAULT NULL";
+		$stmt = $mysqli->prepare($consulta);
+		if(!$stmt || !$stmt->execute()){
+			return false;
+		}
+	}
+
+	if(columnaDatosEmpresaExisteEmpresa($mysqli,"nombre")==false){
+		$consulta="ALTER TABLE `datos_empresa` ADD COLUMN `nombre` varchar(100) DEFAULT NULL";
+		$stmt = $mysqli->prepare($consulta);
+		if(!$stmt || !$stmt->execute()){
+			return false;
+		}
+	}
+
+	if(columnaDatosEmpresaExisteEmpresa($mysqli,"telefono")==false){
+		$consulta="ALTER TABLE `datos_empresa` ADD COLUMN `telefono` varchar(100) DEFAULT NULL";
+		$stmt = $mysqli->prepare($consulta);
+		if(!$stmt || !$stmt->execute()){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function columnaDatosEmpresaExisteEmpresa($mysqli,$columna)
+{
+	$columna=mysqli_real_escape_string($mysqli,$columna);
+	$consulta="SHOW COLUMNS FROM `datos_empresa` LIKE '".$columna."'";
+	$stmt = $mysqli->prepare($consulta);
+	if(!$stmt){
+		return false;
+	}
+	if(!$stmt->execute()){
+		return false;
+	}
+	$result = $stmt->get_result();
+	return mysqli_num_rows($result)>0;
 }
 
 function buscarDatosLocalEmpresa($mysqli,$user)

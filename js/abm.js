@@ -1443,6 +1443,37 @@ document.getElementById("divpagare").innerHTML=pagina;
 }
 
 
+function escaparHtmlEmpresaAbmApp(valor){
+	return String(valor == null ? "" : valor)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function obtenerDatosEmpresaTicketAbmAppHtml(){
+	var lineas = [];
+	var rucEmpresa = typeof ruc !== "undefined" ? String(ruc == null ? "" : ruc).trim() : "";
+	var telefonoEmpresa = typeof telefono !== "undefined" ? String(telefono == null ? "" : telefono).trim() : "";
+
+	if(rucEmpresa != ""){
+		lineas.push("RUC: " + escaparHtmlEmpresaAbmApp(rucEmpresa));
+	}
+	if(telefonoEmpresa != ""){
+		lineas.push("Cel: " + escaparHtmlEmpresaAbmApp(telefonoEmpresa));
+	}
+
+	return lineas.join("<br>");
+}
+
+function obtenerCabeceraTicketEmpresaAbmApp(){
+	var nombreEmpresa = typeof tituloRecibo !== "undefined" ? tituloRecibo : "";
+	return "<p class='pTituloTicket1' >"+escaparHtmlEmpresaAbmApp(nombreEmpresa)+"</p>"
+		+"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAbmAppHtml()+"</p>";
+}
+
+
 function obtenerMes(m){
 	if(m=="1"){
 		controlMes=m
@@ -1526,10 +1557,7 @@ if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
 	pagina="<div  style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -1604,10 +1632,7 @@ if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
 	pagina="<div  style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -1743,10 +1768,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -1864,10 +1886,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 			pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -2202,7 +2221,7 @@ function ImprimirDivTicketGarantia(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+escaparHtmlEmpresaAbmApp(typeof tituloRecibo !== "undefined" ? tituloRecibo : "")+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Garantía</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -2267,7 +2286,7 @@ function ImprimirDivTicketGarantiaVerificacion(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+escaparHtmlEmpresaAbmApp(typeof tituloRecibo !== "undefined" ? tituloRecibo : "")+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>CONTROL DE GARANTIA</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -2321,7 +2340,7 @@ function ImprimirDivTicketGarantiaEntrega(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+escaparHtmlEmpresaAbmApp(typeof tituloRecibo !== "undefined" ? tituloRecibo : "")+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>CONTROL DE GARANTIA</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -2977,10 +2996,7 @@ function imprimirDivticket(idCodVenta){
 	pagina="<!DOCTYPE html><html><head><style type='text/css'>"+stylos+" </style> 	</head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -3112,10 +3128,7 @@ if(TipoVenta!="CREDITO"  ){
 	pagina="<style type='text/css'>"+stylos+" </style><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaAbmApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -5044,8 +5057,8 @@ pagina="<br><div style='background-color:#fff;'>"
 
 +"<div class='divTicket' style='width: 90%;border: solid 1px;border-radius: 10px;height: 440px;' > "
 +"<center><img src='/GoodVentaElectroCasaMaric/iconos/Logo.JPG' style='display: flex;  align-items: center;  justify-content: center;  margin: 45px 30px;   height: 30%;  width: 81%;  opacity: 0.15; position: absolute;' /></center>"
-+"<p class='pTituloTicket1' style='font-size: 30px;font-weight: 700;background: #7d7c7b; color: #ffff; border-radius: 10px;' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'> Tacuary entre itapiru cuidad Cnel. Oviedo <br> Cel: (0985) 918981<br> Cnel. Oviedo, Paraguay </p>"
++"<p class='pTituloTicket1' style='font-size: 30px;font-weight: 700;background: #7d7c7b; color: #ffff; border-radius: 10px;' >"+escaparHtmlEmpresaAbmApp(typeof tituloRecibo !== "undefined" ? tituloRecibo : "")+"</p>"
++"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAbmAppHtml()+"</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 
 

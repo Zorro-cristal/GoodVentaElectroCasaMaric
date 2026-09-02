@@ -5179,10 +5179,7 @@ function ReimprimirDiv (datos){
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >"+tituloRecibo+"</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -5300,10 +5297,7 @@ function imprimirDiv(NroRecibo,totalInteresPagado,DeudaActual,totalpagado,totald
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >"+tituloRecibo+"</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -5474,10 +5468,7 @@ function imprimirDivVenta(idCodVenta){
 +"<center>"
 +"<div class='divTicket' >"
 +"<p class='pTituloTicket1' >COMPROBANTE DE PAGO</p>"
-+"<p class='pTituloTicket2'>CASA TOLEDO"
-+"<br>Telf. (0983) 859078"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAppHtml()+"</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -8273,10 +8264,7 @@ function ReimprimirDivVentaOffline(Subtotal,totalDescuento,totalInteres,nombreCl
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >"+tituloRecibo+"</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -8431,10 +8419,7 @@ function imprimirDivVentaOffline(diaatrazado,pagado,cuotasNro,deudaActual,nroRec
 pagina="<div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >"+tituloRecibo+"</p>"
-+"<p class='pTituloTicket2'>"
-+"<br>Cnel. Oviedo, py "
-+"</p>"
++obtenerCabeceraTicketEmpresaApp()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -14952,9 +14937,79 @@ function obtenerFechaActual(){
 	}
 	return f.getFullYear() + "-" + mes + "-" + dia;
 }
-var tituloRecibo = "GRUPO ELIM S.A.";
+var tituloRecibo = "";
 var ruc = "";
 var telefono = "";
+var direccionEmpresa = "";
+var ciudadEmpresa = "";
+var localEmpresa = "";
+var codLocalEmpresa = "";
+
+function escaparHtmlEmpresaApp(valor){
+	return String(valor == null ? "" : valor)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/\"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
+function obtenerDatosEmpresaTicketAppHtml(){
+	var lineas = [];
+	var rucEmpresa = String(ruc == null ? "" : ruc).trim();
+	var telefonoEmpresa = String(telefono == null ? "" : telefono).trim();
+
+	if(rucEmpresa != ""){
+		lineas.push("RUC: " + escaparHtmlEmpresaApp(rucEmpresa));
+	}
+	if(telefonoEmpresa != ""){
+		lineas.push("Cel: " + escaparHtmlEmpresaApp(telefonoEmpresa));
+	}
+
+	return lineas.join("<br>");
+}
+
+function obtenerCabeceraTicketEmpresaApp(){
+	return "<p class='pTituloTicket1' >"+escaparHtmlEmpresaApp(tituloRecibo)+"</p>"
+		+"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketAppHtml()+"</p>";
+}
+
+function asignarHtmlEmpresaApp(id, html){
+	var elemento = document.getElementById(id);
+	if(elemento){
+		elemento.innerHTML = html;
+	}
+}
+
+function obtenerDatoEmpresaApp(valor){
+	return String(valor == null ? "" : valor).trim();
+}
+
+function obtenerUbicacionEmpresaOfertaApp(){
+	var partes = [];
+	var ciudad = obtenerDatoEmpresaApp(ciudadEmpresa);
+	var local = obtenerDatoEmpresaApp(localEmpresa);
+
+	if(ciudad != ""){
+		partes.push(escaparHtmlEmpresaApp(ciudad));
+	}else if(local != ""){
+		partes.push(escaparHtmlEmpresaApp(local));
+	}
+	partes.push("Atención y ventas");
+	return partes.join(" · ");
+}
+
+function actualizarDatosEmpresaApp(){
+	asignarHtmlEmpresaApp("lblEmpresaOfertaNombre", escaparHtmlEmpresaApp(tituloRecibo));
+	asignarHtmlEmpresaApp("lblEmpresaOfertaTelefono", escaparHtmlEmpresaApp(telefono));
+	asignarHtmlEmpresaApp("lblEmpresaOfertaUbicacion", obtenerUbicacionEmpresaOfertaApp());
+	asignarHtmlEmpresaApp("lblEmpresaOfertaDireccion", escaparHtmlEmpresaApp(direccionEmpresa));
+	asignarHtmlEmpresaApp("lblEmpresaOfertaCiudadDetalle", escaparHtmlEmpresaApp(ciudadEmpresa));
+	asignarHtmlEmpresaApp("lblEmpresaTicketDireccion", direccionEmpresa != "" ? "Dirección: " + escaparHtmlEmpresaApp(direccionEmpresa) : "");
+	asignarHtmlEmpresaApp("lblEmpresaTicketCiudad", ciudadEmpresa != "" ? "Ciudad: " + escaparHtmlEmpresaApp(ciudadEmpresa) : "");
+	asignarHtmlEmpresaApp("lblEmpresaTicketTelefono", telefono != "" ? "Tel: " + escaparHtmlEmpresaApp(telefono) : "");
+}
+
 function buscarDatosEmpresa() {
 
 	obtener_datos_user();
@@ -14991,6 +15046,11 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 				   tituloRecibo = datos[2];
 				   ruc = datos[3];
 				   telefono = datos[4];
+				   direccionEmpresa = datos[5] || datos.direccion || "";
+				   localEmpresa = datos[6] || datos.local || "";
+				   codLocalEmpresa = datos[7] || datos.cod_local || "";
+				   ciudadEmpresa = datos[8] || datos.ciudad || "";
+				   actualizarDatosEmpresaApp();
 				}
 			} catch (error) {
 					ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")

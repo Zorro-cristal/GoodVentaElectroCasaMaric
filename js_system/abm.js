@@ -1351,6 +1351,7 @@ document.getElementById("lblReciboPlazo1").innerHTML =  ""
 document.getElementById("lblReciboPlazo2").innerHTML = ""
 // document.getElementById("lblReciboPlazo3").innerHTML = ""
 
+actualizarDatosEmpresaReciboLegal();
 
 var documento= document.getElementById("divImpresionRecibo").innerHTML;
      localStorage.setItem("reporte", documento);
@@ -1465,6 +1466,10 @@ var fecha = new Date(vencimientopagare);
 	var numeroFacturaPagare = facturanroPagare || nroPagare || "";
 	var fechaVencimientoPagare = dia+"/"+mes+"/"+anhoVencimiendo;
 	var importeFormateadoPagare = separadordemilesnumero(ImportePagare);
+	var nombreEmpresaPagare = obtenerNombreEmpresaImpresionHtml();
+	var contactoEmpresaPagare = obtenerContactoEmpresaInlineHtml();
+	var lugarFechaPagare = obtenerLugarFechaEmpresaHtml();
+	var ciudadOrdenPagare = obtenerCiudadOrdenEmpresaHtml();
 
 	var pagina="<style>"
 	+"@page{size:A4 landscape;margin:8mm;}"
@@ -1495,16 +1500,16 @@ var fecha = new Date(vencimientopagare);
 	+"</style>"
 	+"<section class='pagare-maric'>"
 	+"<header class='pagare-encabezado'>"
-	+"<div class='pagare-marca'>CASA<br>MARIC<small>Hogar, fácil y seguro.</small></div>"
-	+"<div class='pagare-empresa'><h2>CASA &ldquo;MARIC&rdquo;</h2><h3>DE WALTER FABIÁN SÁNCHEZ RUIZ</h3>"
+	+"<div class='pagare-marca'>"+nombreEmpresaPagare+"<small>Hogar, fácil y seguro.</small></div>"
+	+"<div class='pagare-empresa'><h2>"+nombreEmpresaPagare+"</h2><h3>DE WALTER FABIÁN SÁNCHEZ RUIZ</h3>"
 	+"<p>Comercio al por mayor de mercaderías n.c.p. o a cambio de una retribución o por contrato<br>Comercio al por menor de electrodomésticos y accesorios &middot; Equipos de telecomunicaciones<br>Comercio de motocicletas y de sus piezas y accesorios</p>"
-	+"<p><b>14 de Mayo y Joaquín Estigarribia &middot; Cel.: (0985) 712 481 &middot; Villarrica &middot; Guairá &middot; Py</b></p></div>"
+	+"<p><b>"+contactoEmpresaPagare+"</b></p></div>"
 	+"<table class='pagare-datos'><tr><td>Guaraníes:</td><td class='pagare-casilla'>"+importeFormateadoPagare+"</td></tr><tr><td>Vence:</td><td class='pagare-casilla'>"+fechaVencimientoPagare+"</td></tr><tr><td>Factura N°:</td><td class='pagare-casilla'>"+escaparHtmlPagare(numeroFacturaPagare)+"</td></tr></table>"
 	+"</header>"
 	+"<h1 class='pagare-titulo'>PAGARÉ A LA ORDEN</h1>"
-	+"<p class='pagare-fecha'>Villarrica, "+dia+" de "+mesletras.toLowerCase()+" de "+anhoVencimiendo+"</p>"
+	+"<p class='pagare-fecha'>"+lugarFechaPagare+dia+" de "+mesletras.toLowerCase()+" de "+anhoVencimiendo+"</p>"
 	+"<p class='pagare-linea'>El día <b>"+fechaVencimientoPagare+"</b> pagaré(mos).</p>"
-	+"<p class='pagare-linea'>En la ciudad de Villarrica, a la orden de <b>&ldquo;CASA MARIC&rdquo;</b>. Libre de protesto y de interpelaciones judiciales o extrajudiciales la cantidad de guaraníes:</p>"
+	+"<p class='pagare-linea'>En la ciudad de "+ciudadOrdenPagare+", a la orden de <b>&ldquo;"+nombreEmpresaPagare+"&rdquo;</b>. Libre de protesto y de interpelaciones judiciales o extrajudiciales la cantidad de guaraníes:</p>"
 	+"<span class='pagare-renglon'>"+escaparHtmlPagare(totaletrasRecibo)+"</span><span class='pagare-renglon'>&nbsp;</span>"
 	+"<p class='pagare-recibido'>por igual valor recibido en <span class='pagare-puntos' style='display:inline-block;width:105mm'>&nbsp;</span> A mi (nuestra) entera satisfacción.</p>"
 	+"<p class='pagare-legal'>Queda expresamente convenido que la falta de pago de una cuota (Pagaré) en su vencimiento producirá la caducidad de los plazos de los demás documentos y volverá exigible el total de la obligación, produciéndose la mora de pleno derecho por el solo vencimiento de los plazos acordados. La cantidad de la obligación devengará durante el tiempo de mora el interés del ______% mensual y el interés punitorio del ______% mensual por el simple retardo; sin que esto implique prórroga del plazo de la obligación. Además el deudor abonará una comisión de cobranza del ______% al acreedor, si se vale de la gestión de su cobrador para efectuar las cuotas por falta de pago en las fechas convenidas y en el domicilio del mismo. Se fija expresamente la jurisdicción de los juzgados y tribunales de la Ciudad de Villarrica para entender en los asuntos judiciales que pudieran surgir en lo sucesivo. Pasados los 90 días de atraso se autoriza el registro general de morosos INFORMCONF.</p>"
@@ -1552,6 +1557,194 @@ function limpiarDireccionPagare(valor){
 		direccion = partes.join("-").trim();
 	}
 	return direccion.replace(/^-+|-+$/g, "").trim();
+}
+
+function normalizarDatoEmpresaImpresion(valor){
+	return String(valor == null ? "" : valor).trim();
+}
+
+function obtenerNombreEmpresaImpresion(){
+	if(typeof tituloRecibo !== "undefined"){
+		return normalizarDatoEmpresaImpresion(tituloRecibo);
+	}
+	return "";
+}
+
+function obtenerRucEmpresaImpresion(){
+	if(typeof ruc !== "undefined"){
+		return normalizarDatoEmpresaImpresion(ruc);
+	}
+	return "";
+}
+
+function obtenerTelefonoEmpresaImpresion(){
+	if(typeof telefono !== "undefined"){
+		return normalizarDatoEmpresaImpresion(telefono);
+	}
+	return "";
+}
+
+function obtenerDireccionEmpresaImpresion(){
+	if(typeof direccionEmpresa !== "undefined"){
+		return normalizarDatoEmpresaImpresion(direccionEmpresa);
+	}
+	return "";
+}
+
+function obtenerCiudadEmpresaImpresion(){
+	if(typeof ciudadEmpresa !== "undefined"){
+		return normalizarDatoEmpresaImpresion(ciudadEmpresa);
+	}
+	return "";
+}
+
+function obtenerNombreEmpresaImpresionHtml(){
+	return escaparHtmlPagare(obtenerNombreEmpresaImpresion());
+}
+
+function obtenerRucEmpresaImpresionHtml(){
+	return escaparHtmlPagare(obtenerRucEmpresaImpresion());
+}
+
+function obtenerTelefonoEmpresaImpresionHtml(){
+	return escaparHtmlPagare(obtenerTelefonoEmpresaImpresion());
+}
+
+function obtenerDireccionEmpresaImpresionHtml(){
+	return escaparHtmlPagare(obtenerDireccionEmpresaImpresion());
+}
+
+function obtenerCiudadEmpresaImpresionHtml(){
+	return escaparHtmlPagare(obtenerCiudadEmpresaImpresion());
+}
+
+function obtenerDatosEmpresaTicketHtml(){
+	var lineas = [];
+	var rucEmpresa = obtenerRucEmpresaImpresionHtml();
+	var telefonoEmpresa = obtenerTelefonoEmpresaImpresionHtml();
+	var direccion = obtenerDireccionEmpresaImpresionHtml();
+	var ciudad = obtenerCiudadEmpresaImpresionHtml();
+
+	if(rucEmpresa != ""){
+		lineas.push("RUC: " + rucEmpresa);
+	}
+	if(telefonoEmpresa != ""){
+		lineas.push("Cel: " + telefonoEmpresa);
+	}
+	if(direccion != ""){
+		lineas.push(direccion);
+	}
+	if(ciudad != ""){
+		lineas.push(ciudad);
+	}
+
+	return lineas.join("<br>");
+}
+
+function obtenerCabeceraTicketEmpresaImpresion(){
+	return "<p class='pTituloTicket1' >"+obtenerNombreEmpresaImpresionHtml()+"</p>"
+		+"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketHtml()+"</p>";
+}
+
+function obtenerContactoEmpresaInlineHtml(){
+	var partes = [];
+	var direccion = obtenerDireccionEmpresaImpresionHtml();
+	var telefonoEmpresa = obtenerTelefonoEmpresaImpresionHtml();
+	var ciudad = obtenerCiudadEmpresaImpresionHtml();
+
+	if(direccion != ""){
+		partes.push(direccion);
+	}
+	if(telefonoEmpresa != ""){
+		partes.push("Cel.: " + telefonoEmpresa);
+	}
+	if(ciudad != ""){
+		partes.push(ciudad);
+	}
+
+	return partes.join(" &middot; ");
+}
+
+function obtenerLugarFechaEmpresaHtml(){
+	var ciudad = obtenerCiudadEmpresaImpresionHtml();
+	if(ciudad == ""){
+		return "";
+	}
+	return ciudad + ", ";
+}
+
+function obtenerCiudadOrdenEmpresaHtml(){
+	var ciudad = obtenerCiudadEmpresaImpresionHtml();
+	return ciudad == "" ? "esta ciudad" : ciudad;
+}
+
+function asignarHtmlEmpresaPorSelector(selector, html){
+	if(typeof document === "undefined"){
+		return;
+	}
+	var elementos = document.querySelectorAll(selector);
+	for(var i=0;i<elementos.length;i++){
+		elementos[i].innerHTML = html;
+	}
+}
+
+function asignarHtmlEmpresaPorId(id, html){
+	if(typeof document === "undefined"){
+		return;
+	}
+	var elemento = document.getElementById(id);
+	if(elemento){
+		elemento.innerHTML = html;
+	}
+}
+
+function actualizarDatosEmpresaReciboLegal(){
+	asignarHtmlEmpresaPorSelector(".lblEmpresaMarcaRecibo", obtenerNombreEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorSelector(".lblEmpresaNombreRecibo", obtenerNombreEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorSelector(".lblEmpresaContactoRecibo", obtenerContactoEmpresaInlineHtml());
+	asignarHtmlEmpresaPorSelector(".lblEmpresaRucRecibo", obtenerRucEmpresaImpresionHtml());
+}
+
+function obtenerDomicilioEmpresaContratoHtml(){
+	var partes = [];
+	var direccion = obtenerDireccionEmpresaImpresionHtml();
+	var ciudad = obtenerCiudadEmpresaImpresionHtml();
+
+	if(direccion != ""){
+		partes.push("domiciliado en " + direccion);
+	}
+	if(ciudad != ""){
+		partes.push("de la ciudad de " + ciudad);
+	}
+
+	return partes.join(" ");
+}
+
+function actualizarDatosEmpresaContrato(){
+	asignarHtmlEmpresaPorId("ContratoEmpresaNombre", obtenerNombreEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("ContratoEmpresaDireccion", obtenerDireccionEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("ContratoEmpresaTelefono", obtenerTelefonoEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("ContratoEmpresaCiudad", obtenerCiudadEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("ContratoEmpresaNombreTexto", "&quot;"+obtenerNombreEmpresaImpresionHtml()+"&quot;");
+	asignarHtmlEmpresaPorId("ContratoEmpresaDomicilioTexto", obtenerDomicilioEmpresaContratoHtml());
+	asignarHtmlEmpresaPorId("ContratoEmpresaFirma", obtenerNombreEmpresaImpresionHtml());
+}
+
+function actualizarDatosEmpresaPresupuesto(){
+	asignarHtmlEmpresaPorId("pvEmpresaNombre", obtenerNombreEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("pvEmpresaDireccion", obtenerDireccionEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("pvEmpresaTelefono", obtenerTelefonoEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("pvEmpresaFooter", obtenerNombreEmpresaImpresionHtml());
+}
+
+function actualizarTextosEmpresaSistema(){
+	asignarHtmlEmpresaPorId("lblEmpresaCabeceraSistema", obtenerNombreEmpresaImpresionHtml());
+	asignarHtmlEmpresaPorId("lblEmpresaAutorizadaSistema", obtenerNombreEmpresaImpresionHtml());
+}
+
+function obtenerNombreEmpresaParaUrl(){
+	var nombre = obtenerNombreEmpresaImpresion();
+	return nombre == "" ? "la empresa" : nombre;
 }
 
 
@@ -1638,12 +1831,7 @@ if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
 	pagina="<div  style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -1718,12 +1906,7 @@ if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
 	pagina="<div  style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -1859,12 +2042,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -1982,12 +2160,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 			pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -2322,7 +2495,7 @@ function ImprimirDivTicketGarantia(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+obtenerNombreEmpresaImpresionHtml()+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Garantía</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -2387,7 +2560,7 @@ function ImprimirDivTicketGarantiaVerificacion(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+obtenerNombreEmpresaImpresionHtml()+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>CONTROL DE GARANTIA</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -2441,7 +2614,7 @@ function ImprimirDivTicketGarantiaEntrega(){
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
++"<p class='pTituloTicket1' >"+obtenerNombreEmpresaImpresionHtml()+"</p>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>CONTROL DE GARANTIA</b></p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
@@ -3097,12 +3270,7 @@ function imprimirDivticket(idCodVenta){
 	pagina="<!DOCTYPE html><html><head><style type='text/css'>"+stylos+" </style> 	</head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -3234,12 +3402,7 @@ if(TipoVenta!="CREDITO"  ){
 	pagina="<style type='text/css'>"+stylos+" </style><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >GRUPO ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"RUC:  <br>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br>"
-+"<br>Cnel. Oviedo, Paraguay"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -5217,21 +5380,22 @@ var f = new Date();
 	var anho =f.getFullYear()
 	
 	var emision= f.getFullYear()+"-"+mes+"-"+dia;
+	var nombreEmpresaSolicitud = obtenerNombreEmpresaImpresionHtml();
 	
 
 	var pagina="<table style='width:95%'>"
 +"<tr>"
 +"<td style='width:50%;text-align:left'>"
-+"<p class='pTituloC' style='font-size: 15px;'><b>Señores ELIM S.A.</b> </p>"
++"<p class='pTituloC' style='font-size: 15px;'><b>Señores "+nombreEmpresaSolicitud+"</b> </p>"
 +"</td>"
 +"<td style='width:50%;text-align:left'>"
 +"</td>"
 +"</tr>"
 +"</table>"
 +"<div style='width:95%' style='text-align:left'>"
-+"<p class='pTituloC' style=' font-size: 9px;text-align:left;text-align: justify; line-height: 15px;'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Solocito una linea de crédito para la adquisición de vuestra empresa. Del mismo modo acepto las condiciones y términos estipulados por ella, así como la política de descuentos de mis haberes, en caso que la compra sea vía descuento. Por lo tanto autorizo a GRUPO ELIM S.A. a descontar el monto de mis cuotas, así como de los intereses en caso de atraso de mis cuotas a través del medio que la empresa crea conveniente, independientemente al motivo del no descuento. Ante cualquier consulta o discrepancia en las cuotas descontadasarreglaré dicha situación con la casa comercial<b>&nbsp&nbsp</b>.---------</p>"
++"<p class='pTituloC' style=' font-size: 9px;text-align:left;text-align: justify; line-height: 15px;'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Solocito una linea de crédito para la adquisición de vuestra empresa. Del mismo modo acepto las condiciones y términos estipulados por ella, así como la política de descuentos de mis haberes, en caso que la compra sea vía descuento. Por lo tanto autorizo a "+nombreEmpresaSolicitud+" a descontar el monto de mis cuotas, así como de los intereses en caso de atraso de mis cuotas a través del medio que la empresa crea conveniente, independientemente al motivo del no descuento. Ante cualquier consulta o discrepancia en las cuotas descontadasarreglaré dicha situación con la casa comercial<b>&nbsp&nbsp</b>.---------</p>"
 
-+"<p class='pTituloC' style=' font-size: 9px;text-align:left; text-align: justify; line-height: 15px;'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp De conformidad a lo establecido en el Art. 5 inc. A y de conformidad con los dispuesto en la ley 1682, autorizo suficientemente y otorgo mandato suficiente  a la empresa GRUPO ELIM S.A.  a obtener información de mi persona através de cualquier persona, entidad o empresa que procesa y difunda ese yipo de informción<b>&nbsp&nbsp</b>.---------</p>"
++"<p class='pTituloC' style=' font-size: 9px;text-align:left; text-align: justify; line-height: 15px;'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp De conformidad a lo establecido en el Art. 5 inc. A y de conformidad con los dispuesto en la ley 1682, autorizo suficientemente y otorgo mandato suficiente  a la empresa "+nombreEmpresaSolicitud+"  a obtener información de mi persona através de cualquier persona, entidad o empresa que procesa y difunda ese yipo de informción<b>&nbsp&nbsp</b>.---------</p>"
 +"<div class='divSeparadorTicket' style='margin-bottom:5px; background-color: #000c;width: 100%;'></div>"
 +"</div>"
 +"<p class='pTituloC'><b>DATOS PERSONALES</b> </p>"
@@ -5417,6 +5581,11 @@ function ReImprimirDivTickeFacturaPago( Fecha, Cajero, CuotasNro, Pagado, DiasAt
 
  
 	totalCobroPagado=formatearNumero(totalCobroPagado)
+  const nombreEmpresaTicket = obtenerNombreEmpresaImpresionHtml();
+  const rucEmpresaTicket = obtenerRucEmpresaImpresionHtml();
+  const telefonoEmpresaTicket = obtenerTelefonoEmpresaImpresionHtml();
+  const direccionEmpresaTicket = obtenerDireccionEmpresaImpresionHtml();
+  const ciudadEmpresaTicket = obtenerCiudadEmpresaImpresionHtml();
   const pagina = `
   <div class="ticket-wrap">
    
@@ -5426,10 +5595,10 @@ function ReImprimirDivTickeFacturaPago( Fecha, Cajero, CuotasNro, Pagado, DiasAt
       <div class="ticket-header-top">
         <div class="brand">
           <div class="logo">
-            <img src="/GoodVentaElectroCasaMaric/iconos/iconoEmpresa.JPG" alt="Logo de Casa Maric">
+            <img src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Logo de ${nombreEmpresaTicket}">
           </div>
           <div class="title">
-            <h1>CASA MARIC</h1>
+            <h1>${nombreEmpresaTicket}</h1>
             <p>Recibo de Dinero</p>
           </div>
         </div>
@@ -5444,12 +5613,12 @@ function ReImprimirDivTickeFacturaPago( Fecha, Cajero, CuotasNro, Pagado, DiasAt
     <div class="ticket-subheader">
       <div class="company-info">
         <div class="left">
-          <b>RUC:</b> 4193548-9<br>
-          <b>Dirección:</b> 14 de Mayo y Joaquín Estigarribia<br>
-          <b>Ciudad:</b> Villarrica - Guairá - Py
+          <b>RUC:</b> ${rucEmpresaTicket || "-"}<br>
+          <b>Dirección:</b> ${direccionEmpresaTicket || "-"}<br>
+          <b>Ciudad:</b> ${ciudadEmpresaTicket || "-"}
         </div>
         <div class="right">
-          <b>Tel:</b> (0985) 712 481<br>
+          <b>Tel:</b> ${telefonoEmpresaTicket || "-"}<br>
           <b>Tipo venta:</b> ${tipoventa || "-"}<br>
           <b>Días atrasado:</b> ${DiasAtrazado} día(s)
         </div>
@@ -5611,11 +5780,7 @@ function ReImprimirDivTickeFacturaPagoTicket(Fecha,Cajero,CuotasNro,Pagado,DiasA
 pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+"<p class='pTituloTicket1' >ELIM S.A.</p>"
-+"<p class='pTituloTicket2'>"
-+"Cel: (0984) 107 021 - (0971) 452 582 <br> Calle 1° de Marzo c/ Iturbe <br>"
-+"Cnel. Oviedo, PARAGUAY"
-+"</p>"
++obtenerCabeceraTicketEmpresaImpresion()
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -5825,6 +5990,7 @@ ReImprimirDivTickeFacturaPago(fechaVenta,cajera,CuotasNro,TotalPagado,DiasAtrasa
 
 function imprimirContrato(){
 	  // Insertar los datos en los elementos del recibo
+actualizarDatosEmpresaContrato();
 rellenarCampo('ContratoFechaEmision', datosContrato.fecha);
 rellenarCampo('ContratoCondicion', datosContrato.condicion);
 rellenarCampo('ContratoRuc', datosContrato.ruc);
