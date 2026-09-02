@@ -333,11 +333,11 @@ function BuscarRegistroCredito($buscar)
 $mysqli=conectar_al_servidor();
 $condicioncliente="";
 if($buscar!=""){
-	$condicioncliente=" and concat( pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente ,' ',cl.rut_cliente,' ', pr.telefono)   like '%$buscar%'";
+	$condicioncliente=" and concat(ifnull(pr.nombre_persona,''),' ',ifnull(pr.apellido_persona,''),' ',ifnull(cl.ci_cliente,''),' ',ifnull(cl.rut_cliente,''),' ',ifnull(pr.telefono,''))   like '%$buscar%'";
 }
 
 
-$sql= "select cl.whapp,pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,pr.direccion,pr.telefono,pr.email,cl.ci_cliente
+$sql= "select cl.whapp,pr.cod_persona,trim(concat(ifnull(nombre_persona,''),' ',ifnull(apellido_persona,''))) as nombre_persona,pr.direccion,pr.telefono,pr.email,cl.ci_cliente
 ,cl.rut_cliente,cl.Calificacion,cl.estado,cl.idzonaFk,foto1,foto2,cl.accesocredito,cl.fechanac,lugardetrabajo,salario,antiguedad,teleftrab1,teleftrab2,direcciontrab,ifnull(cl.tipo_vivienda,'') as tipo_vivienda,
 (Select nombre from zona where idzonaFk=idzona )as zona
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona 
@@ -439,11 +439,11 @@ function BuscarRegistroVistaClienteVenta($buscar)
 $mysqli=conectar_al_servidor();
 $condicioncliente="";
 if($buscar!=""){
-	$condicioncliente=" and concat( pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente ,' ',cl.rut_cliente,' ', pr.telefono)   like '%$buscar%'";
+	$condicioncliente=" and concat(ifnull(pr.nombre_persona,''),' ',ifnull(pr.apellido_persona,''),' ',ifnull(cl.ci_cliente,''),' ',ifnull(cl.rut_cliente,''),' ',ifnull(pr.telefono,''))   like '%$buscar%'";
 }
 
 
-$sql= "select pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,cl.estado,vt.cod_venta,cl.ci_cliente,
+$sql= "select pr.cod_persona,trim(concat(ifnull(nombre_persona,''),' ',ifnull(apellido_persona,''))) as nombre_persona,cl.estado,vt.cod_venta,cl.ci_cliente,
 (Select nombre from zona where idzonaFk=idzona )as zona
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona 
  inner join venta vt on cod_clienteFK = cl.cod_cliente
@@ -939,9 +939,9 @@ function BuscarRegistroEnVista($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select cl.lat,cl.lot,pr.cod_persona,cl.ci_cliente,concat(nombre_persona,' ',apellido_persona) as nombre_persona,pr.direccion,pr.telefono,pr.email,cl.rut_cliente,cl.Calificacion,cl.idzonaFk,foto1,foto2,cl.lugardetrabajo,cl.direcciontrab,cl.salario,cl.antiguedad,cl.teleftrab1,cl.teleftrab2,cl.fecha_edicion_referencia
- from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona where estado='Activo' and concat(pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente) like ? 
-order by nombre_persona asc ";
+$sql= "select cl.lat,cl.lot,pr.cod_persona,cl.ci_cliente,trim(concat(ifnull(nombre_persona,''),' ',ifnull(apellido_persona,''))) as nombre_persona,pr.direccion,pr.telefono,pr.email,cl.rut_cliente,cl.Calificacion,cl.idzonaFk,foto1,foto2,cl.lugardetrabajo,cl.direcciontrab,cl.salario,cl.antiguedad,cl.teleftrab1,cl.teleftrab2,cl.fecha_edicion_referencia
+ from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona where cl.estado='Activo' and concat(ifnull(pr.nombre_persona,''),' ',ifnull(pr.apellido_persona,''),' ',ifnull(cl.ci_cliente,''),' ',ifnull(cl.rut_cliente,''),' ',ifnull(pr.telefono,'')) like ? 
+order by nombre_persona asc limit 500";
 $pagina = "";   
 $buscar="%".$buscar."%";
 $stmt = $mysqli->prepare($sql);
@@ -1010,7 +1010,8 @@ $pagina.="
 <td  id='td_21' style='display:none'>".$teleftrab1."</td>
 <td  id='td_22' style='display:none'>".$teleftrab2."</td>
 <td  id='td_24' style='display:none'>".$fecha_edicion_referencia."</td>
-</tr>";
+</tr>
+</table>";
 
 
 }
