@@ -18,10 +18,24 @@
 		{
 			var pagina=localStorage.getItem("reporte");
 			var tipo=localStorage.getItem("tipo");
+			if (!pagina || !pagina.trim()) {
+				document.getElementById("divimpr").textContent = "No se cargaron los datos de la factura. Volvé a abrir la venta para imprimir.";
+				return;
+			}
 			document.getElementById("divimpr").innerHTML=pagina
 			if(tipo=="factura" || tipo=='ticket'){
 			
-			  window.print();
+			  var recursos = Array.prototype.map.call(document.getElementById("divimpr").querySelectorAll("img"), function (imagen) {
+				  return new Promise(function (resolve) {
+					  if (imagen.complete) { resolve(); return; }
+					  imagen.addEventListener("load", resolve, { once: true });
+					  imagen.addEventListener("error", resolve, { once: true });
+				  });
+			  });
+			  if (document.fonts && document.fonts.ready) recursos.push(document.fonts.ready);
+			  Promise.all(recursos).then(function () {
+				  setTimeout(function () { window.print(); }, 1000);
+			  });
           
 			}
 

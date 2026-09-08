@@ -7,6 +7,11 @@
 #divAbmProducto1 .producto-chip{padding:3px 8px;font-size:11px}
 #divAbmProducto1 .productos-footer{padding:5px 10px}
 
+#table_abm_producto td[id='td_datos_1']{
+    white-space:pre-wrap !important;
+    overflow-wrap:anywhere;
+}
+
 /* El listado conserva el pie visible y desplaza solamente el cuerpo. */
 #divAbmProducto{
     position:fixed !important;

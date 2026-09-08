@@ -59,7 +59,7 @@
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/accesos_usuarios_asiscap.css?x=20260721v1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/usuarios_perfil.css?x=20260724v9" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/inicializacion_sistema.css?x=20260722v4" />
-<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/listado_productos.css?x=20260729tablaSinSolaparFooter2" />
+<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/listado_productos.css?x=20260908nombreMultilinea1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/catalogo_productos_moderno.css?x=20260723catalogocompacto4" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/mapa_clientes.css?x=20260724v3" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/informe_ubicaciones_clientes.css?x=20260723v1" />
@@ -86,7 +86,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_usuarios.js?x=20260724confirmarpermisos1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_proveedor.js?x=20260721arrays1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_darbaja.js?x=20260720v1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_producto.js?x=20260724editarfrente1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_producto.js?x=20260908nombreMultilinea1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_categoria.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_marca.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_precios_categoria.js?x=20260720v1"></script>
@@ -102,7 +102,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20260901pagare1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20260908esperaFactura1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
@@ -12820,7 +12820,8 @@ style="display:none;" onchange='readFileProducto(this)' />
         <input class="form-control w-100" id="inptCodFabricaProducto" type="text">
 
         <p class="pTituloC mt-2">Producto:</p>
-        <textarea class="textarea1 w-100" id="inptNombreProducto" style="height:60px"></textarea>
+        <textarea class="textarea1 w-100" id="inptNombreProducto" rows="4" style="height:100px;resize:vertical" aria-describedby="ayudaNombreProducto"></textarea>
+        <small id="ayudaNombreProducto">Presioná Enter para agregar otra línea.</small>
 
         <p class="pTituloC mt-2">Link:</p>
         <input class="form-control w-100" id="inptlinkProducto" type="text">
@@ -43218,8 +43219,8 @@ onclick='EnviarProductoDesde()' />
 <td style='width:99%'>
 <p class='pTituloC' >Producto
 Seleccionado :</p>
-<input class='inputText' type='text'
-id='inptProductoNombreVista' style='width:230px' disabled />
+<textarea class='textarea1' rows='4'
+id='inptProductoNombreVista' style='width:100%;min-height:100px;resize:vertical' disabled></textarea>
 </td>
 </tr>
 </table>

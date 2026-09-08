@@ -40,9 +40,12 @@ $cod_ventaFK = utf8_decode($cod_ventaFK);
 $num_factura=$_POST['num_factura'];
 $num_factura = utf8_decode($num_factura);
 
-if($cod_ventaFK==""){
 $fecha_venta=$_POST['fecha_venta'];
 $fecha_venta = utf8_decode($fecha_venta);
+$tipo=$_POST['tipo'];
+$tipo = utf8_decode($tipo);
+
+if($cod_ventaFK==""){
 $cod_usuarioFK=$user;
 $cod_usuarioFK = utf8_decode($cod_usuarioFK);
 $cod_clienteFK=$_POST['cod_clienteFK'];
@@ -70,8 +73,6 @@ $puntoexpedicion = utf8_decode($puntoexpedicion);
 
 $codSolicitudCreditoFK=$_POST['codSolicitudCreditoFK'];
 $codSolicitudCreditoFK = utf8_decode($codSolicitudCreditoFK);
-$tipo=$_POST['tipo'];
-$tipo = utf8_decode($tipo);
 
 $datosventa=iniciarVenta($codSolicitudCreditoFK,$puntoexpedicion,$tipo_comprobante,$fecha_venta,$cod_usuarioFK,$cod_clienteFK,$num_factura,$cod_cobradorFK,$TipoVenta,$TipoPago,$vendedor1,$vendedor2,$comisioncobrador,$cod_local,$idGaranteFk);
 $cod_ventaFK=$datosventa[0];
@@ -1776,7 +1777,7 @@ $paginarecibo.="
 <table class='tableReporRecibo' >
 <tr >
 <td  style='width:10%;text-aling:center'>".number_format($cantidad_detalle,'2',',','.')."</td>
-<td  style='width:50%'>$nombre_producto * $NombreMarca * $descripcion <br> $descripcionDetalleVenta</td>
+<td  style='width:50%'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))." $descripcion <br> $descripcionDetalleVenta</td>
 <td  style='width:10%'>".number_format($precio_producto,'0',',','.') ."</td>
 <td  style='width:10%;text-aling:center'>".number_format($subtotalIvaext,'0',',','.') ."</td>
 <td  style='width:5%;text-aling:center'>".number_format($subtotalIva5,'0',',','.') ."</td>
@@ -4556,7 +4557,7 @@ $paginarecibo.="
 <table class='tableReporRecibo' >
 <tr >
 <td  style='width:10%;text-aling:center'>".number_format($cantidad,'2',',','.')."</td>
-<td  style='width:50%'>$nombre_producto * $NombreMarca</td>
+<td  style='width:50%'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))."</td>
 <td  style='width:10%'>".number_format($paginapreciosb,'0',',','.') ."</td>
 <td  style='width:10%;text-aling:center'>".number_format($subtotalIvaext,'0',',','.') ."</td>
 <td  style='width:5%;text-aling:center'>".number_format($subtotalIva5,'0',',','.') ."</td>

@@ -1327,7 +1327,7 @@ var totalCobroCuota="";
 var totalCobroCargoAdministrativo="";
 var totalCobroPagado="";
 
-var esperaImpresionVentaMs = 350;
+var esperaImpresionVentaMs = 1000;
 
 function esperarDatosVentaParaImpresion(callback) {
 	var promesas = [];
@@ -1344,6 +1344,10 @@ function esperarDatosVentaParaImpresion(callback) {
 		}
 	}
 	var continuar = function () {
+		if (typeof detallesRecibo !== "string" || detallesRecibo.trim() === "") {
+			ver_vetana_informativa("NO SE PUDO CARGAR EL DETALLE DE LA FACTURA. VOLVÉ A ABRIR LA VENTA PARA IMPRIMIR.");
+			return;
+		}
 		setTimeout(callback, esperaImpresionVentaMs);
 	};
 	if (promesas.length > 0 && typeof $ !== "undefined" && typeof $.when === "function") {

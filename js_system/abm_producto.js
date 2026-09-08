@@ -53,6 +53,7 @@ function crearListadoVistaProductos(configuracion) {
 			function agregarCelda(id, valor, ancho, oculta, html) {
 				var celda = utilidades.crearElemento("td", id ? { id: id } : {});
 				if (id) idsUsados[id] = true;
+				if (id === "td_datos_1") celda.style.whiteSpace = "pre-wrap";
 				if (oculta) celda.style.display = "none";
 				else if (ancho) celda.style.width = ancho;
 				if (html) celda.innerHTML = valor == null ? "" : String(valor);
@@ -450,7 +451,7 @@ function obtenerdatosabmProducto(datostr) {
 	datostr.className = 'tableRegistroSelec'
 	document.getElementById('inptCodProducto').value = $(datostr).children('td[id="td_id"]').html();
 	document.getElementById('inptRegistroSeleccProducto').value = $(datostr).children('td[id="td_datos_1"]').html();
-	document.getElementById('inptNombreProducto').value = $(datostr).children('td[id="td_datos_1"]').html();
+	document.getElementById('inptNombreProducto').value = $(datostr).children('td[id="td_datos_1"]').text();
 	document.getElementById('inptPrecioCompraProducto').value = $(datostr).children('td[id="td_datos_5"]').html();
 	document.getElementById('inptPrecioVentaProducto').value = $(datostr).children('td[id="td_datos_4"]').html();
 	document.getElementById('inptStockProducto').value = $(datostr).children('td[id="td_datos_6"]').html();
@@ -1714,7 +1715,7 @@ function obtenerdatosvistaproducto(datostr) {
 	datostr.className = 'tableRegistroSelec'
 ElementoProductoVista=datostr	
 		idFkProducto = $(datostr).children('td[id="td_id"]').html();
-		document.getElementById('inptProductoNombreVista').value = $(datostr).children('td[id="td_datos_1"]').html();
+		document.getElementById('inptProductoNombreVista').value = $(datostr).children('td[id="td_datos_1"]').text();
 		document.getElementById('inptProductoCategoriaVista').value = $(datostr).children('td[id="td_datos_12"]').html();
 		document.getElementById('inptProductoStockVista').value = $(datostr).children('td[id="td_datos_6"]').html();
 		document.getElementById('inptProductoPrecioContadoVista').value = $(datostr).children('td[id="td_datos_4"]').html();
