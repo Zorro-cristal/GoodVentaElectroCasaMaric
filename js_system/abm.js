@@ -1267,6 +1267,16 @@ function ImprimirFacrtura1() {
 	}
 	var marcaContado = condicionFactura.indexOf('CONTADO') >= 0 ? 'X' : '';
 	var marcaCredito = condicionFactura.indexOf('CREDITO') >= 0 || condicionFactura.indexOf('CRÉDITO') >= 0 ? 'X' : '';
+	var totalFacturaNumero = Number(QuitarSeparadorMilValor(totalesRecibo));
+	var totalFacturaEnLetras = '';
+	if(isFinite(totalFacturaNumero) && totalFacturaNumero >= 0){
+		totalFacturaEnLetras = numeroALetras(Math.round(totalFacturaNumero), {
+			plural: 'GUARANÍES',
+			singular: 'GUARANÍ',
+			centPlural: 'CÉNTIMOS',
+			centSingular: 'CÉNTIMO'
+		}).replace(/\s+/g, ' ').trim();
+	}
 
 	function asignarDatoFactura(id, valor){
 		var elemento = document.getElementById(id);
@@ -1288,6 +1298,7 @@ function ImprimirFacrtura1() {
 		asignarDatoFactura('lblReciboSubTotal5iva' + copia, SubtotalRecibovaiva5);
 		asignarDatoFactura('lblReciboSubTotal10iva' + copia, SubtotalRecibovaiva10);
 		asignarDatoFactura('lblReciboTotalVenta' + copia, totalesRecibo);
+		asignarDatoFactura('lblReciboTotalLetras' + copia, totalFacturaEnLetras);
 		asignarDatoFactura('lblReciboTotal5iva' + copia, totalesReciboDetalleiva15);
 		asignarDatoFactura('lblReciboTotal10iva' + copia, totalesReciboDetalleiva10);
 		asignarDatoFactura('lblReciboTotaliva' + copia, totalInteresRecibo);

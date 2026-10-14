@@ -119,6 +119,7 @@ body {
 .facturaSubtotal5,
 .facturaSubtotal10,
 .facturaTotal,
+.facturaTotalLetras,
 .facturaIva5,
 .facturaIva10,
 .facturaIvaTotal {
@@ -129,6 +130,17 @@ body {
 .facturaSubtotal5 { left: 162mm; top: 107.2mm; width: 19mm; }
 .facturaSubtotal10 { left: 182mm; top: 107.2mm; width: 20mm; }
 .facturaTotal { left: 171mm; top: 114.8mm; width: 31mm; }
+.facturaTotalLetras {
+  left: 35mm;
+  top: 114.8mm;
+  width: 132mm;
+  height: 7mm;
+  font-size: 6.2pt;
+  font-weight: 600;
+  line-height: 3.2mm;
+  text-align: left;
+  white-space: normal;
+}
 .facturaIva5 { left: 70mm; top: 123.2mm; width: 28mm; font-size: 7pt; }
 .facturaIva10 { left: 116mm; top: 123.2mm; width: 28mm; font-size: 7pt; }
 .facturaIvaTotal { left: 171mm; top: 123.2mm; width: 31mm; font-size: 7pt; }
