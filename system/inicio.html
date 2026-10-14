@@ -78,7 +78,7 @@
 
 <script src="/GoodVentaElectroCasaMaric/js/jquery.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261014contrato1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261014facturapreimpresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/barras_progreso_modernas.js?x=20260724v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/datosUsuario.js"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/inicio.js?x=20260725buscadormoderno1"></script>
@@ -102,7 +102,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261014contrato1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261014facturapreimpresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
@@ -55379,246 +55379,43 @@ style='width:100%'></div>
 </center>
 </div>
 
-<div class='principal2' style='display:none;background-color:#fff'id='divImpresionRecibo'>
-<center>
-<div class='divPrincipalRecibo' style='display: flex;'>
-<div class='divCuerpoRecibo' style='margin-left: 12px;' >
-<div style='display:flex'>
-<div class='divCabeceraRecibo'>
-<div class='reciboEmpresaMarca'><span class='lblEmpresaMarcaRecibo'></span><span>Rápido, fácil y seguro...</span></div>
-<div class='reciboEmpresaDatos'><b class='lblEmpresaNombreRecibo'></b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b class='lblEmpresaContactoRecibo'></b></div>
+<div class='principal2' style='display:none;background-color:#fff' id='divImpresionRecibo'>
+<div class='facturaCasaMaric'>
+<section class='facturaCopia facturaCopia1'>
+<p class='facturaDato facturaFecha' id='lblReciboFechaEmision1'></p>
+<p class='facturaDato facturaNombre' id='lblReciboNombre1'></p>
+<p class='facturaDato facturaDireccion' id='lblReciboDireccion1'></p>
+<p class='facturaDato facturaRuc' id='lblReciboRUC1'></p>
+<p class='facturaDato facturaTelefono' id='lblReciboTelef1'></p>
+<p class='facturaMarca facturaContado' id='lblReciboContado1'></p>
+<p class='facturaMarca facturaCredito' id='lblReciboCredito1'></p>
+<div class='facturaDetalle' id='DivDetalleRecibo1'></div>
+<p class='facturaDato facturaSubtotalExenta' id='lblReciboSubTotalEx1'></p>
+<p class='facturaDato facturaSubtotal5' id='lblReciboSubTotal5iva1'></p>
+<p class='facturaDato facturaSubtotal10' id='lblReciboSubTotal10iva1'></p>
+<p class='facturaDato facturaTotal' id='lblReciboTotalVenta1'></p>
+<p class='facturaDato facturaIva5' id='lblReciboTotal5iva1'></p>
+<p class='facturaDato facturaIva10' id='lblReciboTotal10iva1'></p>
+<p class='facturaDato facturaIvaTotal' id='lblReciboTotaliva1'></p>
+</section>
+<section class='facturaCopia facturaCopia2'>
+<p class='facturaDato facturaFecha' id='lblReciboFechaEmision2'></p>
+<p class='facturaDato facturaNombre' id='lblReciboNombre2'></p>
+<p class='facturaDato facturaDireccion' id='lblReciboDireccion2'></p>
+<p class='facturaDato facturaRuc' id='lblReciboRUC2'></p>
+<p class='facturaDato facturaTelefono' id='lblReciboTelef2'></p>
+<p class='facturaMarca facturaContado' id='lblReciboContado2'></p>
+<p class='facturaMarca facturaCredito' id='lblReciboCredito2'></p>
+<div class='facturaDetalle' id='DivDetalleRecibo2'></div>
+<p class='facturaDato facturaSubtotalExenta' id='lblReciboSubTotalEx2'></p>
+<p class='facturaDato facturaSubtotal5' id='lblReciboSubTotal5iva2'></p>
+<p class='facturaDato facturaSubtotal10' id='lblReciboSubTotal10iva2'></p>
+<p class='facturaDato facturaTotal' id='lblReciboTotalVenta2'></p>
+<p class='facturaDato facturaIva5' id='lblReciboTotal5iva2'></p>
+<p class='facturaDato facturaIva10' id='lblReciboTotal10iva2'></p>
+<p class='facturaDato facturaIvaTotal' id='lblReciboTotaliva2'></p>
+</section>
 </div>
-<div class='divTituloRecibo'>
-<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: <span class='lblEmpresaRucRecibo'></span></strong><span>N° <b id='lblReciboNumeroLegal1'></b></span></div>
-</div>
-</div>
-<div class='divCuerpoTitulo' style='display: flex;'>
-<div class='divCuerpotitulo1'>
-<p class='pTituloRecibo' >FECHA DE EMISION: <b id='lblReciboFechaEmision1' ></b></p>
-<p class='pTituloRecibo' >NOMBRE O RAZON SOCIAL: <b id='lblReciboNombre1' ></b></p>   
-<p class='pTituloRecibo' >RUC: <b id='lblReciboRUC1' ></b> </p>
-<p class='pTituloRecibo' >DIRECCION: <b id='lblReciboDireccion1' ></b>  </p>
-<p class='pTituloRecibo' style='display:none' >DIRECCION <b id='lblReciboElaborado1' ></b></p> 
-<p class='pTituloRecibo' style='display:none' >00000000 <b id='lblReciboTelef1' ></b></p>
-</div>
-<div class='divCuerpotitulo2'>
-<p class='pTituloRecibo2' >CI: <b id='lblReciboCi1' ></b></p>
-<p class='pTituloRecibo2' >TIPO: <b id='lblReciboContado1' ></b></p>
-<p class='pTituloRecibo2' style='display:none' >Villarrica, py <b id='lblReciboCondicion1' ></b></p>
-<p class='pTituloRecibo2' style='display:none' >00000000 <b id='lblReciboPlazo1' ></b></p>
-<p class='pTituloRecibo2' style='display:none'  id='lblReciboNotaRemision1'></p>
-</div>
-</div>
-<table class="tableCabeceraRegistro"  >
-<tbody>
-<tr>
-<td class="td_registro" style="width:10%;">
-CANT.
-</td>
-<td class="td_registro" style="width:50%;">
-DESCRIPCION
-</td>
-<td class="td_registro" style="width:10%;">
-P. UNIT.
-</td>
-<td class="td_registro" style="width:10%;">
-EXENTAS.
-</td>
-<td class="td_registro" style="width:5%;">
-5%
-</td>
-<td class="td_registro" style="width:15%;">
-10%
-</td>
-</tr>
-</tbody>
-</table>
-<div class='divCuerpoDetalle' id='DivDetalleRecibo1'>
-
-</div>
-
-<div class='divCuerpoDetalle2'>
-<table style='width:100%; '>
-<tr>
-<td style='width:70%'>
-<p class='pTituloRecibo2'>SUB-TOTALES: </p>
-</td>
-<td style='width:10%'>
-<p class='pTituloRecibo2'  id='lblReciboSubTotalEx1'>0</p>
-</td>
-<td style='width:5%'>
-<p class='pTituloRecibo2'  id='lblReciboSubTotal5iva1'>0</p>
-</td>
-<td style='width:15%'>
-<p class='pTituloRecibo2' > <b id='lblReciboSubTotal10iva1' ></b> </p>
-</td>
-</tr>
-</table>
-</div>
-
-
-
-<div style='border: 1px #b0b0b0 solid; border-radius: 10px;    height: 50px;'>
-
-<div class='divCuerpoDetalle3'>
-<br>
-<table style='width:100%'>
-<tr>
-<td style='width:80%'>
-<p class='pTituloRecibo2' style=' margin-top: -20px;' >TOTAL A PAGAR GS. : </p>
-<p class='pTituloRecibo2' style=' margin-top: -10px;' > <b id='lblReciboNroEnLetras1' ></b></p>
-</td>
-<td style='width:20%;text-align:center; '>
-<p class='pTituloRecibo2' style=' margin-top: -20px;' >TOTAL: <b id='lblReciboTotalVenta1' ></b> </p>
-</td>
-</tr>
-</table>
-</div>
- 
-
-<div>
-<table style='width:100%;margin-top: 10px;'>
-<tr>
-<td style='width:40%'>
-<p class='pTituloRecibo2' >LIQUIDACION DEL IVA:</p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >IVA (5%):<b id='lblReciboTotal5iva1' ></b></p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >IVA (10%):<b id='lblReciboTotal10iva1' ></b></p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >TOTAL IVA: <b id='lblReciboTotaliva1' ></b></p>
-</td>
-</tr>
-</table>
-</div>
-
- 
-
-</div>
-
-
-</div>
-
-<div style='width:20px;'></div>
-<div class='divCuerpoRecibo' style='margin-left: 0px;'>
-<div style='display:flex'>
-<div class='divCabeceraRecibo'>
-<div class='reciboEmpresaMarca'><span class='lblEmpresaMarcaRecibo'></span><span>Rápido, fácil y seguro...</span></div>
-<div class='reciboEmpresaDatos'><b class='lblEmpresaNombreRecibo'></b><br>Comercio al por menor de electrodomésticos y accesorios<br>Comercio de motocicletas y de sus piezas y accesorios<br><b class='lblEmpresaContactoRecibo'></b></div>
-</div>
-<div class='divTituloRecibo'>
-<div class='reciboDatosLegales'><b>RECIBO DE DINERO</b><span>TIMBRADO N° 18690358</span><strong>RUC: <span class='lblEmpresaRucRecibo'></span></strong><span>N° <b id='lblReciboNumeroLegal2'></b></span></div>
-</div>
-</div>
-<div class='divCuerpoTitulo' style='display:flex;'>
-<div class='divCuerpotitulo1'>
-<p class='pTituloRecibo' >FECHA DE EMISION: <b id='lblReciboFechaEmision2' ></b></p>
-<p class='pTituloRecibo' >NOMBRE O RAZON SOCIAL: <b id='lblReciboNombre2' ></b></p>   
-<p class='pTituloRecibo' >RUC: <b id='lblReciboRUC2' ></b> </p> 
-<p class='pTituloRecibo' >DIRECCION: <b id='lblReciboDireccion2' ></b></p>
-<p class='pTituloRecibo' style='display:none' >DIRECCION: <b id='lblReciboElaborado2' ></b> </p> 
-<p class='pTituloRecibo' style='display:none' >00000000 <b id='lblReciboTelef2' ></b> </p>
-</div>
-<div class='divCuerpotitulo2'>
-<p class='pTituloRecibo2' >CI: <b id='lblReciboCi2' ></b> </p>
-<p class='pTituloRecibo2' >TIPO: <b id='lblReciboContado2' ></b> </p>
-<p class='pTituloRecibo2' style='display:none' >Villarrica, py <b id='lblReciboCondicion2' ></b></p>
-<p class='pTituloRecibo2' style='display:none' >00000000 <b id='lblReciboPlazo2' ></b></p>
-<p class='pTituloRecibo2' style='display:none' > <b id='lblReciboNotaRemision2' ></b> </p>
-</div>
-</div>
-<table class="tableCabeceraRegistro"  >
-<tbody>
-<tr>
-
-<td class="td_registro" style="width:10%;">
-CANT.
-</td>
-<td class="td_registro" style="width:50%;">
-DESCRIPCION
-</td>
-<td class="td_registro" style="width:10%;">
-P. UNIT.
-</td>
-<td class="td_registro" style="width:10%;">
-EXENTAS.
-</td>
-<td class="td_registro" style="width:5%;">
-5%
-</td>
-<td class="td_registro" style="width:15%;">
-10%
-</td>
-</tr>
-</tbody>
-</table>
-
-<div class='divCuerpoDetalle' id='DivDetalleRecibo2'>
-
-</div>
-
-
-<div class='divCuerpoDetalle2'>
-<table style='width:100%; '>
-<tr>
-<td style='width:70%'>
-<p class='pTituloRecibo2'>SUB-TOTALES: </p>
-</td>
-<td style='width:10%'>
-<p class='pTituloRecibo2' id='lblReciboSubTotalEx2'>0</p>
-</td>
-<td style='width:5%'>
-<p class='pTituloRecibo2' id='lblReciboSubTotal5iva2'>0</p>
-</td>
-<td style='width:15%'>
-<p class='pTituloRecibo2' > <b id='lblReciboSubTotal10iva2'></b> </p>
-</td>
-</tr>
-</table>
-</div>
-
-<div style='border: 1px #b0b0b0 solid; border-radius: 10px;  height: 50px;'>
-
-<div class='divCuerpoDetalle3'>
-<br>
-<table style='width:100%'>
-<tr>
-<td style='width:80%'>
-<p class='pTituloRecibo2' style='margin-top: -20px;' >TOTAL A PAGAR GS. : </p>
-<p class='pTituloRecibo2' style='margin-top: -10px;' > <b id='lblReciboNroEnLetras2' > </b> </p>
-</td>
-<td style='width:20%;text-align:center; '>
-<p class='pTituloRecibo2' style=' margin-top: -20px;' > TOTAL: <b id='lblReciboTotalVenta2' > </b>  </p>
-</td>
-</tr>
-</table>
-</div>
-<div>
-<table style='width:100%;;margin-top: 10px;'>
-<tr>
-<td style='width:40%'>
-<p class='pTituloRecibo2' >LIQUIDACION DEL IVA:</p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >IVA (5%):<b id='lblReciboTotal5iva2' > </b> </p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >IVA (10%):<b id='lblReciboTotal10iva2' ></b> </p>
-</td>
-<td style='width:20%'>
-<p class='pTituloRecibo2' >TOTAL IVA: <b id='lblReciboTotaliva2' > </b></p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-
-</div>
-</center>
 </div>
  
 <div id='DivImprimir' style='display:none'></div>

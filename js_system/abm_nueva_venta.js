@@ -1410,6 +1410,7 @@ manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
 					 totalCobroPagado=datos[45];
 					 SubtotalRecibovaiva5 = datos[6];
 					 SubtotalRecibovaiva10 = datos[7];
+					 SubtotalReciboExentas = datos[53] || "0";
 					 totalesReciboDetalleiva10 = datos[8];
 					 totalesReciboDetalleiva15 = datos[9];
 					 totalInteresRecibo = datos[36];

@@ -1222,6 +1222,7 @@ function abmcreditorefin(dias,cuotaNro,interes,Monto,descuento,fecha,idcredito,o
 var detallesRecibo = 0;
 
 var NroFacturaLegal = 0;
+var SubtotalReciboExentas = 0;
 var SubtotalRecibovaiva5 = 0;
 var SubtotalRecibovaiva10 = 0;
 var totalesReciboDetalleiva10 = 0;
@@ -1253,105 +1254,44 @@ var TipoFactura=""
 
 var CiRecibo=""
 function ImprimirFacrtura1() {
-	
-	if(RucRecibo==""){
-		RucRecibo=CiRecibo
-		
+	var documentoFactura = String(RucRecibo || CiRecibo || '').trim();
+	var fechaFactura = document.getElementById('inptFechaVenta').value;
+	if(/^\d{4}-\d{2}-\d{2}$/.test(fechaFactura)){
+		var partesFechaFactura = fechaFactura.split('-');
+		fechaFactura = partesFechaFactura[2] + '/' + partesFechaFactura[1] + '/' + partesFechaFactura[0];
 	}
-	
-document.getElementById("DivDetalleRecibo1").innerHTML = detallesRecibo
-document.getElementById("DivDetalleRecibo2").innerHTML = detallesRecibo
-// document.getElementById("DivDetalleRecibo3").innerHTML = detallesRecibo
-document.getElementById("lblReciboTotal5iva1").innerHTML = totalesReciboDetalleiva15
-document.getElementById("lblReciboTotal5iva2").innerHTML = totalesReciboDetalleiva15
-// document.getElementById("lblReciboTotal5iva3").innerHTML = totalesReciboDetalleiva15
-document.getElementById("lblReciboTotal10iva1").innerHTML = totalesReciboDetalleiva10
-document.getElementById("lblReciboTotal10iva2").innerHTML = totalesReciboDetalleiva10
-// document.getElementById("lblReciboTotal10iva3").innerHTML = totalesReciboDetalleiva10
-document.getElementById("lblReciboSubTotal10iva1").innerHTML = SubtotalRecibovaiva10
-document.getElementById("lblReciboSubTotal10iva2").innerHTML = SubtotalRecibovaiva10
-// document.getElementById("lblReciboSubTotal10iva3").innerHTML = SubtotalRecibovaiva10
-document.getElementById("lblReciboSubTotal5iva1").innerHTML = SubtotalRecibovaiva5
-document.getElementById("lblReciboSubTotal5iva2").innerHTML = SubtotalRecibovaiva5
-// document.getElementById("lblReciboSubTotal5iva3").innerHTML = SubtotalRecibovaiva5
-document.getElementById("lblReciboTotalVenta1").innerHTML = totalesRecibo
-document.getElementById("lblReciboTotalVenta2").innerHTML = totalesRecibo
-// document.getElementById("lblReciboTotalVenta3").innerHTML = totalesRecibo
-document.getElementById("lblReciboTotaliva1").innerHTML = totalInteresRecibo
-document.getElementById("lblReciboTotaliva2").innerHTML = totalInteresRecibo
-// document.getElementById("lblReciboTotaliva3").innerHTML = totalInteresRecibo
-var t=QuitarSeparadorMilValor(totalesRecibo);
-  var totaletrasRecibo=numeroALetras(t, {
-  plural: 'GUARANIES',
-  singular: 'GUARANIES',
-  centPlural: 'GUARANIES',
-  centSingular: 'GUARANIES'
-});
-document.getElementById("lblReciboNroEnLetras1").innerHTML = totaletrasRecibo
-document.getElementById("lblReciboNroEnLetras2").innerHTML = totaletrasRecibo
-// document.getElementById("lblReciboNroEnLetras3").innerHTML = totaletrasRecibo
-		
-document.getElementById("lblReciboNombre1").innerHTML = NombreRecibo
-document.getElementById("lblReciboCi1").innerHTML = ""
-document.getElementById("lblReciboRUC1").innerHTML = RucRecibo
-document.getElementById("lblReciboDireccion1").innerHTML =  DireccionRecibo
-document.getElementById("lblReciboTelef1").innerHTML =  ""
 
-document.getElementById("lblReciboNombre2").innerHTML = NombreRecibo
-document.getElementById("lblReciboCi2").innerHTML = ""
-document.getElementById("lblReciboRUC2").innerHTML = RucRecibo
-document.getElementById("lblReciboDireccion2").innerHTML =  DireccionRecibo
-document.getElementById("lblReciboTelef2").innerHTML =  ""
-
-document.getElementById("lblReciboNumeroLegal1").textContent = NroFacturaLegal || "";
-document.getElementById("lblReciboNumeroLegal2").textContent = NroFacturaLegal || "";
-
- 
- 
-	document.getElementById("lblReciboContado1").innerHTML = TipoFactura
-	document.getElementById("lblReciboContado2").innerHTML =  TipoFactura
-	// document.getElementById("lblReciboContado3").innerHTML =  "X"
-	 
-var f = new Date();
-	var dia =f.getDate()
-	if(dia<10){
-		dia="0"+dia;
+	var condicionFactura = String(TipoFactura || '').toUpperCase();
+	if(condicionFactura == '' && document.getElementById('inptSeleccTipoVenta')){
+		condicionFactura = String(document.getElementById('inptSeleccTipoVenta').value || '').toUpperCase();
 	}
-	var mes =f.getMonth()+1
-	if(mes<10){
-		mes="0"+mes;
+	var marcaContado = condicionFactura.indexOf('CONTADO') >= 0 ? 'X' : '';
+	var marcaCredito = condicionFactura.indexOf('CREDITO') >= 0 || condicionFactura.indexOf('CRÉDITO') >= 0 ? 'X' : '';
+
+	function asignarDatoFactura(id, valor){
+		var elemento = document.getElementById(id);
+		if(elemento){
+			elemento.textContent = valor == null ? '' : String(valor);
+		}
 	}
-	var hora =f.getHours()
-	if(hora<10){
-		hora="0"+hora;
+
+	for(var copia = 1; copia <= 2; copia++){
+		document.getElementById('DivDetalleRecibo' + copia).innerHTML = detallesRecibo;
+		asignarDatoFactura('lblReciboFechaEmision' + copia, fechaFactura);
+		asignarDatoFactura('lblReciboNombre' + copia, NombreRecibo);
+		asignarDatoFactura('lblReciboDireccion' + copia, DireccionRecibo);
+		asignarDatoFactura('lblReciboRUC' + copia, documentoFactura);
+		asignarDatoFactura('lblReciboTelef' + copia, telefonoRecino);
+		asignarDatoFactura('lblReciboContado' + copia, marcaContado);
+		asignarDatoFactura('lblReciboCredito' + copia, marcaCredito);
+		asignarDatoFactura('lblReciboSubTotalEx' + copia, SubtotalReciboExentas);
+		asignarDatoFactura('lblReciboSubTotal5iva' + copia, SubtotalRecibovaiva5);
+		asignarDatoFactura('lblReciboSubTotal10iva' + copia, SubtotalRecibovaiva10);
+		asignarDatoFactura('lblReciboTotalVenta' + copia, totalesRecibo);
+		asignarDatoFactura('lblReciboTotal5iva' + copia, totalesReciboDetalleiva15);
+		asignarDatoFactura('lblReciboTotal10iva' + copia, totalesReciboDetalleiva10);
+		asignarDatoFactura('lblReciboTotaliva' + copia, totalInteresRecibo);
 	}
-	var min =f.getMinutes()
-	if(min<10){
-		min="0"+min;
-	}
-  
-/* document.getElementById("lblReciboFechaEmision1").innerHTML = f.getFullYear()+"-"+mes+"-"+dia;
-document.getElementById("lblReciboFechaEmision2").innerHTML =  f.getFullYear()+"-"+mes+"-"+dia; */
-
-document.getElementById("lblReciboFechaEmision1").innerHTML = document.getElementById('inptFechaVenta').value;
-document.getElementById("lblReciboFechaEmision2").innerHTML =  document.getElementById('inptFechaVenta').value;
-
-
-// document.getElementById("lblReciboFechaEmision3").innerHTML =  f.getFullYear()+"-"+mes+"-"+dia;
-
-document.getElementById("lblReciboElaborado1").innerHTML =  ""
-document.getElementById("lblReciboElaborado2").innerHTML =""
-// document.getElementById("lblReciboElaborado3").innerHTML = ""
-
-document.getElementById("lblReciboCondicion1").innerHTML =  ""
-document.getElementById("lblReciboCondicion2").innerHTML = ""
-// document.getElementById("lblReciboCondicion3").innerHTML = ""
-
-document.getElementById("lblReciboPlazo1").innerHTML =  ""
-document.getElementById("lblReciboPlazo2").innerHTML = ""
-// document.getElementById("lblReciboPlazo3").innerHTML = ""
-
-actualizarDatosEmpresaReciboLegal();
 
 var documento= document.getElementById("divImpresionRecibo").innerHTML;
      localStorage.setItem("reporte", documento);

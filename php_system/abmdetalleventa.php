@@ -1699,8 +1699,12 @@ if($puntoexpedicion!=""){
 $subtotalIva5=0;
 $subtotalIva10=0;
 $subtotalIvaext=0;
+$importeVentaExenta=0;
+$importeVentaIva5=0;
+$importeVentaIva10=0;
 if($impuesto==11){
 $subtotalIva10=($subtotal/$impuesto);
+$importeVentaIva10=$subtotal;
 $totalesiva=$totalesiva+$subtotalIva10;
 $totales10=$totales10+$subtotalIva10;
 $SubTotalestotalIva10=$SubTotalestotalIva10+$subtotal;
@@ -1708,12 +1712,14 @@ $SubTotalestotalIva10=$SubTotalestotalIva10+$subtotal;
 }
 if($impuesto==21){
 $subtotalIva5=($subtotal/$impuesto);
+$importeVentaIva5=$subtotal;
 $totalesiva=$totalesiva+$subtotalIva5;
 $totales5=$totales5+$subtotalIva5;
 $SubTotalestotalIva5=$SubTotalestotalIva5+$subtotal;
 }
 if($impuesto==1){
 $subtotalIvaext=$subtotal;
+$importeVentaExenta=$subtotal;
 $totalesExt=$totalesExt+$subtotalIvaext;
 }
 
@@ -1776,12 +1782,13 @@ $descripcionDetalleVenta=buscardescripcionDetalleVenta($cod_detalle);
 $paginarecibo.="
 <table class='tableReporRecibo' >
 <tr >
-<td  style='width:10%;text-aling:center'>".number_format($cantidad_detalle,'2',',','.')."</td>
-<td  style='width:50%'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))." $descripcion <br> $descripcionDetalleVenta</td>
-<td  style='width:10%'>".number_format($precio_producto,'0',',','.') ."</td>
-<td  style='width:10%;text-aling:center'>".number_format($subtotalIvaext,'0',',','.') ."</td>
-<td  style='width:5%;text-aling:center'>".number_format($subtotalIva5,'0',',','.') ."</td>
-<td  style='width:15%;text-aling:center'>".number_format($subtotal,'0',',','.') ."</td>
+<td class='facturaColCodigo'>".htmlspecialchars($cod_barra, ENT_QUOTES, 'UTF-8')."</td>
+<td class='facturaColCantidad'>".number_format($cantidad_detalle,'2',',','.')."</td>
+<td class='facturaColDescripcion'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))." $descripcion <br> $descripcionDetalleVenta</td>
+<td class='facturaColPrecio'>".number_format($precio_producto,'0',',','.') ."</td>
+<td class='facturaColExenta'>".number_format($importeVentaExenta,'0',',','.') ."</td>
+<td class='facturaColIva5'>".number_format($importeVentaIva5,'0',',','.') ."</td>
+<td class='facturaColIva10'>".number_format($importeVentaIva10,'0',',','.') ."</td>
 </tr>
 </table>";
 
@@ -1875,7 +1882,8 @@ $informacion =array("1" => "exito","2" => $formato=='json' ? $filas : $pagina,"5
 "49"=>number_format($verDetallePago[1],'0',',','.'),
 "50"=>number_format($verDetallePago[2],'0',',','.'),
 "51"=>$garantedireccion,
-"52"=>$garantenombre);
+"52"=>$garantenombre,
+"53"=>number_format($totalesExt,'0',',','.'));
 echo json_encode($informacion);	
 exit;
 }
@@ -4515,8 +4523,12 @@ if($totalpagado>0){
 $subtotalIva5=0;
 $subtotalIva10=0;
 $subtotalIvaext=0;
+$importeVentaExenta=0;
+$importeVentaIva5=0;
+$importeVentaIva10=0;
 if($impuesto==11){
 $subtotalIva10=($subtotal/$impuesto);
+$importeVentaIva10=$subtotal;
 $totalesiva=$totalesiva+$subtotalIva10;
 $totales10=$totales10+$subtotalIva10;
 $SubTotalestotalIva10=$SubTotalestotalIva10+$subtotal;
@@ -4524,12 +4536,14 @@ $SubTotalestotalIva10=$SubTotalestotalIva10+$subtotal;
 }
 if($impuesto==21){
 $subtotalIva5=($subtotal/$impuesto);
+$importeVentaIva5=$subtotal;
 $totalesiva=$totalesiva+$subtotalIva5;
 $totales5=$totales5+$subtotalIva5;
 $SubTotalestotalIva5=$SubTotalestotalIva5+$subtotal;
 }
 if($impuesto==1){
 $subtotalIvaext=$subtotal;
+$importeVentaExenta=$subtotal;
 $totalesExt=$totalesExt+$subtotalIvaext;
 }
 
@@ -4556,12 +4570,13 @@ $totalesExt=$totalesExt+$subtotalIvaext;
 $paginarecibo.="
 <table class='tableReporRecibo' >
 <tr >
-<td  style='width:10%;text-aling:center'>".number_format($cantidad,'2',',','.')."</td>
-<td  style='width:50%'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))."</td>
-<td  style='width:10%'>".number_format($paginapreciosb,'0',',','.') ."</td>
-<td  style='width:10%;text-aling:center'>".number_format($subtotalIvaext,'0',',','.') ."</td>
-<td  style='width:5%;text-aling:center'>".number_format($subtotalIva5,'0',',','.') ."</td>
-<td  style='width:15%;text-aling:center'>".number_format($subtotal,'0',',','.') ."</td>
+<td class='facturaColCodigo'>".htmlspecialchars($cod_barra, ENT_QUOTES, 'UTF-8')."</td>
+<td class='facturaColCantidad'>".number_format($cantidad,'2',',','.')."</td>
+<td class='facturaColDescripcion'>".nl2br(htmlspecialchars($nombre_producto, ENT_QUOTES, 'UTF-8'))."</td>
+<td class='facturaColPrecio'>".number_format($paginapreciosb,'0',',','.') ."</td>
+<td class='facturaColExenta'>".number_format($importeVentaExenta,'0',',','.') ."</td>
+<td class='facturaColIva5'>".number_format($importeVentaIva5,'0',',','.') ."</td>
+<td class='facturaColIva10'>".number_format($importeVentaIva10,'0',',','.') ."</td>
 </tr>
 </table>";
 

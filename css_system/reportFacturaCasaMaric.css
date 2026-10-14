@@ -1,0 +1,167 @@
+* {
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+html,
+body,
+body > form,
+.divimpr,
+.facturaCasaMaric {
+  width: 210mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+  background: #fff;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+
+.facturaCasaMaric {
+  --factura-ajuste-x: 0mm;
+  --factura-ajuste-y: 0mm;
+  position: relative;
+  display: block;
+  text-align: left;
+  transform: translate(var(--factura-ajuste-x), var(--factura-ajuste-y));
+  transform-origin: top left;
+}
+
+.facturaCopia {
+  position: absolute;
+  left: 0;
+  width: 210mm;
+  height: 140mm;
+  overflow: hidden;
+  break-inside: avoid;
+}
+
+.facturaCopia1 { top: 0mm; }
+.facturaCopia2 { top: 144.5mm; }
+
+.facturaDato,
+.facturaMarca {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: #000;
+  font: 600 7.5pt/4mm Arial, sans-serif;
+  white-space: nowrap;
+}
+
+.facturaFecha { left: 20mm; top: 34.8mm; width: 58mm; }
+.facturaNombre { left: 21.5mm; top: 40.2mm; width: 114mm; }
+.facturaDireccion { left: 21.5mm; top: 45.7mm; width: 114mm; }
+.facturaRuc { left: 145mm; top: 40.2mm; width: 58mm; }
+.facturaTelefono { left: 145mm; top: 45.7mm; width: 58mm; }
+
+.facturaMarca {
+  top: 34.5mm;
+  width: 5mm;
+  height: 5mm;
+  font-size: 10pt;
+  font-weight: 700;
+  line-height: 5mm;
+  text-align: center;
+}
+
+.facturaContado { left: 149mm; }
+.facturaCredito { left: 178mm; }
+
+.facturaDetalle {
+  position: absolute;
+  top: 55.2mm;
+  left: 7.5mm;
+  width: 195mm;
+  height: 50.5mm;
+  overflow: hidden;
+}
+
+.facturaDetalle .tableReporRecibo {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: transparent;
+  color: #000;
+  font: 400 6.8pt/3.8mm Arial, sans-serif;
+}
+
+.facturaDetalle .tableReporRecibo td {
+  border: 0;
+  padding: 0 0.7mm;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.facturaColCodigo { width: 16%; text-align: left; }
+.facturaColCantidad { width: 8%; text-align: center; }
+.facturaColDescripcion { width: 29%; text-align: left; }
+.facturaColPrecio { width: 10%; text-align: right; }
+.facturaColExenta { width: 12%; text-align: right; }
+.facturaColIva5 { width: 11%; text-align: right; }
+.facturaColIva10 { width: 14%; text-align: right; }
+
+.facturaSubtotalExenta,
+.facturaSubtotal5,
+.facturaSubtotal10,
+.facturaTotal,
+.facturaIva5,
+.facturaIva10,
+.facturaIvaTotal {
+  text-align: right;
+}
+
+.facturaSubtotalExenta { left: 141mm; top: 107.2mm; width: 20mm; }
+.facturaSubtotal5 { left: 162mm; top: 107.2mm; width: 19mm; }
+.facturaSubtotal10 { left: 182mm; top: 107.2mm; width: 20mm; }
+.facturaTotal { left: 171mm; top: 114.8mm; width: 31mm; }
+.facturaIva5 { left: 70mm; top: 123.2mm; width: 28mm; font-size: 7pt; }
+.facturaIva10 { left: 116mm; top: 123.2mm; width: 28mm; font-size: 7pt; }
+.facturaIvaTotal { left: 171mm; top: 123.2mm; width: 31mm; font-size: 7pt; }
+
+@media screen {
+  body {
+    background: #ddd;
+  }
+
+  .facturaCasaMaric {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .25);
+  }
+
+  .facturaCopia {
+    outline: 1px dashed #bbb;
+    outline-offset: -1px;
+  }
+}
+
+@media print {
+  html,
+  body,
+  body > form,
+  .divimpr,
+  .facturaCasaMaric {
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+    background: transparent !important;
+  }
+
+  .facturaCopia {
+    outline: 0 !important;
+  }
+}
