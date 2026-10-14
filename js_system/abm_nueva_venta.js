@@ -1942,6 +1942,7 @@ function abmcreditosVenta(pagoentrega,nroCuota, Monto, iniciopago, metodopago, i
 					 if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){  
 					 document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text() 
 					 document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
+					 actualizarVisibilidadContrato();
 					 document.getElementById("divOpcionesImpresion").style.display=""
 					 document.getElementById("divConfirmarNroDeFactura").style.display=""
 					 // document.getElementById("btnImprimirticket").style.display=""
@@ -1960,6 +1961,7 @@ function abmcreditosVenta(pagoentrega,nroCuota, Monto, iniciopago, metodopago, i
      					verCerrarConfigCredito("")
 					 }else{ 
 					 EntregaPagare=document.getElementById("inptEntregaVenta").value;
+					 actualizarVisibilidadContrato();
 					 document.getElementById("divOpcionesImpresion").style.display=""
 					 // document.getElementById("btnImprimirticket").style.display=""
 					 // document.getElementById("btnImprimirFactura").style.display="none"
@@ -1996,6 +1998,7 @@ function abmcreditosVenta(pagoentrega,nroCuota, Monto, iniciopago, metodopago, i
 
 }
 function vercerrarOpcionesImpresion(d) {
+	actualizarVisibilidadContrato();
 	
 	var tipoventa=document.getElementById("inptSeleccTipoComprobanteVenta").value
 	
@@ -2013,6 +2016,14 @@ function vercerrarOpcionesImpresion(d) {
 		$("div[id=divOpcionesImpresion]").fadeIn(250)
 	} else {
 		$("div[id=divOpcionesImpresion]").fadeOut(250)		
+	}
+}
+
+function actualizarVisibilidadContrato(){
+	var botonContrato = document.getElementById("btnImprimirContrato");
+	var tipoVenta = document.getElementById("inptSeleccTipoVenta");
+	if(botonContrato && tipoVenta){
+		botonContrato.style.display = tipoVenta.value == "CREDITO" ? "" : "none";
 	}
 }
 function vercerrarConfirmarNroFactura(d) {
@@ -2620,6 +2631,7 @@ NroVentas=PuntoExpedicion+"-"+NroVentas
 					};
 
 					if(document.getElementById("inptSeleccTipoVenta").value=="CONTADO"){
+						actualizarVisibilidadContrato();
 						document.getElementById("divOpcionesImpresion").style.display=""
 						esperarDatosVentaParaImpresion(finalizarImpresionContado);
 					}else{

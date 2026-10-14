@@ -78,7 +78,7 @@
 
 <script src="/GoodVentaElectroCasaMaric/js/jquery.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20260901pagare1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261014contrato1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/barras_progreso_modernas.js?x=20260724v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/datosUsuario.js"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/inicio.js?x=20260725buscadormoderno1"></script>
@@ -102,7 +102,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20260908esperaFactura1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261014contrato1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
@@ -21761,7 +21761,7 @@ onclick="ImprimirFacrtura1()">
 onclick="imprimirPagare()">
 <br>
 <br>
-<input id='btnImprimirContrato' type="button" value="Imprimir Contrato" class="btn1"
+<input id='btnImprimirContrato' type="button" value="Imprimir Contrato" class="btn1" style='display:none;'
 onclick="imprimirContrato()">
 <br>
 <br>
@@ -52453,117 +52453,44 @@ style='width:88%'></div>
 
 
 <div id='DivContrato' style='display:none;'>
+<article class='contrato-maric'>
+  <header class='contrato-encabezado'>
+    <h1>CONTRATO DE COMPRA VENTA DE PRODUCTOS</h1>
+    <img src='/GoodVentaElectroCasaMaric/iconos/logo.png' alt='Casa Maric'>
+  </header>
 
+  <p class='contrato-referencia'>Factura N° <strong id='ContratoNumeroFactura'></strong> &middot; Fecha <strong id='ContratoFechaEmision'></strong></p>
 
-<div class="membrete clearfix">
-  <div class="logo">
-    <img src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Logo empresa" style="height: 75px;">
-  </div>
-  <div class="empresa-info">
-    <strong id='ContratoEmpresaNombre'></strong><br>
-    Venta de Electrodomésticos y Muebles en General<br>
-    <span id='ContratoEmpresaDireccion'></span><br>
-    Tel: <span id='ContratoEmpresaTelefono'></span><br>
-    <span id='ContratoEmpresaCiudad'></span>
-  </div>
-</div>
+  <p>Entre <strong id='ContratoEmpresaNombreTexto'></strong>, R.U.C. N° <strong id='ContratoEmpresaRuc'></strong>, <span id='ContratoEmpresaDomicilioTexto'></span>, en adelante <strong>PROVEEDOR</strong> y el titular de la presente Factura en adelante <strong>CONSUMIDOR</strong>, se regirán por las siguientes cláusulas del contrato.</p>
 
+  <p><strong>PRIMERA:</strong> El <strong>PROVEEDOR</strong> vende a crédito o contado al <strong>CONSUMIDOR</strong> las mercaderías detalladas en esta Factura, con todos los accesorios, que en adelante se denominan <strong>PRODUCTO O SERVICIO</strong> y que el mismo declara bajo fe de juramento recibir toda la información veraz, eficaz y en perfecto estado de funcionamiento lo adquirido, dándose cumplimiento a lo establecido en el <strong>Art. 8 de la Ley 1334/98.</strong></p>
 
- <!-- CONTRATO -->
-  <div class="titulo">CONTRATO DE VENTA A CRÉDITO</div>
-<div style='border: 1px solid;border-radius: 5px;'>
-  <table class="no-border">
-    <tr>
-      <td><strong>FECHA DE EMISIÓN:</strong> <b id='ContratoFechaEmision'>Coronel Oviedo, 08/07/2025</b></td>
-      <td><strong>CONDICION:</strong> <b id='ContratoCondicion'>CREDITO</b></td>
-    </tr>
-    <tr>
-      <td><strong>RUC o C.I.:</strong> <b id='ContratoRuc'> 5.524.793 </b></td>
-      <td><strong>TELÉFONO:</strong> <b id='ContratoTelefono'></b></td>
-    </tr>
-    <tr>
-      <td><strong>NOMBRE:</strong>  <b id='ContratoNombre'> GUSTAVO DANIEL ACOSTA DELGADO </b></td>
-	  <td><strong>NRO. VENTA:</strong>  <b id='ContratoCod_venta'> 3608 </b></td>
-    </tr>   
-  </table>
-</div>
+  <p><strong>SEGUNDA:</strong> El <strong>CONSUMIDOR</strong> deberá abonar el pago conforme se detalla en la presente factura a crédito o contado en el domicilio del <strong>PROVEEDOR</strong>. En el caso de que no fuere abonado en la fecha estipulada de vencimiento, devengará un interés del cinco por ciento (5%) mensual. La mora se producirá por el simple vencimiento de los plazos fijados, sin necesidad de interpelación judicial o extrajudicial y libre de protesto. Solo será admitido el pago debidamente documentado y al solo efecto de la cancelación de la deuda.</p>
 
-<br>
+  <p><strong>TERCERA:</strong> Si el <strong>CONSUMIDOR</strong> dejare de abonar dos (2) cuotas consecutivas a su vencimiento, el <strong>PROVEEDOR</strong> estará facultado al secuestro de las mercaderías en forma extrajudicial o judicial que se encuentren en poder del <strong>CONSUMIDOR</strong> o de un tercero; las cuotas que hubiere abonado serán estipuladas en concepto de gastos de uso del producto. Así mismo el <strong>PROVEEDOR</strong> se reserva el derecho de accionar contra el <strong>CONSUMIDOR</strong> o contra el codeudor.</p>
 
-<table> 
-      <tr>
-        <th style='width:10%;' >CÓDIGO</th>
-        <th style='width:50%;'>PRODUCTO</th>
-        <th style='width:10%;'>CANTIDAD</th>
-        <th style='width:10%;'>PRECIO</th>
-        <th style='width:20%;'>TOTAL</th>
-      </tr>  
-  </table>
-<div style='border: 1px solid;border-radius: 5px;' id='ContratoDetalleVenta' >
+  <p><strong>CUARTA:</strong> Si el <strong>CONSUMIDOR</strong> no abonare la totalidad del precio convenido en el presente contrato, se constituirá el mismo en depositario regular de lo vendido y queda obligado a su conservación en perfecto estado, no pudiendo transferir o gravar sin la autorización por escrito del <strong>PROVEEDOR</strong> con cinco (5) días de antelación como mínimo.</p>
 
-  <table>
-      <tr>
-        <td style='width:10%;'>11205</td>
-        <td style='width:50%;'>ACONDICIONADOR DE AIRE JAM 12000BTU</td>
-        <td style='width:10%;'>1,00</td>
-        <td style='width:10%;'>5.000.000</td>
-        <td style='width:20%;'>5.000.000</td>
-      </tr>
-  </table>
+  <p><strong>QUINTA:</strong> El <strong>PROVEEDOR</strong>, en cumplimiento a lo establecido en el <strong>Art. 11 de la Ley N° 1334/98</strong>, otorga la garantía del producto o servicio como mínimo de seis (6) meses y máximo de un (1) año, informando las condiciones y manuales, así como los locales y servicios técnicos habilitados para su usufructo. La garantía corre a partir de la fecha establecida en la presente Factura. En caso de ser superior a lo establecido, será informado y entregado un nuevo certificado de garantía. El <strong>CONSUMIDOR</strong> fue informado en forma veraz y eficaz, aceptando en forma irrevocable la garantía del producto o servicio adquirido.</p>
 
-</div>
+  <p><strong>SEXTA:</strong> El <strong>CONSUMIDOR</strong> autoriza en forma irrevocable al <strong>PROVEEDOR</strong> para recabar datos personales del mismo, por su cuenta o a través de empresas especializadas de nuestro medio, conforme a los datos proporcionados por el <strong>CONSUMIDOR</strong> en la solicitud de compra del producto o servicio, de conformidad a lo establecido en el <strong>Art. 5 de la Ley N° 1682/01</strong> y sus modificaciones; y en caso de tener una mora superior a noventa (90) días en el pago del crédito o cualquier deuda pendiente, se incluya mi nombre personal o razón social que represente como “Moroso” en las empresas con las que opera el <strong>PROVEEDOR</strong>. La presente cláusula se regirá por lo establecido en la Ley N° 1682/01 y Ley N° 1969/02.</p>
 
-<br>
-<div style=' width: 400px;
-    border: 1px solid;
-    border-radius: 5px;
-    right: 40px;
-    position: absolute;'>
-  <table class="no-border">
-    <tr><td><strong>TOTAL VENTA:</strong></td><td id='ContratototalVenta'  >5.000.000</td></tr>
-    <tr><td><strong>ENTREGA:</strong></td><td id='ContratoEntrega' >0</td></tr>
-    <tr><td><strong>SALDO:</strong></td><td id='ContratoSaldo' >5.000.000</td></tr>
-    <tr><td><strong>CANTIDAD CUOTAS:</strong></td><td id='ContratoCantidadCuotas' >10</td></tr>
-    <tr><td><strong>CUOTA MENSUAL:</strong></td><td id='ContratoCuotaMensual' >500.000</td></tr>
-  </table>
-</div>
- 
- <br>
- <br>
- <br>
- <br>
- <br>
- <br> 
- 
+  <p><strong>SÉPTIMA:</strong> Para todos los efectos legales, las partes se someten a la competencia y jurisdicción de los juzgados y tribunales de la ciudad de Villarrica. En prueba de conformidad y aceptación, suscriben las partes en tres ejemplares de un mismo tenor y a un solo efecto en la ciudad de Villarrica, República del Paraguay.</p>
 
-  <p>Entre <strong id='ContratoEmpresaNombreTexto'></strong> <span id='ContratoEmpresaDomicilioTexto'></span>, en adelante se denominará el VENDEDOR y el titular de la presente factura, que se determina en adelante COMPRADOR, que se regirá por las cláusulas del presente CONTRATO.</p>
-
-  <p><strong>PRIMERA:</strong> El vendedor vende al comprador y este lo acepta, el (los) artículo(s) mencionado(s) en esta factura con todos sus accesorios, que en adelante se denomina LO VENDIDO, y que el comprador recibe en este acto en perfecto estado de funcionamiento y sin defecto de ninguna clase.</p>
-
-  <p><strong>SEGUNDA:</strong> El comprador está obligado al pago de la cuota mensual en el domicilio del vendedor conforme a la presente factura. Si cualquiera de las cuotas no fuese abonada a su vencimiento, devengará un interés del 4% mensual. La mora se producirá por el simple vencimiento de los plazos fijados, sin necesidad de interpretación extrajudicial y libre de protesto y sin gastos.</p>
-
-  <p><strong>TERCERA:</strong> Si el comprador dejare de abonar dos (2) cuotas consecutivas a su vencimiento, el vendedor queda facultado al secuestro de la mercadería(s) en forma extrajudicial o judicial que se encuentra en poder del comprador o de un tercero, la cual no haberse abonado será imputada en concepto de alquiler por el uso de lo vendido. Así mismo el vendedor se reserva el derecho de accionar contra el comprador o contra el(los) codeudor(es).</p>
-
-  <p><strong>CUARTA:</strong> Si el comprador no abona la totalidad del precio convenido, el comprador se constituye en depositario regular de lo vendido y queda obligado a su conservación, no pudiendo transferir, gravarlo, sin el consentimiento del vendedor en forma escrita, solicitando con cinco (5) días de antelación.</p>
-
-  <p><strong>QUINTA:</strong> El comprador renuncia a partir de la firma del presente contrato a poner cualquier excepción que no sea la de pago debidamente documentado y al solo efecto de su cancelación del crédito.</p>
-
-  <p><strong>SEXTA:</strong> Autorizo suficientemente al vendedor a recabar todos mis datos por su cuenta a través de empresas especializadas de nuestro medio conforme a los datos proporcionados por mi persona en mi solicitud de crédito, para la concesión de la misma de conformidad a lo establecido en el Art. 5° de la Ley 1682/01. Así mismo les autorizo en forma irrestricta para que en caso de un atraso superior a los 90 días en el pago de este crédito o de cualquier otra deuda pendiente incluyan mi nombre personal o Razón Social que represento, como “Moroso” en las empresas con las que opera el vendedor. La presente cláusula se aplicará por lo establecido en las leyes N° 1682/01 y N° 1969/02.</p>
-
-  <p><strong>SÉPTIMA:</strong> Para todos los efectos legales, las partes se someten a la competencia y jurisdicción de los Juzgados y Tribunales de la ciudad de Coronel Oviedo. Suscribiendo el presente contrato en prueba de conformidad y aceptación el vendedor, comprador y el(los) codeudor(es), previa lectura y ratificación del contenido del presente contrato en tres (3) ejemplares de un mismo tenor y a un solo efecto en la ciudad de Coronel Oviedo a la fecha de esta Factura.</p>
-
-  <div class="firmas">
+  <footer class='contrato-firmas'>
     <div>
-      <strong id='ContratoEmpresaFirma'></strong><br>VENDEDOR
+      <span class='linea-firma'></span>
+      <strong id='ContratoEmpresaFirma'></strong>
+      <small>PROVEEDOR</small>
     </div>
     <div>
-      <strong id='ContratoClienteFirma' >GUSTAVO DANIEL ACOSTA DELGADO</strong><br><b id='ContratoCiFirma' > C.I. Nº: 5524793 - COMPRADOR</b> 
+      <span class='linea-firma'></span>
+      <strong id='ContratoClienteFirma'></strong>
+      <small id='ContratoCiFirma'></small>
+      <small>CONSUMIDOR</small>
     </div>
-		<div>
-      .............................................<br>CODEUDOR<br>C.I. Nº:
-		</div>
-  </div>
-
+  </footer>
+</article>
 </div>
 
 

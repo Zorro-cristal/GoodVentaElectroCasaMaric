@@ -1725,7 +1725,7 @@ function actualizarDatosEmpresaContrato(){
 	asignarHtmlEmpresaPorId("ContratoEmpresaDireccion", obtenerDireccionEmpresaImpresionHtml());
 	asignarHtmlEmpresaPorId("ContratoEmpresaTelefono", obtenerTelefonoEmpresaImpresionHtml());
 	asignarHtmlEmpresaPorId("ContratoEmpresaCiudad", obtenerCiudadEmpresaImpresionHtml());
-	asignarHtmlEmpresaPorId("ContratoEmpresaNombreTexto", "&quot;"+obtenerNombreEmpresaImpresionHtml()+"&quot;");
+	asignarHtmlEmpresaPorId("ContratoEmpresaNombreTexto", obtenerNombreEmpresaImpresionHtml());
 	asignarHtmlEmpresaPorId("ContratoEmpresaDomicilioTexto", obtenerDomicilioEmpresaContratoHtml());
 	asignarHtmlEmpresaPorId("ContratoEmpresaFirma", obtenerNombreEmpresaImpresionHtml());
 }
@@ -5984,32 +5984,25 @@ ReImprimirDivTickeFacturaPago(fechaVenta,cajera,CuotasNro,TotalPagado,DiasAtrasa
     detalle: ' ', 
   };
   
- function rellenarCampo(id, texto ) { 
-  document.getElementById(id).innerHTML = texto  ;
+function rellenarCampo(id, texto) {
+	var campo = document.getElementById(id);
+	if(campo){
+		campo.textContent = texto == null ? "" : String(texto);
+	}
 }
 
 function imprimirContrato(){
-	  // Insertar los datos en los elementos del recibo
-actualizarDatosEmpresaContrato();
-rellenarCampo('ContratoFechaEmision', datosContrato.fecha);
-rellenarCampo('ContratoCondicion', datosContrato.condicion);
-rellenarCampo('ContratoRuc', datosContrato.ruc);
-rellenarCampo('ContratoTelefono', datosContrato.telefono);
-rellenarCampo('ContratoNombre', datosContrato.cliente);
-rellenarCampo('ContratoCod_venta', datosContrato.cod_venta);
-rellenarCampo('ContratototalVenta', datosContrato.totalVenta+" Gs.");
-rellenarCampo('ContratoEntrega', datosContrato.entrega+" Gs.");
-rellenarCampo('ContratoSaldo', datosContrato.saldo+" Gs.");
-rellenarCampo('ContratoCantidadCuotas', datosContrato.plazo);
-rellenarCampo('ContratoCuotaMensual', datosContrato.mensual+" Gs.");
-rellenarCampo('ContratoDetalleVenta', datosContrato.detalle);
- 
-rellenarCampo('ContratoClienteFirma', datosContrato.cliente); 
-rellenarCampo('ContratoCiFirma', "C.I. Nº:"+datosContrato.ruc+" - COMPRADOR"); 
- 
- var documento= document.getElementById("DivContrato").innerHTML;
+	actualizarDatosEmpresaContrato();
+	var documentoClienteContrato = normalizarDatoEmpresaImpresion(datosContrato.ruc);
+	rellenarCampo('ContratoEmpresaRuc', obtenerRucEmpresaImpresion());
+	rellenarCampo('ContratoFechaEmision', datosContrato.fecha);
+	rellenarCampo('ContratoNumeroFactura', datosContrato.cod_venta);
+	rellenarCampo('ContratoClienteFirma', datosContrato.cliente);
+	rellenarCampo('ContratoCiFirma', documentoClienteContrato == "" ? "" : "C.I. Nº: "+documentoClienteContrato);
+
+	var documento= document.getElementById("DivContrato").innerHTML;
      localStorage.setItem("reporte", documento);
-	   localStorage.setItem("tipo", "reporte");
+	   localStorage.setItem("tipo", "contrato");
 	
 	  var URL= "/GoodVentaElectroCasaMaric/system/contrato.html"
         window.open(URL, 'Imprimir', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,left = 0');

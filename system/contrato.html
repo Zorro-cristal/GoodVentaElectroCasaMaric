@@ -7,8 +7,8 @@
 
   <meta name="msapplicaction-navbutton-color" content="#000" />
    <meta  name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimun-scalable=1,maximun-scalable=1" />
-    <title>IMPRIMIR</title>
-	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/contrato.css?x=0000" />
+    <title>Contrato de compra venta</title>
+	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/contrato.css?x=20261014contrato1" />
 
 
 	<script>
@@ -18,7 +18,7 @@
 			var pagina=localStorage.getItem("reporte");
 			var tipo=localStorage.getItem("tipo");
 			document.getElementById("divimpr").innerHTML=pagina
-			if(tipo=="factura" || tipo=='ticket'){
+			if(tipo=="factura" || tipo=='ticket' || tipo=='contrato'){
 			
 			  window.print();
           
