@@ -4561,7 +4561,8 @@ $nroCancelado = utf8_encode($valor['nroCancelado']);
 
 $datos=calcularintereses2($idcredito,0,0,"2","2","1","no");
 $descuento=$datos[0];
-$total_interes=$datos[1];
+$total_interes=$datos[1]+$datos[16];
+$totalInteres+=$total_interes;
 $total=$datos[2];
 $totalPago=$datos[3];
 $deudaActua=$datos[4];
@@ -4583,9 +4584,9 @@ if($fechapagado!=""){
 }
 
 
-$total_interes = ceil($total_interes/1000)*1000;
-$total = ceil($total/1000)*1000;
-$deudaActua = ceil($deudaActua/1000)*1000;
+
+
+
 
 
 $styleName=CargarStyleTable($styleName);
@@ -4632,7 +4633,7 @@ $pagina.="
 
 }
 }
-$deuda=$total_venta-($totalPagado+$entrega);
+// $deuda ya suma los saldos reales de cada cuota.
  mysqli_close($mysqli);    
 $informacion =array("1" => "exito","2" => ($devolverArray ? $filas : $pagina),"3" =>number_format($totalPagado,'0',',','.') ,"4" =>number_format($deuda,'0',',','.'),"5" =>number_format($interes,'2',',','.'),"6" =>$dias, "7" =>number_format($totalInteres,'0',',','.'), "9" => number_format($entrega,'0',',','.'),"8" => $diasatrazado);
 echo json_encode($informacion);	
@@ -6344,7 +6345,7 @@ $nroCancelado = utf8_encode($valor['nroCancelado']);
 
 $datos=calcularintereses2($idcredito,0,0,"2","2","1","no");
 $descuento=$datos[0];
-$total_interes=$datos[1];
+$total_interes=$datos[1]+$datos[16];
 $total=$datos[2];
 $totalPago=$datos[3];
 $deudaActua=$datos[4];
@@ -6372,9 +6373,9 @@ if($controlVentas!=$cod_venta){
 }
 $mostrarTituloFactura=$tituloPagos!=="";
 
-$total_interes = ceil($total_interes / 1000) * 1000;
-$total = ceil($total / 1000) * 1000;
-$deudaActua = ceil($deudaActua / 1000) * 1000;
+
+
+
 
 
 $fechapago = date("d-m-Y", strtotime($fechapago));
@@ -8566,7 +8567,7 @@ $TelefonoGaranteImprimir = $telefonoFarante;
 
 $datos=calcularintereses2($idcredito,0,0,"2","2","1","no");
 $descuento=$datos[0];
-$total_interes=$datos[1];
+$total_interes=$datos[1]+$datos[16];
 $total=$datos[2];
 $totalPago=$datos[3];
 $deudaActua=$datos[4];
@@ -8588,10 +8589,10 @@ if($fechapagado!=""){
 }
 
 
-$total_interes = ceil($total_interes/1000)*1000;
-$total = ceil($total/1000)*1000;
-$deudaActua = ceil($deudaActua/1000)*1000;
-$totalinteres = ceil($totalinteres/1000)*1000;
+
+
+
+
 
 $totalInteres = $datos[10];
 // $totalInteres += $totalinteres;

@@ -10,6 +10,7 @@ include('quitarseparadormiles.php');
 include("buscar_nivel.php");
 include("BuscarNroFactura.php");
 include("calcularintereses.php");
+require_once __DIR__.'/estado_cuenta_venta.php';
 include("subir_foto_base64.php");
 // include("calcularInteresDirecto.php");
 include("classTable.php");
@@ -1376,7 +1377,7 @@ function VentasCompletadas($nroventa, $fecha1, $fecha2, $cliente, $nrodocumento,
 	}
 	$condicionfecha = "";
 	if ($fecha1 != "" && $fecha2 != "") {
-		$condicionfecha = "and pg.Fecha between '" . $fecha1 . "' and  '" . $fecha2 . "'";
+		$condicionfecha = "and IF(vt.TipoVenta='CONTADO',vt.fecha_venta,pg.Fecha) between '" . $fecha1 . "' and  '" . $fecha2 . "'";
 	}
 
 $condicioncallcenter = "";
@@ -1392,8 +1393,8 @@ $condicioncallcenter = "";
 		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 			IFNULL((SELECT estado from detalle_callcenterventas cv where cv.cod_clienteFK = cod_clienteFK and cv.cod_ventaFK = cod_venta ORDER BY iddetalle_callcenterventas DESC LIMIT 1),'SIN ESTADO') as estado_callcenter,
-			IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado
-		from venta vt inner join pago pg on cod_venta_fk=vt.cod_venta  where (total_venta - (IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) + IFNULL((select sum(cr.descuento) from credito cr  where vt.cod_venta=cr.cod_venta ),0) ) )=0 and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
+			".sqlCapitalCobradoVenta()." as totalpagado
+		from venta vt left join pago pg on pg.cod_venta_fk=vt.cod_venta  where ".sqlVentaPagada()." and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condiciontipoventa.$condicioncallcenter. " 
 		GROUP BY vt.cod_venta
 		ORDER BY vt.fecha_venta DESC
@@ -1530,7 +1531,7 @@ $nroRegistroControlDA++;
 	
 	
 	$sql = "Select fecha_venta 
-		from venta vt inner join pago pg on cod_venta_fk=vt.cod_venta  where (total_venta - (IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) + IFNULL((select sum(cr.descuento) from credito cr  where vt.cod_venta=cr.cod_venta ),0) ) )=0 and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
+		from venta vt left join pago pg on pg.cod_venta_fk=vt.cod_venta  where ".sqlVentaPagada()." and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condicioncallcenter. $condiciontipoventa . " 
 		GROUP BY vt.cod_venta";
 		
@@ -1591,7 +1592,7 @@ function masVentasCompletadas($totalVenta, $nroventa, $fecha1, $fecha2, $cliente
 	}
 	$condicionfecha = "";
 	if ($fecha1 != "" && $fecha2 != "") {
-		$condicionfecha = "and pg.Fecha between '" . $fecha1 . "' and  '" . $fecha2 . "'";
+		$condicionfecha = "and IF(vt.TipoVenta='CONTADO',vt.fecha_venta,pg.Fecha) between '" . $fecha1 . "' and  '" . $fecha2 . "'";
 	}
 
 	$condicioncallcenter = "";
@@ -1606,8 +1607,8 @@ function masVentasCompletadas($totalVenta, $nroventa, $fecha1, $fecha2, $cliente
 		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 			IFNULL((SELECT estado from detalle_callcenterventas cv where cv.cod_clienteFK = cod_clienteFK and cv.cod_ventaFK = cod_venta ORDER BY iddetalle_callcenterventas DESC LIMIT 1),'SIN ESTADO') as estado_callcenter,
-			IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado
-		from venta vt inner join pago pg on cod_venta_fk=vt.cod_venta  where (total_venta - (IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) + IFNULL((select sum(cr.descuento) from credito cr  where vt.cod_venta=cr.cod_venta ),0) ) )=0 and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
+			".sqlCapitalCobradoVenta()." as totalpagado
+		from venta vt left join pago pg on pg.cod_venta_fk=vt.cod_venta  where ".sqlVentaPagada()." and  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condiciontipoventa . $condicioncallcenter ." 
 		GROUP BY vt.cod_venta
 		ORDER BY vt.fecha_venta DESC
@@ -2751,10 +2752,10 @@ function solicitudAnulacionVenta($buscar,$local,$formato=''){
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) as pagado,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cliente on cod_cliente=cod_ClienteFK
 			inner join persona on cod_cliente=cod_persona  
-			where IFNULL((Select count(fecha) from cancelaciones c where c.cod_venta=vt.cod_venta limit 1),0)=0 and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))<total_venta and IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0)!='0' and 
+			where IFNULL((Select count(fecha) from cancelaciones c where c.cod_venta=vt.cod_venta limit 1),0)=0 and ".sqlVentaPendiente()." and IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0)!='0' and
 			(Select count(*) from credito c where c.cod_venta=vt.cod_venta )>0 ".$condicionbuscar.$condicionlocal." order by fecha_venta desc limit 100 ";
 		 
    
@@ -2815,7 +2816,7 @@ if ( ! $stmt->execute()) {
 			  $totalventadetalle=utf8_encode($valor['totalventadetalle']);
 			  $accesocredito=utf8_encode($valor['accesocredito']);
 			  $pagado=utf8_encode($valor['pagado']);
-			  $totalpagado=$totalpagado+$pago;
+			  $totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 				if($puntoexpedicion!=""){
 					$nrof=$puntoexpedicion."-".$num_factura;
 				}else{
@@ -3726,11 +3727,11 @@ function historialventa($garante, $fecha1, $fecha2, $fechafiltro, $nroventa, $do
 	$condiciontipoventa = " ";
 	//Pendientes
 	if ($estadocuenta == "1") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))<total_venta";
+		$condicionCuenta = " and ".sqlVentaPendiente();
 	}
 	//Pagados
 	if ($estadocuenta == "2") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))>=total_venta";
+		$condicionCuenta = " and ".sqlVentaPagada();
 	}
 	
 	//Cancelados
@@ -3880,24 +3881,24 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0] + $totalDescuentodetalle;
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$SubTotalDeuda = $datos[11];
 			if ($SubTotalDeuda == 0) {
 				$SubTotalDeuda = $total_venta;
 			}
 			$subtotalventa = $totalventadetalle + $totaldescuento;
 			$totalinterespadado = $datos[12];
-			$TotalPagoSininteres = $datos[13];
+			$TotalPagoSininteres = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			$styleCancelado = "";
-			$totalpagado = $totalpagado + $pago;
-			$deudapendiente = $total_venta - $totalpagado;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
+			$deudapendiente = deudaPendienteVenta($TipoVenta,$datos);
 			if ($nroCancelado == 0) {
 				$TotalVentas = $total_venta + $TotalVentas;
 				$TotalPagos = $TotalPagos + $totalpagado;
@@ -4158,10 +4159,10 @@ function mashistorialventa($garante, $fecha1, $fecha2, $fechafiltro, $nroventa, 
 	$condicionCuenta = " ";
 	$condiciontipoventa = " ";
 	if ($estadocuenta == "1") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))<total_venta";
+		$condicionCuenta = " and ".sqlVentaPendiente();
 	}
 	if ($estadocuenta == "2") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))>=total_venta";
+		$condicionCuenta = " and ".sqlVentaPagada();
 	}
 	if ($estadocuenta == "3") {
 		$condicionCuenta = " and IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)>0";
@@ -4314,24 +4315,24 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0] + $totalDescuentodetalle;
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$SubTotalDeuda = $datos[11];
 			if ($SubTotalDeuda == 0) {
 				$SubTotalDeuda = $total_venta;
 			}
 			$subtotalventa = $totalventadetalle + $totaldescuento;
 			$totalinterespadado = $datos[12];
-			$TotalPagoSininteres = $datos[13];
+			$TotalPagoSininteres = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			$styleCancelado = "";
-			$totalpagado = $totalpagado + $pago;
-			$deudapendiente = $total_venta - $totalpagado;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
+			$deudapendiente = deudaPendienteVenta($TipoVenta,$datos);
 			if ($nroCancelado == 0) {
 				$TotalVentas = $total_venta + $TotalVentas;
 				$TotalPagos = $TotalPagos + $totalpagado;
@@ -4573,7 +4574,7 @@ function buscarexpedientescancelados($cliente, $buscar)
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where vt.cod_clienteFK ='" . $cliente . "' 
         and IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)>0 		";
 
@@ -4633,7 +4634,7 @@ function buscarexpedientescancelados($cliente, $buscar)
 			$totalDescuentodetalle = utf8_encode($valor['totalDescuentodetalle']);
 
 			$totalRegistro = $totalRegistro + 1;
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 
 			$totaldescuentos = $totalDescuentodetalle + $totaldescuento;
 			$subtotalventa = $totalventadetalle - $totaldescuentos;
@@ -4728,7 +4729,7 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cancelaciones cl on cl.cod_venta=vt.cod_venta 
 		where vt.fecha_venta!='0' " . $condicioncliente . $condicionnroventa . $condicioncodlocal . $condicionfiltrofecha . $condicionfecha . " limit 50 ";
 
@@ -4791,7 +4792,7 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 				$productos = "SIN PRODUCTOS";
 			}
 			$totalRegistro = $totalRegistro + 1;
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 
 
 			$deuda = $total_venta - $totalpagado;
@@ -4862,7 +4863,7 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cancelaciones cl on cl.cod_venta=vt.cod_venta 
 		where vt.fecha_venta!='0' " . $condicioncliente . $condicionnroventa . $condicioncodlocal . $condicionfiltrofecha . $condicionfecha;
 	$stmt = $mysqli->prepare($sql);
@@ -4926,7 +4927,7 @@ function mashistorialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cancelaciones cl on cl.cod_venta=vt.cod_venta 
 		where vt.fecha_venta!='0' " . $condicioncliente . $condicionnroventa . $condicioncodlocal . $condicionfiltrofecha . $condicionfecha . " limit " . $registrocargado . ", 50 ";
 
@@ -4988,7 +4989,7 @@ function mashistorialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $
 				$productos = "SIN PRODUCTOS";
 			}
 			$totalRegistro = $totalRegistro + 1;
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 
 
 			$deuda = $total_venta - $totalpagado;
@@ -5302,7 +5303,7 @@ function buscarexpedientes($buscar)
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where (vt.cod_clienteFK ='" . $buscar . "' or vt.idGaranteFk ='" . $buscar . "'  ) and
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 ";
 
@@ -5377,14 +5378,14 @@ function buscarexpedientes($buscar)
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0];
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$totaldescuentos = $totalDescuentodetalle + $totaldescuento;
 			$subTotal = $totalventadetalle - $totaldescuentos;
 			$totalVenta = $subTotal + $totalVenta;
@@ -5479,9 +5480,9 @@ function buscarexpedientesventasfinalizadas($buscar)
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where (vt.cod_clienteFK ='" . $buscar . "' or vt.idGaranteFk ='" . $buscar . "'  ) and
-		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))>=total_venta";
+		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and ".sqlVentaPagada();
 
 
 
@@ -5554,14 +5555,14 @@ function buscarexpedientesventasfinalizadas($buscar)
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0];
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$totaldescuentos = $totalDescuentodetalle + $totaldescuento;
 			$subTotal = $totalventadetalle - $totaldescuentos;
 			$totalVenta = $subTotal + $totalVenta;
@@ -5656,9 +5657,9 @@ function buscarexpedientesventaspendientes($buscar)
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where (vt.cod_clienteFK ='" . $buscar . "' or vt.idGaranteFk ='" . $buscar . "'  ) and
-		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))<total_venta";
+		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 and ".sqlVentaPendiente();
 
 
 
@@ -5732,14 +5733,14 @@ function buscarexpedientesventaspendientes($buscar)
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0];
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$totaldescuentos = $totalDescuentodetalle + $totaldescuento;
 			$subTotal = $totalventadetalle - $totaldescuentos;
 			$totalVenta = $subTotal + $totalVenta;
@@ -5898,7 +5899,7 @@ function ganaciaventa($nroventa, $fecha1, $fecha2, $cliente, $nrodocumento, $fec
 		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado,
+		".sqlCapitalCobradoVenta()." as totalpagado,
 		IFNULL((select sum((pg2.comision*pg2.monto)/100) from pago pg2  where vt.cod_venta=pg2.cod_venta_fk),0) as comisioncobrador
 		from venta vt  where  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condiciontipoventa . "
@@ -5993,7 +5994,7 @@ function ganaciaventa($nroventa, $fecha1, $fecha2, $cliente, $nrodocumento, $fec
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 				(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado,
+		".sqlCapitalCobradoVenta()." as totalpagado,
 		IFNULL((select sum((pg2.comision*pg2.monto)/100) from pago pg2  where vt.cod_venta=pg2.cod_venta_fk),0) as comisioncobrador
 		from venta vt  where  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condiciontipoventa;
@@ -6058,7 +6059,7 @@ function masganaciaventa($costoTotal, $VentaTotal, $nroventa, $fecha1, $fecha2, 
 		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado,
+		".sqlCapitalCobradoVenta()." as totalpagado,
 		IFNULL((select sum((pg2.comision*pg2.monto)/100) from pago pg2  where vt.cod_venta=pg2.cod_venta_fk),0) as comisioncobrador
 		from venta vt  where  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 
 		" . $condicioncliente . $condicionnroventa . $condicionrodocumento . $condicionfechafiltro . $condicionfecha . $condicionCodLocal . $condiciontipoventa . "
@@ -6721,7 +6722,7 @@ function historialvistaventa($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " and (SELECT count(idcancelaciones) FROM cancelaciones c WHERE c.cod_venta = vt.cod_venta) = 0 order by fecha_venta desc limit 100 ";
 
 
@@ -6782,7 +6783,7 @@ function historialvistaventa($buscar, $filtro)
 			$tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
 			$totalventadetalle = utf8_encode($valor['totalventadetalle']);
 			$accesocredito = utf8_encode($valor['accesocredito']);
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 			if ($puntoexpedicion != "") {
 				$nrof = $puntoexpedicion . "-" . $num_factura;
 			} else {
@@ -6886,7 +6887,7 @@ function historialvistaventadocumentos($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " order by fecha_venta desc limit 100 ";
 
 
@@ -6947,7 +6948,7 @@ function historialvistaventadocumentos($buscar, $filtro)
 			$tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
 			$totalventadetalle = utf8_encode($valor['totalventadetalle']);
 			$accesocredito = utf8_encode($valor['accesocredito']);
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 			if ($puntoexpedicion != "") {
 				$nrof = $puntoexpedicion . "-" . $num_factura;
 			} else {
@@ -7036,7 +7037,7 @@ function historialvistaventadocumentoscliente($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " order by fecha_venta desc limit 100 ";
 
 
@@ -7097,7 +7098,7 @@ function historialvistaventadocumentoscliente($buscar, $filtro)
 			$tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
 			$totalventadetalle = utf8_encode($valor['totalventadetalle']);
 			$accesocredito = utf8_encode($valor['accesocredito']);
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 			if ($puntoexpedicion != "") {
 				$nrof = $puntoexpedicion . "-" . $num_factura;
 			} else {
@@ -7211,7 +7212,7 @@ function buscardatosVenta($buscar)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where 
 		vt.cod_venta='$buscar' limit 1 ";
 
@@ -7268,7 +7269,7 @@ function buscardatosVenta($buscar)
 			$nrodocumento = utf8_encode($valor['nrodocumento']);
 			$tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
 			$puntoexpedicion = utf8_encode($valor['puntoexpedicion']);
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 
 			$pagina .= "
 <table style='display:none'>
@@ -7324,8 +7325,8 @@ function buscarCuentasCanceladas($buscar, $formato = "")
 	$devolverArray = strtolower($formato) === "json";
 
 	$sql = "Select vt.cod_clienteFK,vt.cod_venta,vt.puntoexpedicion,vt.num_factura,vt.fecha_venta,datediff(cr.fechapago,(select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1)) as diff
-		from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta where vt.cod_clienteFK ='" . $buscar . "'  and
-		(IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))>=total_venta
+		from venta vt left join credito cr on vt.cod_venta=cr.cod_venta where vt.cod_clienteFK ='" . $buscar . "'  and
+		".sqlVentaPagada()."
         and IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0		
 		order by (diff*-1) desc limit 5";
 
@@ -7409,7 +7410,7 @@ function buscarCuentasPendientes($buscar, $formato = "")
 	$fechahoy = date('Y-m-d');
 	$sql = "Select vt.cod_clienteFK,vt.cod_venta,vt.puntoexpedicion,vt.num_factura,vt.fecha_venta,datediff(cr.fechapago,'" . $fechahoy . "') as diff,cr.fechapago
 		from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta where vt.cod_clienteFK ='" . $buscar . "'  and
-		IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0)< ((cr.Monto+totalinteres)-cr.descuento)
+		vt.TipoVenta<>'CONTADO' AND (".sqlCuotaCapitalPendiente('cr').">0 OR IFNULL(cr.deudaInteres,0)>0)
         and IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0		
 		order by (diff*-1) desc limit 5";
 
@@ -7565,7 +7566,7 @@ function historialFiltroMorosos($buscar, $filtro, $zona, $Local)
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado ,
+		".sqlCapitalCobradoVenta()." as totalpagado ,
 		DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
 		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) as dias
@@ -8468,7 +8469,7 @@ function vistaventainformconf($cod_clienteFK, $cod_venta, $formato="")
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where cod_clienteFK = '$cod_clienteFK' or idGaranteFk = '$cod_clienteFK' " . $condicioncodventa . "  order by fecha_venta desc limit 100 ";
 
 	$stmt = $mysqli->prepare($sql);
@@ -8525,7 +8526,7 @@ function vistaventainformconf($cod_clienteFK, $cod_venta, $formato="")
 			$tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
 			$totalventadetalle = utf8_encode($valor['totalventadetalle']);
 			$accesocredito = utf8_encode($valor['accesocredito']);
-			$totalpagado = $totalpagado + $pago;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
 			if ($puntoexpedicion != "") {
 				$nrof = $puntoexpedicion . "-" . $num_factura;
 			} else {
@@ -8759,24 +8760,24 @@ exit; */
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0] + $totalDescuentodetalle;
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			$TotalDiasAtrasado = $datos[5];
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$SubTotalDeuda = $datos[11];
 			if ($SubTotalDeuda == 0) {
 				$SubTotalDeuda = $total_venta;
 			}
 			$subtotalventa = $totalventadetalle - $totaldescuento;
 			$totalinterespadado = $datos[12];
-			$TotalPagoSininteres = $datos[13];
+			$TotalPagoSininteres = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			$styleCancelado = "";
-			$totalpagado = $totalpagado + $pago;
-			$deudapendiente = $total_venta - $totalpagado;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
+			$deudapendiente = deudaPendienteVenta($TipoVenta,$datos);
 			if ($nroCancelado == 0) {
 				$TotalVentas = $total_venta + $TotalVentas;
 				$TotalPagos = $TotalPagos + $totalpagado;
@@ -9028,24 +9029,24 @@ exit; */
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0] + $totalDescuentodetalle;
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			$TotalDiasAtrasado = $datos[5];
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$SubTotalDeuda = $datos[11];
 			if ($SubTotalDeuda == 0) {
 				$SubTotalDeuda = $total_venta;
 			}
 			$subtotalventa = $totalventadetalle - $totaldescuento;
 			$totalinterespadado = $datos[12];
-			$TotalPagoSininteres = $datos[13];
+			$TotalPagoSininteres = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			$styleCancelado = "";
-			$totalpagado = $totalpagado + $pago;
-			$deudapendiente = $total_venta - $totalpagado;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
+			$deudapendiente = deudaPendienteVenta($TipoVenta,$datos);
 			if ($nroCancelado == 0) {
 				$TotalVentas = $total_venta + $TotalVentas;
 				$TotalPagos = $TotalPagos + $totalpagado;
@@ -10460,11 +10461,11 @@ function buscar_ventas_clientes_trabajados($fechafiltro, $nroventa, $cliente, $t
 	
 	//Pendientes
 	if ($estadocuenta == "1") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))<total_venta";
+		$condicionCuenta = " and ".sqlVentaPendiente();
 	}
 	//Pagados
 	if ($estadocuenta == "2") {
-		$condicionCuenta = " and (IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0))>=total_venta";
+		$condicionCuenta = " and ".sqlVentaPagada();
 	}
 	
 	//Cancelados
@@ -10595,24 +10596,24 @@ function buscar_ventas_clientes_trabajados($fechafiltro, $nroventa, $cliente, $t
 
 			$datos = calcularintereses2($cod_venta, 0, 0, "2", "2", "2", "no");
 			$totaldescuento = $datos[0] + $totalDescuentodetalle;
-			$totalintereses = $datos[1];
+			$totalintereses = $datos[1]+$datos[16];
 			//$datos[2]=$TotalEnDeuda;
-			$totalpagado = $datos[13];
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			//$datos[4]=$TotalAPagar;
 			// $datos[5]=$TotalDiasAtrasado;
 			// $datos[6]=$nrodecuotasatrazado;
 			// $datos[7]=$TotalApagarSinInteres;
-			$deuda = $datos[8];
+			$deuda = deudaPendienteVenta($TipoVenta,$datos);
 			$SubTotalDeuda = $datos[11];
 			if ($SubTotalDeuda == 0) {
 				$SubTotalDeuda = $total_venta;
 			}
 			$subtotalventa = $totalventadetalle + $totaldescuento;
 			$totalinterespadado = $datos[12];
-			$TotalPagoSininteres = $datos[13];
+			$TotalPagoSininteres = totalPagadoVenta($TipoVenta,$total_venta,$datos[13]);
 			$styleCancelado = "";
-			$totalpagado = $totalpagado + $pago;
-			$deudapendiente = $total_venta - $totalpagado;
+			$totalpagado = totalPagadoVenta($TipoVenta,$total_venta,$totalpagado,$pago);
+			$deudapendiente = deudaPendienteVenta($TipoVenta,$datos);
 			if ($nroCancelado == 0) {
 				$TotalVentas = $total_venta + $TotalVentas;
 				$TotalPagos = $TotalPagos + $totalpagado;
@@ -10969,7 +10970,7 @@ function ClienteParaInforconf($buscar,$filtro,$zona,$vista,$fecha,$formato=""){
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as ruc,
 		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado , 
+		".sqlCapitalCobradoVenta()." as totalpagado ,
   IFNULL( ((select sum(cr.Monto) from credito cr where cr.cod_venta=vt.cod_venta) +(select sum(totalinteres) from credito c where c.cod_venta = vt.cod_venta and
  ifnull((select sum(Monto) from pago p where p.cod_creditoFK = c.idcredito and Tipo='Pago Cuota'),0)<c.Monto) )-((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta) + (select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota')),0) as deu		
 		from  venta vt inner join cliente cl on cod_cliente=cod_ClienteFK
@@ -11196,7 +11197,7 @@ foreach ($arraycod_Ventas as $cod_venta) {
 
 $sql= "Select vt.total_venta,
 		IFNULL((Select totalinteres from totalesdeudaventa where cod_venta=cod_ventaFk),0) as totalinteres,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where vt.cod_venta ='$cod_venta' and
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0 ";
   
@@ -12140,7 +12141,7 @@ function obtener_total_pagado_dia($anho,$mes,$dia,$local,$tipo)
  
 	$sql = "Select
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado
+		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt  where  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0  ".$condicionFecha.$condicionlocal.$condiciontipoventa;
  
  
@@ -12248,7 +12249,7 @@ function obtener_total_evaluacion_dia($anho,$mes,$dia,$local,$tipo)
 		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		IFNULL((select sum(pg1.Monto) from pago pg1  where vt.cod_venta=pg1.cod_venta_fk and tipo='Pago Cuota'),0) as totalpagado,
+		".sqlCapitalCobradoVenta()." as totalpagado,
 		IFNULL((select sum((pg2.comision*pg2.monto)/100) from pago pg2  where vt.cod_venta=pg2.cod_venta_fk),0) as comisioncobrador
 		from venta vt  where  IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0  ".$condicionFecha.$condicionlocal.$condiciontipoventa;
  

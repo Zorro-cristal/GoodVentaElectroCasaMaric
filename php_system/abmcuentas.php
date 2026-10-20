@@ -1,5 +1,6 @@
 <?php
 require("conexion.php");
+require_once __DIR__.'/estado_cuenta_venta.php';
 include("verificar_navegador.php");
 $operacion = $_POST['funt'];/*Función para capturar datos enviados desde la función de AJAX desde el javascript*/
 $operacion = utf8_decode($operacion);/*Función para cambiar letras que esten codificadas por la cadificación de caracteres */
@@ -157,10 +158,10 @@ if($buscarpor=="cliente"){
 	
 	$sql= "select cl.lat,cl.lot,pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,cl.ci_cliente,vt.cod_venta,(vt.total_venta-vt.descuento) as total,pago,vt.descuento,vt.total_venta,vt.descuento,
 (select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
-(select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and IFNULL((select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta),0)< cr1.Monto order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
+(select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and (".sqlCuotaCapitalPendiente('cr1').">0 OR IFNULL(cr1.deudaInteres,0)>0) order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona
  inner join venta vt on vt.cod_clienteFK=cl.cod_cliente
- where concat(pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente) like ? and (vt.total_venta-vt.descuento)>IFNULL((select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta),0)  and vt.cod_cobradorFK='$cod_cobradorFK'
+ where concat(pr.nombre_persona,' ',pr.apellido_persona,' ',cl.ci_cliente) like ? and ".sqlVentaPendiente()." and vt.cod_cobradorFK='$cod_cobradorFK'
  ".$oderbycoordenadas;/*Sentencia para buscar registros*/
 
  $stmt = $mysqli->prepare($sql);/*Se prepara la sentencia sql con el objeto prepare*/
@@ -170,10 +171,10 @@ $stmt->bind_param($s,$buscar);/*Se cargar los paramentros a la sentencia prepara
 }else{
 		$sql= "select cl.lat,cl.lot,pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,cl.ci_cliente,vt.cod_venta,(vt.total_venta-vt.descuento) as total,pago,vt.descuento,vt.total_venta,vt.descuento,
 (select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
-(select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and IFNULL((select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta),0) < cr1.Monto order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
+(select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and (".sqlCuotaCapitalPendiente('cr1').">0 OR IFNULL(cr1.deudaInteres,0)>0) order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona
  inner join venta vt on vt.cod_clienteFK=cl.cod_cliente
- where (select count(fechapago) from  credito cr where vt.cod_venta=cr.cod_venta and cr.fechapago<='$buscar')>0 and vt.cod_cobradorFK='$cod_cobradorFK'
+ where (select count(fechapago) from  credito cr where vt.cod_venta=cr.cod_venta and cr.fechapago<='$buscar')>0 and ".sqlVentaPendiente()." and vt.cod_cobradorFK='$cod_cobradorFK'
  ".$oderbycoordenadas;/*Sentencia para buscar registros*/
 
 	$stmt = $mysqli->prepare($sql);/*Se prepara la sentencia sql con el objeto prepare*/

@@ -4322,6 +4322,7 @@ function buscarhistorialventa() {
 }
 controldebusquedadHistorialVenta=true
 document.getElementById("tbProcessHistorialVenta").style.display="none"
+	limpiarSeleccionHistorialVenta()
 	if(listado){
 		listado.establecerRegistros([], false)
 	}
@@ -4718,7 +4719,7 @@ ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 	});
 }
 function editarventaselecc() {
-	if (document.getElementById("inptRegistroSeleccHistorialVenta").value == "") {
+	if (!elementoventa || !codVentaVentanas) {
 		ver_vetana_informativa("FALTO SELECCIONAR UN REGISTRO")
 		return
 	}	
@@ -4731,6 +4732,15 @@ function editarventaselecc() {
 	}
 var elementoventa = ""
 var controltipoventa="";
+function limpiarSeleccionHistorialVenta() {
+	elementoventa = ""
+	codVentaVentanas = ""
+	codVentaClienteVentanas = ""
+	document.getElementById("inptRegistroSeleccHistorialVenta").value = ""
+	document.getElementById("btnOpcionesHistorialVenta").style.backgroundColor = "#ccc"
+	document.getElementById("btnAuditoriaVentas").style.backgroundColor = "#ccc"
+	document.getElementById("btnUbicacionClienteVenta").style.backgroundColor = "#ccc"
+}
 function obtenerdatoshistorialventa(datostr) {
 
 
@@ -4808,7 +4818,9 @@ function obtenerelementohistroialventa(datos) {
 	codVentaVentanas = $(datos).children('td[id="td_datos_8"]').text();
 	codVentaClienteVentanas = $(datos).children('td[id="td_datos_10"]').text();
 	cod_clienteBuscarUbicacion = $(datos).children('td[id="td_datos_10"]').text();
-	document.getElementById('inptRegistroSeleccHistorialVenta').value = $(datos).children('td[id="td_datos_13"]').text();
+	// Una venta migrada puede tener codigo valido sin numero de factura.
+	var numeroVenta = $(datos).children('td[id="td_datos_13"]').text();
+	document.getElementById('inptRegistroSeleccHistorialVenta').value = numeroVenta || codVentaVentanas;
 		document.getElementById('inptUsuarioInsertadoPor').value=$(datos).children('td[id="td_datos_100"]').text()
 	document.getElementById('inptFechaInsertadoPor').value=$(datos).children('td[id="td_datos_102"]').text()
 	document.getElementById('inptUsuarioEditadoPor').value=$(datos).children('td[id="td_datos_101"]').text()
@@ -4845,10 +4857,7 @@ function limpiarcamposhistorialventa(){
 	document.getElementById("inptTotalVentaHistorialVenta").value="";
 	document.getElementById("inptTotalPagosHistorialVenta").value="";
 	document.getElementById("inptTotalPendienteHistorialVenta").value="";
-	document.getElementById("inptRegistroSeleccHistorialVenta").value="";
-	document.getElementById("btnOpcionesHistorialVenta").style.backgroundColor="#ccc";
-	document.getElementById("btnAuditoriaVentas").style.backgroundColor="#ccc";
-	document.getElementById("btnUbicacionClienteVenta").style.backgroundColor="#ccc";
+	limpiarSeleccionHistorialVenta()
 	var listado = obtenerListadoCoreHistorialVentas()
 	if(listado){
 		listado.establecerRegistros([], false)
@@ -4864,7 +4873,7 @@ function limpiarcamposhistorialventa(){
 function vercerrarOpcionesHistorialVenta(d){
 		
 	if(d=="1"){
-		if(document.getElementById("inptRegistroSeleccHistorialVenta").value==""){
+		if(!elementoventa || !codVentaVentanas){
 			ver_vetana_informativa("FALTO SELECCIONAR UN REGISTRO")
 			return false
 		}
@@ -5367,7 +5376,7 @@ function minimizarexpedientecliente(){
 	copiarBotonEnContenedor(document.getElementById("divMenuExpedienteCliente1"));
 }
 function irAExtractodesdeVenta() {
-	if (document.getElementById("inptRegistroSeleccHistorialVenta").value == "") {
+	if (!elementoventa || !codVentaVentanas) {
 		ver_vetana_informativa("FALTO SELECCIONAR UN REGISTRO")
 		return
 	}

@@ -793,6 +793,10 @@ function verificarcamposInformEmpresa() {
 				var datos = $.parseJSON(responseText);
 				var respuesta = datos["1"];
 
+				if (respuesta == "POST_MAX_SIZE") {
+					ver_vetana_informativa("LAS IMAGENES SUPERAN EL LIMITE DE ENVIO. SELECCIONE LOGOS MAS LIVIANOS.");
+					return false;
+				}
 				if (respuesta == "IMG") {
 					ver_vetana_informativa("NO SE PUDO GUARDAR EL LOGO. VERIFIQUE LA IMAGEN.");
 					return false;

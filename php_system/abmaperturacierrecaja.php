@@ -219,8 +219,8 @@ if ( ! $stmt->execute()) {
 		  
 		      $idarqueocaja=$valor['idarqueocaja'];
 		  	  $caja_idcaja=utf8_encode($valor['caja_idcaja']);
-		  	  $montoapertura=utf8_encode($valor['montoapertura']);
-		  	  $montocierre=utf8_encode($valor['montocierre']);
+			$montoapertura=floatval($valor['montoapertura']);
+			$montocierre=floatval($valor['montocierre']);
 		  	  $fechaapertura=utf8_encode($valor['fechaapertura']);
 		  	  $fechacierre=utf8_encode($valor['fechacierre']);
 		  	  $estado=utf8_encode($valor['estado']);
@@ -274,7 +274,7 @@ if ( ! $stmt->execute()) {
 		  
 		  
 		      $idarqueocaja=$valor['idarqueocaja'];
-		  	  $montoapertura=utf8_encode($valor['montoapertura']);
+			$montoapertura=floatval($valor['montoapertura']);
 		  	  $totalRecaudado=ObtenerTotalCaja($idarqueocaja,$montoapertura);
 		  	 			  
 	  } 
@@ -364,8 +364,8 @@ while ($valor= mysqli_fetch_assoc($result))
 {  
 $idarqueocaja = utf8_encode($valor['idarqueocaja']); 
 $caja_idcaja = utf8_encode($valor['caja_idcaja']);          
-$montoapertura = utf8_encode($valor['montoapertura']);          
-$montocierre = utf8_encode($valor['montocierre']); 
+$montoapertura = floatval($valor['montoapertura']);
+$montocierre = floatval($valor['montocierre']);
 $fechaapertura = utf8_encode($valor['fechaapertura']); 
 $fechacierre = utf8_encode($valor['fechacierre']); 
 $estado = utf8_encode($valor['estado']); 
@@ -1328,7 +1328,7 @@ if ($valor>0)
 while ($valor= mysqli_fetch_assoc($result))
 {  
           
-$montoapertura = utf8_encode($valor['montoapertura']);          
+$montoapertura = floatval($valor['montoapertura']);
 
 	    	 
 

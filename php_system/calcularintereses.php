@@ -16,10 +16,10 @@ $condicion=" and cr.fechapago<='$fechahoy'";
 $condicionpago="";
 if($filtro2=="1"){
 	//condicion para saber si esta pagado
-$condicionpago=" and ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0";
+$condicionpago=" and ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0 and cr.deudaInteres<=0";
 }
 if($filtro2=="3"){
-$condicionpago=" and ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))>0";
+$condicionpago=" and (((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))>0 or cr.deudaInteres>0)";
 }
 $condicioncodigo="";
 if($filtro3=="1"){
@@ -84,7 +84,7 @@ $nroRegistro=$valor;
 $controlStyle="";
 $controlVentas="";
 $diff2=0;
-$DiasAtrazo="";
+$DiasAtrazo=0;
 $SumadeudaInteres=0;
 if ($valor>0)
 {
@@ -132,6 +132,7 @@ $interes =round($interes, 3);
 
 //CALCULAR EL MONTO CON DESCUENTO
 $MontoConDescuento=$Monto-$descuento;
+$capitalPendiente=max(0,$MontoConDescuento-$totalPagoCredito);
 /*CALCULAMOS EL MONTO CON DESCUENTO*/
 $MontoSobrante=$MontoConDescuento-$totalPago;
 if($MontoCuotas==0){
@@ -140,25 +141,24 @@ $MontoCuotas=$MontoConDescuento-$totalPago;
 /*VACIAMOS ALGUNAS VARIABLES*/
 $deudaActua=0;
 $total_interes=0;
+$diff2=0;
 $stylecolor=" ";
 //CONDICION PARA SABER SI EL CREDITO ES UNA VENTA CANCELADA
 if($nroCancelado==0){
 	//CONDICION PARA SABER SI YA SE PAGO TODO
-	if(($Monto+$totalPagoInteres)>($totalPago+$descuento)){
+	if($capitalPendiente>0 || $deudaInteres>0){
 			//ESTADO DEL PAGO
 	$Esado="Pendiente";
-	//CONDICION PARA SABER SI HAY DIAS ATRAZADOS
-	if($diff<0 && $diff!=""){
-	$diff=$diff*-1;
+	// El atraso del saldo pendiente no depende de la tasa ni del ultimo abono.
+	$diff2=calcularDiasAtrasoCredito($fechapago,$fechahoy);
 	if($actualizar=="si"){
-		editarDiasAtrazadosdesdecalcularcredito($cod_clienteFK,$diff);
-		actualizardiasatrazadocredito($idcredito,$diff);
+		if($diff2>0){
+			editarDiasAtrazadosdesdecalcularcredito($cod_clienteFK,$diff2);
+		}
+		actualizardiasatrazadocredito($idcredito,$diff2);
 	}
-	}else{
-	$diff=0;
-    }
 	
-	$control=verificar_fecha_expiracion($fechapago);
+	$control=$diff2>0 ? "si" : "no";
 	if($control=="si"){
 	$TotalApagarSinInteres=$TotalApagarSinInteres+($MontoConDescuento-($totalPagoCredito));
 	//CALCULAMOS EL NRO DE CUOTAS ATRAZADAS
@@ -168,7 +168,6 @@ if($nroCancelado==0){
 		/*CALCULAMOS EL DIA DE GRACIA*/
 	$fechahoy=date('Y-m-d');	
 	$datetime1= new DateTime(date('y-m-d',strtotime(str_replace('/','-',$fechahoy)))); 
-	$datetime3= new DateTime(date('y-m-d',strtotime(str_replace('/','-',$fechapago))));	
 	$Fecha1=strtotime($FechaUltimoPago);
 	$Fecha2=strtotime($fechapago);
 	if($FechaPagoCredito=="0" ){
@@ -185,8 +184,6 @@ if($nroCancelado==0){
 	
 	
 	
-	$interval2=$datetime3->diff($datetime1);
-    $diff2=$interval2->format('%a');
 
 	
 	$diasGracia=$diff2-$dias;
@@ -202,7 +199,7 @@ if($nroCancelado==0){
 	$deudaActua=$montoIn+$total_interes + $deudaInteres;
 	
 	if($actualizar=="si"){
-	actualizarTotalCuota($idcredito,$total,$total_interes,$total);
+	actualizarTotalCuota($idcredito,$total,$total_interes,$capitalPendiente);
 	}
 	
 	}else{
@@ -210,15 +207,15 @@ if($nroCancelado==0){
 	$deudaActua=$MontoConDescuento-$totalPagoCredito + $deudaInteres;
 	$total=$deudaActua;
 	if($actualizar=="si"){
-    actualizarTotalCuota($idcredito,$total,0,$MontoConDescuento);
+    actualizarTotalCuota($idcredito,$total,0,$capitalPendiente);
 	}
 	}	
 	}else{
 	
-	$deudaActua=$MontoConDescuento-$totalPagoCredito;
+	$deudaActua=$capitalPendiente+$deudaInteres;
 	$total=$deudaActua;
 	 if($actualizar=="si"){
-	 actualizarTotalCuota($idcredito,$total,0,$MontoConDescuento);
+	 actualizarTotalCuota($idcredito,$total,0,$capitalPendiente);
 	}		
 	}
 			$DeudaPendiente=$DeudaPendiente+$deudaActua;
@@ -227,7 +224,7 @@ if($nroCancelado==0){
 	$deudaActua=$MontoConDescuento-$totalPagoCredito + $deudaInteres;
 	$total=$deudaActua;
 	if($actualizar=="si"){
-	 actualizarTotalCuota($idcredito,$total,0,$MontoConDescuento);
+	 actualizarTotalCuota($idcredito,$total,0,$capitalPendiente);
 	}
 	}
 	
@@ -285,10 +282,7 @@ $TotalEnDeuda=$TotalEnDeuda+$total;
 $TotalEnPagado=$TotalEnPagado+$totalPago;
 $TotalAPagar=$TotalAPagar+$deudaActua;
 $TotalDiasAtrasado=$TotalDiasAtrasado+$diff2;
-if($DiasAtrazo==""){
-	$DiasAtrazo=$diff2;
-	
-}
+$DiasAtrazo=max($DiasAtrazo,$diff2);
 
 
 }
@@ -308,17 +302,8 @@ if($TotalApagarSinInteres<0){
 
 
 
-$TotalEnInteres = ceil($TotalEnInteres / 1000) * 1000;
-$TotalEnDeuda = ceil($TotalEnDeuda / 1000) * 1000;
-$TotalAPagar = ceil($TotalAPagar / 1000) * 1000;
-$TotalApagarSinInteres = ceil($TotalApagarSinInteres / 1000) * 1000;
-$DeudaPendiente = ceil($DeudaPendiente / 1000) * 1000;
-$totalInteresActual = ceil($totalInteresActual / 1000) * 1000;
-$SubTotal = ceil($SubTotal / 1000) * 1000;
-$tinteres = ceil(($tinteres) / 1000) * 1000;
-$SumadeudaInteres = ceil($SumadeudaInteres / 1000) * 1000;
-
-$TotalInteresesPagado = ceil($TotalInteresesPagado / 1000) * 1000;
+// Capital, cobros y cargos registrados conservan su importe exacto.
+// El interes calculado ya aplica su redondeo al calcular cada cuota.
 
 
 $datos[0]=$totalEnDescuento;
@@ -341,6 +326,20 @@ $datos[16]=$SumadeudaInteres;
 
  mysqli_close($mysqli);
 return $datos;
+}
+
+function calcularDiasAtrasoCredito($fechaVencimiento,$fechaReferencia)
+{
+	// No convertir fechas desconocidas o cero en vencimientos ficticios.
+	foreach(array($fechaVencimiento,$fechaReferencia) as $fecha){
+		if(!is_string($fecha) || !preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/D',$fecha,$partes)
+			|| !checkdate((int)$partes[2],(int)$partes[3],(int)$partes[1])){
+			return 0;
+		}
+	}
+	$vencimiento=DateTime::createFromFormat('!Y-m-d',$fechaVencimiento);
+	$referencia=DateTime::createFromFormat('!Y-m-d',$fechaReferencia);
+	return max(0,(int)$vencimiento->diff($referencia)->format('%r%a'));
 }
 
 function actualizarTotalCuota($idcredito,$total,$totalinteres,$totaldeuda){

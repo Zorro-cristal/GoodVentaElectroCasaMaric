@@ -279,8 +279,8 @@ function iniciarListadoAbmPagoProveedorDetalle(){
 				{id:"td_datos_5",campo:"fecha_compra",columna:"fecha_compra"},
 				{id:"td_datos_6",campo:"monto_pendiente_formateado",columna:"total_pendiente"},
 				{campo:"total_pagado_formateado",columna:"total_pagado"},
-				{id:"td_datos_11",campo:"cod_compra",columna:"detalle",render:function(valor){return crearBotonPagoProveedor("VER",verCerrarAbmPagoProveedorDetalleCompra,valor);}},
-				{id:"td_datos_11",campo:"cod_compra",columna:"nota_credito",render:function(valor){return crearBotonPagoProveedor("CARGA",verCerrarAbmCargarNotaCredito,valor);}},
+				{id:"td_datos_11",campo:"cod_compra",columna:"detalle",render:function(valor,registro){return registro.historico ? document.createTextNode("") : crearBotonPagoProveedor("VER",verCerrarAbmPagoProveedorDetalleCompra,valor);}},
+				{id:"td_datos_11",campo:"cod_compra",columna:"nota_credito",render:function(valor,registro){return registro.historico ? document.createTextNode("") : crearBotonPagoProveedor("CARGA",verCerrarAbmCargarNotaCredito,valor);}},
 				{id:"td_datos_9",campo:"cod_proveedor",tecnica:true},
 				{id:"td_datos_10",campo:"cod_compra",tecnica:true}
 			]

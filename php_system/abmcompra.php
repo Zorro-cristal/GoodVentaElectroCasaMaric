@@ -862,7 +862,7 @@ function buscar($fecha1,$fecha2,$nrocompra,$filtrofecha,$proveedor,$estadopago,$
 		IFNULL((select sum(monto) from pagosdecompra where cod_compra=cod_compraFk ),0) as totalpagos
 		 ";
 		 if($agrupado!=""){
-			 $condicionagrupado=" group by cod_proveedorFK";
+			 $condicionagrupado=" group by cod_proveedorFK,cp.estado";
 			  $condicionselectagrupado = "
 			  sum(IFNULL((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK),0)) as totalcompra,
 	    sum(IFNULL((select sum(monto) from pagosdecompra where cod_compra=cod_compraFk and estado='Pagado'),0)) as totalpagado,
@@ -874,22 +874,22 @@ function buscar($fecha1,$fecha2,$nrocompra,$filtrofecha,$proveedor,$estadopago,$
 		 
 		 $condicionpagos="";
 		  if($estadopago=="1"){
-		$condicionpagos=" and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)>(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra)"; 
+		$condicionpagos=" and cp.estado='Activo' and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)>(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra)";
 	 }
 	  if($estadopago=="2"){
-		$condicionpagos="  and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)<=(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra) "; 
+		$condicionpagos=" and cp.estado='Activo' and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)<=(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra) ";
 	 }
 	 
 	 
 	 
-		$sql= "Select cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,descuento,pagado1,pagado2,url,tipo_compra,
+		$sql= "Select cp.estado as estado_compra,cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,descuento,pagado1,pagado2,url,tipo_compra,
 		(Select nombre_persona from persona where cod_persona=cod_proveedorFK) as proveedor,
 		(Select Nombre from local l where l.cod_local=cp.cod_local) as nombrelocal,
 		$condicionselectagrupado,
 				cp.fecha_insert,cp.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_edit )as editadopor
-		from compra cp  where  cp.estado='Activo' and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra ." $condicionagrupado limit 50";
+		from compra cp  where  cp.estado IN ('Activo','Historico') and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra ." $condicionagrupado limit 50";
 	 
 		     
 			 
@@ -926,6 +926,7 @@ if ( ! $stmt->execute()) {
 		  
 		  
 		      $cod_compra=$valor['cod_compra'];
+              $esHistorica = $valor['estado_compra'] === 'Historico';
 		      $fecha_compra=$valor['fecha_compra'];
 		  	  $cod_proveedorFK=utf8_encode($valor['cod_proveedorFK']);
 		  	  $num_comprobante=utf8_encode($valor['num_comprobante']);
@@ -950,6 +951,7 @@ $url = utf8_encode($valor['url']);
  
 			  $totalpagado = obtener_total_detalle_compra_pagado($cod_compra);
 			  $totalPendiente = $totalcompra - $totalpagado;
+              if ($esHistorica) { $totalpagado = 0; $totalPendiente = 0; }
 			  $TotalesPagago+= $totalpagado;
 			  $TotalesPendiente+= $totalPendiente;
 			  $TotalCompraConDescuento+= $totalcompra;
@@ -962,6 +964,8 @@ if($url !=''){
 
 			   $filas[]=array(
 				   "cod_compra"=>$cod_compra,
+                   "estado_compra"=>$valor['estado_compra'],
+                   "historico"=>$esHistorica,
 				   "fecha_compra"=>$fecha_compra,
 				   "cod_proveedor"=>$cod_proveedorFK,
 				   "num_comprobante"=>$num_comprobante,
@@ -973,10 +977,10 @@ if($url !=''){
 				   "descuento_formateado"=>number_format($descuento,'0',',','.'),
 				   "total"=>(float)$totalcompra,
 				   "total_formateado"=>number_format($totalcompra,'0',',','.'),
-				   "total_pagado"=>(float)$totalpagado,
-				   "total_pagado_formateado"=>number_format($totalpagado,'0',',','.'),
-				   "total_pendiente"=>(float)$totalPendiente,
-				   "total_pendiente_formateado"=>number_format($totalPendiente,'0',',','.'),
+				   "total_pagado"=>$esHistorica ? null : (float)$totalpagado,
+				   "total_pagado_formateado"=>$esHistorica ? "Sin confirmar" : number_format($totalpagado,'0',',','.'),
+				   "total_pendiente"=>$esHistorica ? null : (float)$totalPendiente,
+				   "total_pendiente_formateado"=>$esHistorica ? "Sin confirmar" : number_format($totalPendiente,'0',',','.'),
 				   "local"=>$nombrelocal,
 				   "cod_local"=>$cod_local,
 				   "total_pagos"=>(float)$totalpagos,
@@ -1000,8 +1004,8 @@ if($url !=''){
 <td  id='td_datos_7' style='width:10%'>". number_format($subtotalcompra,'0',',','.')."</td>
 <td  id='td_datos_8' style='width:10%'>". number_format($descuento,'0',',','.')."</td>
 <td  id='td_datos_4' style='width:10%'>". number_format($totalcompra,'0',',','.')."</td>
-<td  id='td_datos_9' style='width:10%'>". number_format($totalpagado,'0',',','.')."</td>
-<td  id='td_datos_10' style='width:10%'>". number_format($totalPendiente,'0',',','.')."</td>
+<td  id='td_datos_9' style='width:10%'>". ($esHistorica ? "Sin confirmar" : number_format($totalpagado,'0',',','.'))."</td>
+<td  id='td_datos_10' style='width:10%'>". ($esHistorica ? "Sin confirmar" : number_format($totalPendiente,'0',',','.'))."</td>
 <td  id='' style='width:10%'>". $nombrelocal."</td>
 <td  id='' style='width:10%'>". $ver."</td>
 <td  id='td_datos_5' style='display:none'>".$cod_compra."</td>
@@ -1024,7 +1028,7 @@ if($url !=''){
   $condicionagrupado="";
 		 $condicionselectagrupado = "";
 		 if($agrupado!=""){
-			 $condicionagrupado=" group by cod_proveedorFK";
+			 $condicionagrupado=" group by cod_proveedorFK,cp.estado";
 			  $condicionselectagrupado = "
 			  ,sum(IFNULL((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK),0)) as totalcompra,
 	    sum(IFNULL((select sum(monto) from pagosdecompra where cod_compra=cod_compraFk and estado='Pagado'),0)) as totalpagado,
@@ -1035,7 +1039,7 @@ if($url !=''){
  
  
  $sql= "Select cod_compra $condicionselectagrupado
-		from compra cp  where cp.estado='Activo' and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra. " $condicionagrupado";
+		from compra cp  where cp.estado IN ('Activo','Historico') and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra. " $condicionagrupado";
 		
 		$stmt = $mysqli->prepare($sql);
 if ( ! $stmt->execute()) {
@@ -1085,7 +1089,7 @@ function buscarmas($fecha1,$fecha2,$nrocompra,$filtrofecha,$proveedor,$estadopag
 		IFNULL((select sum(monto) from pagosdecompra where cod_compra=cod_compraFk ),0) as totalpagos
 		 ";
 		 if($agrupado!=""){
-			 $condicionagrupado=" group by cod_proveedorFK";
+			 $condicionagrupado=" group by cod_proveedorFK,cp.estado";
 			  $condicionselectagrupado = "
 			  sum(IFNULL((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK),0)) as totalcompra,
 	    sum(IFNULL((select sum(monto) from pagosdecompra where cod_compra=cod_compraFk and estado='Pagado'),0)) as totalpagado,
@@ -1106,20 +1110,20 @@ function buscarmas($fecha1,$fecha2,$nrocompra,$filtrofecha,$proveedor,$estadopag
 		 
 		 $condicionpagos="";
 		  if($estadopago=="1"){
-		$condicionpagos=" and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)>(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra)"; 
+		$condicionpagos=" and cp.estado='Activo' and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)>(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra)";
 	 }
 	  if($estadopago=="2"){
-		$condicionpagos="  and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)<=(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra) "; 
+		$condicionpagos=" and cp.estado='Activo' and ((select sum(subTotal) from detalle_compra where cod_compra=cod_compraFK) - descuento)<=(SELECT IFNULL(sum((SELECT importe FROM cheque WHERE idcheque = idchequeFK)),0) FROM detalle_pago_cheque where cod_compraFK = cod_compra) ";
 	 }
 	 
-		$sql= "Select cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,descuento,pagado1,pagado2,url,tipo_compra,
+		$sql= "Select cp.estado as estado_compra,cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,descuento,pagado1,pagado2,url,tipo_compra,
 		(Select nombre_persona from persona where cod_persona=cod_proveedorFK) as proveedor,
 		(Select Nombre from local l where l.cod_local=cp.cod_local) as nombrelocal,
 		$condicionselectagrupado,
 				cp.fecha_insert,cp.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_edit )as editadopor
-		from compra cp  where  cp.estado='Activo' and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra." '$condicionagrupado' limit ".$registrocargado." , 50 ";
+		from compra cp  where  cp.estado IN ('Activo','Historico') and cod_compra!='0'  ".$condicionCodLocal.$condicionFecha.$condicionfechafiltro.$condicionproveedor.$condicionnrocomprobante.$condicionpagos.$condiciontipo_compra." $condicionagrupado limit ".$registrocargado." , 50 ";
 	  
 
 	
@@ -1153,6 +1157,7 @@ if ( ! $stmt->execute()) {
 		  
 		  
 		      $cod_compra=$valor['cod_compra'];
+              $esHistorica = $valor['estado_compra'] === 'Historico';
 		      $fecha_compra=$valor['fecha_compra'];
 		  	  $cod_proveedorFK=utf8_encode($valor['cod_proveedorFK']);
 		  	  $num_comprobante=utf8_encode($valor['num_comprobante']);
@@ -1177,6 +1182,7 @@ $url = utf8_encode($valor['url']);
  
 			  $totalpagado = obtener_total_detalle_compra_pagado($cod_compra);
 			  $totalPendiente = $totalcompra - $totalpagado;
+              if ($esHistorica) { $totalpagado = 0; $totalPendiente = 0; }
 			  $TotalesPagago+= $totalpagado;
 			  $TotalesPendiente+= $totalPendiente;
 			  $TotalConDescuento+= $totalcompra;
@@ -1188,6 +1194,8 @@ if($url !=''){
 
 			   $filas[]=array(
 				   "cod_compra"=>$cod_compra,
+                   "estado_compra"=>$valor['estado_compra'],
+                   "historico"=>$esHistorica,
 				   "fecha_compra"=>$fecha_compra,
 				   "cod_proveedor"=>$cod_proveedorFK,
 				   "num_comprobante"=>$num_comprobante,
@@ -1199,10 +1207,10 @@ if($url !=''){
 				   "descuento_formateado"=>number_format($descuento,'0',',','.'),
 				   "total"=>(float)$totalcompra,
 				   "total_formateado"=>number_format($totalcompra,'0',',','.'),
-				   "total_pagado"=>(float)$totalpagado,
-				   "total_pagado_formateado"=>number_format($totalpagado,'0',',','.'),
-				   "total_pendiente"=>(float)$totalPendiente,
-				   "total_pendiente_formateado"=>number_format($totalPendiente,'0',',','.'),
+				   "total_pagado"=>$esHistorica ? null : (float)$totalpagado,
+				   "total_pagado_formateado"=>$esHistorica ? "Sin confirmar" : number_format($totalpagado,'0',',','.'),
+				   "total_pendiente"=>$esHistorica ? null : (float)$totalPendiente,
+				   "total_pendiente_formateado"=>$esHistorica ? "Sin confirmar" : number_format($totalPendiente,'0',',','.'),
 				   "local"=>$nombrelocal,
 				   "cod_local"=>$cod_local,
 				   "total_pagos"=>(float)$totalpagos,
@@ -1226,8 +1234,8 @@ if($url !=''){
 <td  id='td_datos_7' style='width:10%'>". number_format($subtotalcompra,'0',',','.')."</td>
 <td  id='td_datos_8' style='width:10%'>". number_format($descuento,'0',',','.')."</td>
 <td  id='td_datos_4' style='width:10%'>". number_format($totalcompra,'0',',','.')."</td>
-<td  id='td_datos_9' style='width:10%'>". number_format($totalpagado,'0',',','.')."</td>
-<td  id='td_datos_10' style='width:10%'>". number_format($totalPendiente,'0',',','.')."</td>
+<td  id='td_datos_9' style='width:10%'>". ($esHistorica ? "Sin confirmar" : number_format($totalpagado,'0',',','.'))."</td>
+<td  id='td_datos_10' style='width:10%'>". ($esHistorica ? "Sin confirmar" : number_format($totalPendiente,'0',',','.'))."</td>
 <td  id='' style='width:10%'>". $nombrelocal."</td>
 <td  id='' style='width:10%'>". $ver."</td>
 <td  id='td_datos_5' style='display:none'>".$cod_compra."</td>
@@ -2140,6 +2148,8 @@ function buscarCompraProveedorDetalle($fecha1,$fecha2,$proveedor,$control,$cod_f
 	
 	$mysqli=conectar_al_servidor();
 	$filas=array();
+    // Historic documents have no confirmed payable balance.
+    $condicionEstadoCompra = $control == '' ? "cp.estado IN ('Activo','Historico')" : "cp.estado='Activo'";
 	
 
 		 $condicionFecha="";
@@ -2165,7 +2175,7 @@ function buscarCompraProveedorDetalle($fecha1,$fecha2,$proveedor,$control,$cod_f
 		 
 			// $condicionpagos=" and (IFNULL((select dpc.cod_compraFK from detalle_pago_cheque dpc inner join cheque ch on idcheque = idchequeFK where cp.cod_compra=dpc.cod_compraFK and ch.estado='Activo' LIMIT 1),0)) = 0"; 
 	 
-		$sql= "Select cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,pagado1,pagado2,descuento,
+		$sql= "Select cp.estado as estado_compra,cod_compra,fecha_compra,cod_proveedorFK,num_comprobante,cod_local,pagado1,pagado2,descuento,
 		(Select nombre_persona from persona where cod_persona=cod_proveedorFK) as proveedor, tipotr,
 		(Select Nombre from local l where l.cod_local=cp.cod_local) as nombrelocal, 
 		IFNULL((Select sum(subTotal) from detalle_compra where cod_compraFK = cod_compra),0) as total_compra,
@@ -2173,7 +2183,7 @@ function buscarCompraProveedorDetalle($fecha1,$fecha2,$proveedor,$control,$cod_f
 				IFNULL((Select sum(monto) from nota_credito nc where cod_compraFK = cp.cod_compra and nc.estado = 'Activo'),0) as notacredito,
 		(Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
 		(Select nombre_persona from persona pra where pra.cod_persona=cod_user_edit )as editadopor
-		from compra cp  where  cp.estado='Activo'  ".$condicionFecha.$condicionproveedor.$condicionfacturanro.$condicionFechafiltro." order by  fecha_compra asc ";
+		from compra cp  where  ".$condicionEstadoCompra." ".$condicionFecha.$condicionproveedor.$condicionfacturanro.$condicionFechafiltro." order by  fecha_compra asc ";
 	  
 	  // echo $sql;
 	  // exit;
@@ -2221,6 +2231,32 @@ if ( ! $stmt->execute()) {
 			  $descuento = utf8_encode($valor['descuento']); 
 			  $notacredito = utf8_encode($valor['notacredito']); 
 		  	  
+if ($valor['estado_compra'] === 'Historico') {
+    $totalCompas += $subtotalcompra;
+    $totalDesc += $descuento;
+    $filas[] = array(
+        "cod_compra"=>$cod_compra, "cod_proveedor"=>$cod_proveedorFK,
+        "proveedor"=>$proveedor, "nro_factura"=>$num_comprobante,
+        "fecha_compra"=>$fecha_compra, "tipo_compra"=>"HISTORICA SIN CONCILIAR",
+        "monto_pendiente"=>null, "monto_pendiente_formateado"=>"Sin confirmar",
+        "total_pendiente"=>null, "total_pagado"=>null,
+        "total_pagado_formateado"=>"Sin confirmar", "historico"=>true,
+        "detalle"=>$cod_compra, "nota_credito"=>null, "seleccionable"=>false
+    );
+    if ($formato != 'json') {
+        $styleName=CargarStyleTable($styleName);
+        $filaHistorica="<table class='$styleName' border='1' cellspacing='1' cellpadding='5'><tr>"
+            ."<td></td><td>Sin confirmar</td><td>HISTORICA SIN CONCILIAR</td>"
+            ."<td>".htmlspecialchars($proveedor, ENT_QUOTES, 'UTF-8')."</td>"
+            ."<td>".htmlspecialchars($num_comprobante, ENT_QUOTES, 'UTF-8')."</td>"
+            ."<td>".$fecha_compra."</td><td>Sin confirmar</td><td>Sin confirmar</td>"
+            ."<td></td><td></td></tr></table>";
+        $pagina .= $filaHistorica;
+        $pagina2 .= $filaHistorica;
+    }
+    continue;
+}
+
 $totalCompas=$totalCompas+$subtotalcompra;  
 			$totalDesc=$descuento+$totalDesc;
   

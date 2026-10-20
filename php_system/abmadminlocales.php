@@ -1,5 +1,28 @@
 <?php
 
+// PHP descarta todo $_POST cuando el cuerpo supera post_max_size.
+$limitePost = trim(ini_get('post_max_size'));
+$limitePostBytes = (float)$limitePost;
+$unidadesPost = array('g' => 1073741824, 'm' => 1048576, 'k' => 1024);
+$unidadPost = strtolower(substr($limitePost, -1));
+if(isset($unidadesPost[$unidadPost])){
+	$limitePostBytes *= $unidadesPost[$unidadPost];
+}
+if($limitePostBytes > 0 && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > $limitePostBytes){
+	echo json_encode(array("1" => "POST_MAX_SIZE"));
+	exit;
+}
+if(!isset($_POST['funt']) || !is_string($_POST['funt']) || $_POST['funt'] === ''){
+	echo json_encode(array("1" => "CAMPOSVACIOS"));
+	exit;
+}
+foreach(array('useru', 'passu', 'navegador') as $campoSesion){
+	if(!isset($_POST[$campoSesion]) || !is_string($_POST[$campoSesion]) || $_POST[$campoSesion] === ''){
+		echo json_encode(array("1" => "UI"));
+		exit;
+	}
+}
+
 $operacion = $_POST['funt'];
 $operacion = utf8_decode($operacion);
 
