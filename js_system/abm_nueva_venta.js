@@ -1365,13 +1365,14 @@ function esperarDatosVentaParaImpresion(callback) {
 
 function buscardetallesventa() {
 	var cargaDetalleVenta = $.Deferred();
+	var codVentaSolicitada = String(idabmVenta);
 	document.getElementById("table_abm_detalle_venta").innerHTML = paginacargando
 	obtener_datos_user();
 	var datos = {
 		"useru": userid,
 		"passu": passuser,
 		"navegador": navegador,
-		"buscar": idabmVenta,
+		"buscar": codVentaSolicitada,
 		"funt": "buscar"
 	};
 	$.ajax({
@@ -1382,12 +1383,17 @@ function buscardetallesventa() {
 		beforeSend: function () {
 		},
 		error: function (jqXHR, textstatus, errorThrowm) {
-manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
-			document.getElementById("table_abm_detalle_venta").innerHTML = ''
+			if(String(idabmVenta) === codVentaSolicitada){
+				manejadordeerroresjquery(jqXHR.status,textstatus,"abmventana")
+				document.getElementById("table_abm_detalle_venta").innerHTML = ''
+			}
 			cargaDetalleVenta.reject(jqXHR, textstatus, errorThrowm);
 		},
 		success: function (responseText) {
-
+			if(String(idabmVenta) !== codVentaSolicitada){
+				cargaDetalleVenta.reject("La venta seleccionada cambio");
+				return;
+			}
 			var Respuesta = responseText;
 			console.log(Respuesta)
 			document.getElementById("table_abm_detalle_venta").innerHTML = ''
@@ -1515,6 +1521,7 @@ cod_ventaReciboFK=idabmVenta
 					document.getElementById("btnFinalizarVenta").style.display=""
 				  document.getElementById("btnCancelarVenta").style.display=""
 					OpcionesTipoVenta();
+					guardarDatosPagareVenta(datos, codVentaSolicitada);
 					cargaDetalleVenta.resolve(datos);
 					
 					

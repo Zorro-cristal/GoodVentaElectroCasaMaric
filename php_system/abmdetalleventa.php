@@ -1576,7 +1576,7 @@ function  BuscarRegistro($buscar)
 $mysqli=conectar_al_servidor();
 $formato=isset($_POST['formato']) ? utf8_decode($_POST['formato']) : '';
 
-$sql= "select dtv.descripcion ,pr.tipo_producto,vt.fecha_venta, 
+$sql= "select dtv.descripcion ,pr.tipo_producto,vt.fecha_venta,vt.idGaranteFk,
 pr.cod_producto,pr.cod_barra,pr.nombre_producto,dtv.cod_detalle,vt.total_venta,IFNULL(dtv.comision,0) as comision,dtv.estado,detalleproducto,vt.num_factura,vt.puntoexpedicion,concat(vt.puntoexpedicion,'-',vt.num_factura) as fac,
 IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
@@ -1611,6 +1611,7 @@ $Garantetelefono = "";
 $zonaGarante = ""; 
 $garantenombre = "";
 $garantedireccion = "";
+$idGaranteVenta = "";
 $TipoVenta = ""; 
 
 $pagina = "";   
@@ -1678,6 +1679,7 @@ $Garantetelefono = utf8_encode($valor['Garantetelefono']);
 $zonaGarante = utf8_encode($valor['zonaGarante']); 
 $garantenombre = utf8_encode($valor['garantenombre']);
 $garantedireccion = utf8_encode($valor['garantedireccion']);
+$idGaranteVenta = $valor['idGaranteFk'];
 $zonaCliente = utf8_encode($valor['zonaCliente']); 
 $ruccliente = utf8_encode($valor['ruccliente']); 
 $nroCouta = utf8_encode($valor['nroCouta']); 
@@ -1883,7 +1885,8 @@ $informacion =array("1" => "exito","2" => $formato=='json' ? $filas : $pagina,"5
 "50"=>number_format($verDetallePago[2],'0',',','.'),
 "51"=>$garantedireccion,
 "52"=>$garantenombre,
-"53"=>number_format($totalesExt,'0',',','.'));
+"53"=>number_format($totalesExt,'0',',','.'),
+"54"=>$idGaranteVenta);
 echo json_encode($informacion);	
 exit;
 }

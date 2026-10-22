@@ -1329,32 +1329,44 @@ var facturanroPagare=0;
 var ImportePagare=0;
 
 var EntregaPagare=0;
-function imprimirPagare(datosActualizados){
-	var docClienteActual = obtenerValorCampoPagare("inptDocClienteVenta", CiRecibo || DocumentoRecibo || RucRecibo);
-	if(!datosActualizados && typeof idabmVenta !== "undefined" && idabmVenta != "" && (docClienteActual == "" || DireccionRecibo == "")){
-		if(typeof buscardetallesventa === "function"){
-			var cargaDetallePagare = buscardetallesventa();
-			if(cargaDetallePagare && typeof cargaDetallePagare.then === "function"){
-				cargaDetallePagare.done(function(){
-					setTimeout(function(){
-						imprimirPagare(true);
-					}, 250);
-				});
-				return;
-			}
-		}
+// Se conserva la venta impresa aunque el formulario se limpie despues del cobro.
+var datosPagareVenta=null;
+function guardarDatosPagareVenta(datos, codVenta){
+	var texto = function(valor){ return String(valor == null ? "" : valor).trim(); };
+	datosPagareVenta = {
+		codVenta: texto(codVenta),
+		cliente: texto(datos[10]),
+		documento: texto(datos[13]),
+		direccion: texto(datos[11]),
+		idGarante: texto(datos[54]),
+		garante: texto(datos[52]),
+		documentoGarante: texto(datos[39]),
+		direccionGarante: texto(datos[51]),
+		factura: texto(datos[25]),
+		vencimiento: texto(datos[26]),
+		total: texto(datos[3]),
+		entrega: texto(datos[17])
+	};
+}
+
+function imprimirPagare(datosVenta){
+	if(!datosVenta && typeof idabmVenta !== "undefined" && idabmVenta != ""){
+		// Esperar la respuesta evita mezclar el cliente con datos de otra venta.
+		return buscardetallesventa().done(function(){
+			imprimirPagare(datosPagareVenta);
+		}).fail(function(){
+			ver_vetana_informativa("NO SE PUDIERON CARGAR LOS DATOS DE LA VENTA PARA IMPRIMIR EL PAGARÉ. VOLVÉ A ABRIR LA VENTA.");
+		});
+	}
+	datosVenta = datosVenta || datosPagareVenta;
+	if(!datosVenta || datosVenta.cliente == "" || datosVenta.codVenta == ""){
+		ver_vetana_informativa("FALTO CARGAR UNA VENTA PARA IMPRIMIR EL PAGARÉ");
+		return;
 	}
 
-	
-	if(EntregaPagare==""){
-		EntregaPagare="0";
-	}
-	
-	var t=QuitarSeparadorMilValor(totalesRecibo);
-	
-	EntregaPagare=QuitarSeparadorMilValor(EntregaPagare);
-	
-	let totalpagare = Number(t) - Number(EntregaPagare)
+	var t=QuitarSeparadorMilValor(datosVenta.total);
+	var entrega=QuitarSeparadorMilValor(datosVenta.entrega || "0");
+	let totalpagare = Number(t) - Number(entrega)
 	
 	
   var totaletrasRecibo=numeroALetras(totalpagare, {
@@ -1379,7 +1391,7 @@ var f = new Date();
 	
 	
 	
-var fecha = new Date(vencimientopagare);
+var fecha = new Date(datosVenta.vencimiento);
 	fecha.setDate(fecha.getDate() + 1);
 	
 	var dia =fecha.getDate() ;
@@ -1405,16 +1417,14 @@ var fecha = new Date(vencimientopagare);
 	var anhoVencimiendo =fecha.getFullYear()
 
 	ImportePagare=totalpagare;
-	var clientePagare = escaparHtmlPagare(obtenerValorCampoPagare("inptClienteVenta", NombreRecibo));
-	var documentoClientePagare = escaparHtmlPagare(obtenerValorCampoPagare("inptDocClienteVenta", CiRecibo || DocumentoRecibo || RucRecibo));
-	var direccionClientePagare = escaparHtmlPagare(limpiarDireccionPagare(DireccionRecibo));
-	var garanteValorPagare = obtenerValorCampoPagare("inptGaranteVenta", NombreGaranteRecibo);
-	var idGarantePagare = typeof idGaranteFk !== "undefined" ? idGaranteFk : "";
-	var tieneGarantePagare = garanteValorPagare != "" && garanteValorPagare != "SIN GARANTE" && idGarantePagare != "6";
-	var garantePagare = escaparHtmlPagare(tieneGarantePagare ? garanteValorPagare : "");
-	var documentoGarantePagare = escaparHtmlPagare(tieneGarantePagare ? obtenerValorCampoPagare("inptDocGaranteVenta", DocumentoGaranteRecibo) : "");
-	var direccionGarantePagare = escaparHtmlPagare(tieneGarantePagare ? limpiarDireccionPagare(DireccionGaranteRecibo || ZonaReciboGarante) : "");
-	var numeroFacturaPagare = facturanroPagare || nroPagare || "";
+	var clientePagare = escaparHtmlPagare(datosVenta.cliente);
+	var documentoClientePagare = escaparHtmlPagare(datosVenta.documento);
+	var direccionClientePagare = escaparHtmlPagare(datosVenta.direccion);
+	var tieneGarantePagare = datosVenta.garante != "" && datosVenta.garante.toUpperCase() != "SIN GARANTE" && datosVenta.idGarante != "6";
+	var garantePagare = escaparHtmlPagare(tieneGarantePagare ? datosVenta.garante : "");
+	var documentoGarantePagare = escaparHtmlPagare(tieneGarantePagare ? datosVenta.documentoGarante : "");
+	var direccionGarantePagare = escaparHtmlPagare(tieneGarantePagare ? datosVenta.direccionGarante : "");
+	var numeroFacturaPagare = datosVenta.factura || datosVenta.codVenta;
 	var fechaVencimientoPagare = dia+"/"+mes+"/"+anhoVencimiendo;
 	var importeFormateadoPagare = separadordemilesnumero(ImportePagare);
 	var nombreEmpresaPagare = obtenerNombreEmpresaImpresionHtml();
@@ -1485,29 +1495,6 @@ function escaparHtmlPagare(valor){
 		.replace(/>/g, "&gt;")
 		.replace(/\"/g, "&quot;")
 		.replace(/'/g, "&#039;");
-}
-
-function obtenerValorCampoPagare(idCampo, respaldo){
-	var campo = document.getElementById(idCampo);
-	var valor = campo ? campo.value : "";
-	if(valor == "" || valor == null){
-		valor = respaldo || "";
-	}
-	return String(valor).trim();
-}
-
-function limpiarDireccionPagare(valor){
-	var direccion = String(valor == null ? "" : valor).trim();
-	if(direccion == ""){
-		return "";
-	}
-	var partes = direccion.split("-");
-	var ultimo = partes[partes.length - 1].trim();
-	if(ultimo.indexOf("@") >= 0){
-		partes.pop();
-		direccion = partes.join("-").trim();
-	}
-	return direccion.replace(/^-+|-+$/g, "").trim();
 }
 
 function normalizarDatoEmpresaImpresion(valor){
