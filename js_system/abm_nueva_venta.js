@@ -339,12 +339,6 @@ controlDetalle=1;
 		document.getElementById('inptSeleccTipoVenta').style.backgroundColor=""
 		document.getElementById("inptCostoProductoVenta").value= $("#inpTSeleccCosto option:first").val();
 		preciocostocredito= QuitarSeparadorMilValor($("#inpTSeleccCosto option:first").val());	
-		  $("td[id=td_datos_precio_contado]").each(function(i, elementohtml){  
-	   elementohtml.style.display="none"
-	   });
-	$("td[id=td_datos_precios_creditos]").each(function(i, elementohtml){
-elementohtml.style.display=""
-	   });
 	   
 	   
 	}else{
@@ -362,13 +356,8 @@ elementohtml.style.display=""
 		$("#inpTSeleccCosto option[id='contado'").attr("selected",true);
 		seleccionarprecios(document.getElementById("inpTSeleccCosto"))
 		document.getElementById('inptSeleccTipoVenta').style.backgroundColor="#c0e2fd"
-	  $("td[id=td_datos_precio_contado]").each(function(i, elementohtml){  
-	   elementohtml.style.display=""
-	   });
-	$("td[id=td_datos_precios_creditos]").each(function(i, elementohtml){
-elementohtml.style.display="none"
-	   });
 	}
+	ajustarColumnasPrecioVistaVenta();
 	calcular_total_venta()
 	
 }

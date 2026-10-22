@@ -222,6 +222,8 @@ function ajustarColumnasPrecioVistaVenta() {
 	var esCredito = tipoVenta && tipoVenta.value === "CREDITO";
 	$("td[id=td_datos_precio_contado]").each(function (i, elementohtml) { elementohtml.style.display = esCredito ? "none" : ""; });
 	$("td[id=td_datos_precios_creditos]").each(function (i, elementohtml) { elementohtml.style.display = esCredito ? "" : "none"; });
+	$("#cabeceraVistaProductoVenta [data-campo=precio_contado]").toggle(!esCredito);
+	$("#cabeceraVistaProductoVenta [data-campo=precios_credito_html]").toggle(!!esCredito);
 }
 
 var listadoVistaProductoGeneral = null;
@@ -251,14 +253,15 @@ function iniciarListadoVistaProductoVenta() {
 		abrirCombo: function (registro) { buscarvistacomboproducto(registro.codigo, "venta"); },
 		columnas: [
 			{ campo: "codigo_barra", titulo: "COD.", ancho: "12%" },
-			{ campo: "producto", titulo: "PRODUCTO", ancho: "20%", id: "td_datos_1" },
-			{ campo: "marca", titulo: "MARCA", ancho: "10%" },
-			{ campo: "precio_contado", titulo: "PRECIO CONTADO", ancho: "10%", id: "td_datos_precio_contado", valor: function (r) { return r.precio_contado_formateado; } },
-			{ campo: "precios_credito_html", titulo: "PRECIO CREDITO", ancho: "10%", id: "td_datos_precios_creditos", html: true },
-			{ campo: "stock", titulo: "STOCK", ancho: "5%", id: "td_datos_6", valor: function (r) { return r.stock; } },
-			{ campo: "combo", titulo: "COMBO", ancho: "5%", id: "td_datos_18", tipo: "combo" }
+			{ campo: "producto", titulo: "PRODUCTO", ancho: "38%", id: "td_datos_1" },
+			{ campo: "marca", titulo: "MARCA", ancho: "14%" },
+			{ campo: "precio_contado", titulo: "PRECIO CONTADO", ancho: "22%", id: "td_datos_precio_contado", valor: function (r) { return r.precio_contado_formateado; } },
+			{ campo: "precios_credito_html", titulo: "PRECIO CREDITO", ancho: "22%", id: "td_datos_precios_creditos", html: true },
+			{ campo: "stock", titulo: "STOCK", ancho: "7%", id: "td_datos_6", valor: function (r) { return r.stock; } },
+			{ campo: "combo", titulo: "COMBO", ancho: "7%", id: "td_datos_18", tipo: "combo" }
 		]
 	});
+	ajustarColumnasPrecioVistaVenta();
 	return listadoVistaProductoVenta;
 }
 
