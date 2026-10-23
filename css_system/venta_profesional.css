@@ -308,6 +308,54 @@
 #divAbmVenta #table_vista_producto_venta > table:hover td,
 #divAbmVenta #table_abm_detalle_venta > table:hover td { background: #edf5fc !important; }
 
+/* Cabecera y filas comparten anchos y espacio para la barra de desplazamiento. */
+#divAbmVenta .venta-productos-cabecera,
+#divAbmVenta #table_vista_producto_venta {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+}
+
+#divAbmVenta .venta-productos-cabecera {
+    border: 1px solid rgba(138, 154, 176, .22);
+    border-bottom: 0;
+    border-radius: 13px 13px 0 0;
+    background: var(--venta-cabecera);
+    scrollbar-color: transparent transparent;
+}
+
+#divAbmVenta .venta-productos-cabecera::-webkit-scrollbar { width: 9px; }
+
+#divAbmVenta #cabeceraVistaProductoVenta,
+#divAbmVenta #table_vista_producto_venta > table {
+    width: 100% !important;
+    table-layout: fixed;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+#divAbmVenta #cabeceraVistaProductoVenta {
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+#divAbmVenta #table_vista_producto_venta { margin-top: 0; }
+
+#divAbmVenta #cabeceraVistaProductoVenta .td_registro,
+#divAbmVenta #table_vista_producto_venta > table > tr > td,
+#divAbmVenta #table_vista_producto_venta > table > tbody > tr > td {
+    padding: 6px 8px !important;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+}
+
+#divAbmVenta #table_vista_producto_venta [id="td_datos_18"] .btn4 {
+    min-width: 0;
+    width: 100% !important;
+    max-width: 100%;
+    padding: 0 4px !important;
+}
+
 #divAbmVenta #inptTotalVenta2 {
     width: 100% !important;
     height: clamp(120px, 22vh, 230px) !important;
