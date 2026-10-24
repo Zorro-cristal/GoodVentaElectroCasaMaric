@@ -92,10 +92,10 @@ body {
 .facturaRuc { top: 48.9mm; }
 
 .facturaDireccion,
-.facturaTelefono { top: 59.4mm; }
+.facturaTelefono { top: 56.4mm; }
 
 .facturaCopia2 .facturaDireccion,
-.facturaCopia2 .facturaTelefono { top: 60.4mm; }
+.facturaCopia2 .facturaTelefono { top: 54.4mm; }
 
 .facturaNombre,
 .facturaRuc,
@@ -106,23 +106,23 @@ body {
 
 .facturaCopia1 .facturaFecha,
 .facturaCopia1 .facturaMarca {
-  top: calc(45mm * var(--factura-factor-carta) - var(--factura-ajuste-y));
+  top: calc(43mm * var(--factura-factor-carta) - var(--factura-ajuste-y));
 }
 
 .facturaCopia1 .facturaNombre,
 .facturaCopia1 .facturaRuc {
-  top: calc(50.9mm + 2.5mm * var(--factura-factor-carta));
+  top: calc(48.9mm + 2.5mm * var(--factura-factor-carta));
 }
 
 .facturaCopia2 .facturaFecha,
 .facturaCopia2 .facturaMarca {
   /* 47.1mm libres desde el borde inferior del total del IVA del original. */
-  top: calc(52.5mm + 2.9mm * var(--factura-factor-carta));
+  top: calc(46.5mm + 2.9mm * var(--factura-factor-carta));
 }
 
 .facturaCopia2 .facturaNombre,
 .facturaCopia2 .facturaRuc {
-  top: calc(56.9mm - 2mm * var(--factura-factor-carta));
+  top: calc(50.9mm - 2mm * var(--factura-factor-carta));
 }
 
 .facturaFecha { left: var(--factura-inicio-cliente-x); width: 58mm; }
@@ -146,7 +146,7 @@ body {
 
 .facturaDetalle {
   position: absolute;
-  top: 63.9mm;
+  top: 67.9mm;
   left: var(--factura-detalle-x);
   width: var(--factura-detalle-ancho);
   height: 50.5mm;
@@ -154,10 +154,10 @@ body {
 }
 
 .facturaCopia1 .facturaDetalle {
-  top: 73.9mm;
+  top: 71.9mm;
   height: calc(52.5mm - 2mm * var(--factura-factor-carta));
 }
-.facturaCopia2 .facturaDetalle { top: 83.9mm; height: 59.5mm; }
+.facturaCopia2 .facturaDetalle { top: 78.5mm; height: 59.5mm; }
 
 .facturaDetalle .tableReporRecibo {
   width: 100%;
@@ -239,14 +239,14 @@ body {
 .facturaSubtotal5 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) * 0.86 - var(--factura-detalle-relleno-x) - 19mm); top: 129.9mm; width: 19mm; }
 .facturaSubtotal10 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) - var(--factura-detalle-relleno-x) - 20mm); top: 129.9mm; width: 20mm; }
 
-.facturaCopia2 .facturaSubtotalExenta { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) * 0.75 - var(--factura-detalle-relleno-x) - 20mm); top: 125.9mm; width: 20mm; }
-.facturaCopia2 .facturaSubtotal5 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) * 0.86 - var(--factura-detalle-relleno-x) - 19mm); top: 125.9mm; width: 19mm; }
-.facturaCopia2 .facturaSubtotal10 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) - var(--factura-detalle-relleno-x) - 20mm); top: 125.9mm; width: 20mm; }
+.facturaCopia2 .facturaSubtotalExenta { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) * 0.75 - var(--factura-detalle-relleno-x) - 20mm); top: 121.4mm; width: 20mm; }
+.facturaCopia2 .facturaSubtotal5 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) * 0.86 - var(--factura-detalle-relleno-x) - 19mm); top: 121.4mm; width: 19mm; }
+.facturaCopia2 .facturaSubtotal10 { left: calc(var(--factura-detalle-x) + var(--factura-detalle-ancho) - var(--factura-detalle-relleno-x) - 20mm); top: 121.4mm; width: 20mm; }
 
 .facturaCopia1 .facturaSubtotalExenta,
 .facturaCopia1 .facturaSubtotal5,
 .facturaCopia1 .facturaSubtotal10 {
-  top: calc(123.9mm - 0.3mm * var(--factura-factor-carta));
+  top: calc(118.9mm - 0.3mm * var(--factura-factor-carta));
 }
 
 .facturaTotal { left: 171mm; top: 128.5mm; width: 31mm; line-height: 3.2mm; }
@@ -263,13 +263,13 @@ body {
 }
 .facturaCopia1 .facturaTotal,
 .facturaCopia1 .facturaTotalLetras {
-  top: calc(128.5mm + 5mm * var(--factura-factor-carta));
+  top: calc(126mm + 5mm * var(--factura-factor-carta));
 }
 
 .facturaCopia2 .facturaTotal,
 .facturaCopia2 .facturaTotalLetras {
   /* El importe final y el total en letras comparten la fila del duplicado. */
-  top: calc(277mm * var(--factura-factor-carta) - 150.5mm - var(--factura-ajuste-y) - var(--factura-ajuste-importes-y));
+  top: calc(273mm * var(--factura-factor-carta) - 150.5mm - var(--factura-ajuste-y) - var(--factura-ajuste-importes-y));
 }
 
 .facturaIva5 { left: 70mm; top: 156.9mm; width: 28mm; font-size: 7pt; }
@@ -279,13 +279,13 @@ body {
 .facturaCopia1 .facturaIva5,
 .facturaCopia1 .facturaIva10,
 .facturaCopia1 .facturaIvaTotal {
-  top: calc(140.9mm + 2mm * var(--factura-factor-carta));
+  top: calc(137.9mm + 2mm * var(--factura-factor-carta));
 }
 
 .facturaCopia2 .facturaIva5,
 .facturaCopia2 .facturaIva10,
 .facturaCopia2 .facturaIvaTotal {
-  top: 146.9mm;
+  top: 142mm;
 }
 
 @media screen {
