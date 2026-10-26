@@ -1310,7 +1310,7 @@ var documento= document.getElementById("divImpresionRecibo").innerHTML;
 	  
 	  
 	  // if(cod_localFKUSer=="1"){
-		var URL= "/GoodVentaElectroCasaMaric/system/reportFacturas.html"
+		var URL= "/GoodVentaElectroCasaMaric/system/reportFacturas.html?v=" + Date.now();
         window.open(URL, 'Imprimir', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,left = 0');
 	  // }
 		 // if(cod_localFKUSer=="2"){
@@ -1437,8 +1437,8 @@ var fecha = new Date(datosVenta.vencimiento);
 	+".pagare-maric{box-sizing:border-box;width:100%;max-width:277mm;margin:0 auto;padding:3mm 5mm;color:#111;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.18;}"
 	+".pagare-maric *{box-sizing:border-box;}"
 	+".pagare-encabezado{display:flex;align-items:flex-start;gap:8mm;}"
-	+".pagare-marca{width:34mm;text-align:center;font-weight:900;line-height:.84;font-size:22px;padding-top:2mm;}"
-	+".pagare-marca small{display:block;font-size:7px;line-height:1.2;margin-top:2mm;font-weight:600;}"
+	+".pagare-marca{flex:0 0 34mm;text-align:center;padding-top:2mm;}"
+	+".pagare-marca img{display:block;width:100%;height:auto;max-height:24mm;object-fit:contain;}"
 	+".pagare-empresa{flex:1;text-align:center;}"
 	+".pagare-empresa h2{margin:0;font-size:24px;line-height:1;}"
 	+".pagare-empresa h3{margin:1mm 0 0;font-size:9px;}"
@@ -1461,7 +1461,7 @@ var fecha = new Date(datosVenta.vencimiento);
 	+"</style>"
 	+"<section class='pagare-maric'>"
 	+"<header class='pagare-encabezado'>"
-	+"<div class='pagare-marca'>"+nombreEmpresaPagare+"<small>Hogar, fácil y seguro.</small></div>"
+	+"<div class='pagare-marca'><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' alt='Logo de "+nombreEmpresaPagare+"'></div>"
 	+"<div class='pagare-empresa'><h2>"+nombreEmpresaPagare+"</h2><h3>DE WALTER FABIÁN SÁNCHEZ RUIZ</h3>"
 	+"<p>Comercio al por mayor de mercaderías n.c.p. o a cambio de una retribución o por contrato<br>Comercio al por menor de electrodomésticos y accesorios &middot; Equipos de telecomunicaciones<br>Comercio de motocicletas y de sus piezas y accesorios</p>"
 	+"<p><b>"+contactoEmpresaPagare+"</b></p></div>"

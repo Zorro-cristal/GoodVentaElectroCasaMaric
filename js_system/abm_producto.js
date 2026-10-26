@@ -254,7 +254,7 @@ function iniciarListadoVistaProductoVenta() {
 		columnas: [
 			{ campo: "codigo_barra", titulo: "COD.", ancho: "12%" },
 			{ campo: "producto", titulo: "PRODUCTO", ancho: "38%", id: "td_datos_1" },
-			{ campo: "marca", titulo: "MARCA", ancho: "14%" },
+			{ campo: "marca", titulo: "MARCA", ancho: "14%", id: "td_datos_marca" },
 			{ campo: "precio_contado", titulo: "PRECIO CONTADO", ancho: "22%", id: "td_datos_precio_contado", valor: function (r) { return r.precio_contado_formateado; } },
 			{ campo: "precios_credito_html", titulo: "PRECIO CREDITO", ancho: "22%", id: "td_datos_precios_creditos", html: true },
 			{ campo: "stock", titulo: "STOCK", ancho: "7%", id: "td_datos_6", valor: function (r) { return r.stock; } },
