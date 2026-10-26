@@ -1895,7 +1895,7 @@ NroVentas=PuntoExpedicion+"-"+NroVentas
 					if(document.getElementById("inptSeleccTipoComprobanteVenta").value=="FACTURA"){
 						document.getElementById("inptSeleccPuntoExpedicionConfirmarNro").value=$("select[id=inptSeleccPuntoExpedicionVenta]").children(":selected").text()
 						document.getElementById("inptConfirmarNroFactura").value=document.getElementById("inptNroVenta").value
-						document.getElementById("divOpcionesImpresion").style.display="none"
+						document.getElementById("divOpcionesImpresion").style.display=""
 						document.getElementById("divConfirmarNroDeFactura").style.display=""
 						ImprimirFacrtura1()
 					}

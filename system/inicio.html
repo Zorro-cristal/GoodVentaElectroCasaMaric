@@ -102,7 +102,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261022columnasproducto1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261026informeventa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
@@ -159,7 +159,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso_egreso_juan.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_motivo_en_egreso_ingreso_juan.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_local_ingreso_egreso_juan.js?x=20260720v1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_banco_ingreso_egreso_juan.js?x=20260901impresionventa1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_banco_ingreso_egreso_juan.js?x=20261026informeventa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_profesion.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_formulario_estandar.js?x=20260807busquedageneralindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/listado_clientes.js?x=20260731datoslaborales1"></script>
@@ -21761,6 +21761,10 @@ onclick="ImprimirFacrtura1()">
 <br>
 <input id='btnImprimirPagare' type="button" value="Imprimir Pagaré" class="btn1"
 onclick="imprimirPagare()">
+<br>
+<br>
+<input id='btnImprimirInformeVenta' type="button" value="Imprimir Informe" class="btn1"
+onclick="imprimirInformeVenta()">
 <br>
 <br>
 <input id='btnImprimirContrato' type="button" value="Imprimir Contrato" class="btn1" style='display:none;'
@@ -52385,6 +52389,7 @@ TOTAL
 <div class='div_cuerpo_table_b' id='tbExtProducto'
 style='width:88%'></div>
 <br>
+<div id='divExtDetallesCredito'>
 <h1 class='pTituloD'>DETALLES DEL CREDITO</h1><br>
 <table class="tableCabeceraRegistro" style='width:88%'>
 <tbody>
@@ -52404,6 +52409,7 @@ style='width:88%'></div>
 </tbody>
 </table>
 <div class='div_cuerpo_table_b' id='tbExtCuotas' style='width:88%'>
+</div>
 </div>
 <br>
 <table class='TableRepor0'>

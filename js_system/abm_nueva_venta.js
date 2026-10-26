@@ -6013,8 +6013,14 @@ function obtenerdatosexpendientecliente(datostr) {
 	/* buscarcreditosexpediente_imprimir() */
 	
 }
-function buscarcreditosexpediente_imprimir() {	
-		if (idFkVenta== "") {
+function imprimirInformeVenta() {
+	// El recibo conserva la venta finalizada aunque se limpie el formulario.
+	var codVenta = idabmVenta || (typeof cod_ventaReciboFK !== "undefined" ? cod_ventaReciboFK : "");
+	return buscarcreditosexpediente_imprimir(codVenta);
+}
+function buscarcreditosexpediente_imprimir(codVenta) {
+		codVenta = codVenta == null ? idFkVenta : codVenta;
+		if (codVenta== "") {
 			ver_vetana_informativa("FALTO SELECCIONAR UNA VENTA")
 			return
 		}
@@ -6024,7 +6030,7 @@ function buscarcreditosexpediente_imprimir() {
 		"useru": userid,
 		"passu": passuser,
 		"navegador": navegador,
-		"cod_ventaFK": idFkVenta,
+		"cod_ventaFK": codVenta,
 		"funt": "buscarcreditosexpediente_imprimir"
 	};
 	$.ajax({
@@ -6108,7 +6114,8 @@ function ImprimirExtractoExpedienteCliente(ZonaCliente,DireccionCliente,Document
 	document.getElementById("pExTotalDesc").innerHTML=document.getElementById("inptTotalDescuentoOpcionesPago").value
 	document.getElementById("pExDeudaAct").innerHTML=document.getElementById("inptDeudaActual").value
 	document.getElementById("pExTotalInter").innerHTML=document.getElementById("inptTotalInteres").value
-	document.getElementById("pExTotalDeudaSinInteres").innerHTML=deudaSinInteres
+	document.getElementById("pExTotalDeudaSinInteres").innerHTML=deudaSinInteres || "0"
+	document.getElementById("divExtDetallesCredito").style.display = String(TipoVentaClienteImprimir).trim().toUpperCase() === "CONTADO" ? "none" : "";
 	
 	
 	document.getElementById("tbExtCuotas").innerHTML= paginaExtractoCuota 
