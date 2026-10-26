@@ -305,6 +305,20 @@
     font-size: 12px !important;
 }
 
+/* Centrar marca, stock, combo y precios; en el detalle, costo, cantidad y total. */
+#divAbmVenta #table_vista_producto_venta [id="td_datos_marca"],
+#divAbmVenta #table_vista_producto_venta [id="td_datos_precio_contado"],
+#divAbmVenta #table_vista_producto_venta [id="td_datos_precios_creditos"],
+#divAbmVenta #table_vista_producto_venta [id="td_datos_6"],
+#divAbmVenta #table_vista_producto_venta [id="td_datos_18"],
+#divAbmVenta #table_abm_detalle_venta [id="td_datos_3"],
+#divAbmVenta #table_abm_detalle_venta [id="td_datos_4"],
+#divAbmVenta #table_abm_detalle_venta [id="td_datos_5"],
+#divAbmVenta #table_abm_detalle_venta [id="td_datos_3"] + td:not([id]),
+#divAbmVenta #table_abm_detalle_venta [id="td_datos_5"] + td:not([id]) {
+    text-align: center !important;
+}
+
 #divAbmVenta #table_vista_producto_venta > table:hover td,
 #divAbmVenta #table_abm_detalle_venta > table:hover td { background: #edf5fc !important; }
 
