@@ -3914,7 +3914,7 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 				$styleCancelado = "background-color: #FFEB3B;color:#000";
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -4348,7 +4348,7 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 				$styleCancelado = "background-color: #FFEB3B;color:#000";
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -4653,7 +4653,7 @@ function buscarexpedientescancelados($cliente, $buscar)
 			$TotalPagos = $TotalPagos + $totalpagado;
 			$TotalDeuda = $TotalDeuda + $deuda;
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -4809,7 +4809,7 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 			$TotalPagos = $TotalPagos + $totalpagado;
 			$TotalDeuda = $TotalDeuda + $deuda;
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -5006,7 +5006,7 @@ function mashistorialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $
 			$TotalPagos = $TotalPagos + $totalpagado;
 			$TotalDeuda = $TotalDeuda + $deuda;
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -5397,7 +5397,7 @@ function buscarexpedientes($buscar)
 				$controlVentas = $cod_venta;
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -5574,7 +5574,7 @@ function buscarexpedientesventasfinalizadas($buscar)
 				$controlVentas = $cod_venta;
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -5752,7 +5752,7 @@ function buscarexpedientesventaspendientes($buscar)
 				$controlVentas = $cod_venta;
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}
@@ -6669,7 +6669,7 @@ function buscardatosventaticket($buscar)
 			$Monto = number_format($valor['Monto'], '0', ',', '.');
 
 			$cuotaspagadas = buscarcantidadcuotapagados($buscar);
-			$datos[0] = $nroCouta . "/" . $cuotaspagadas;
+			$datos[0] = $cuotaspagadas . "/" . $nroCouta;
 			$datos[1] = $Monto;
 		}
 	}
@@ -8793,7 +8793,7 @@ exit; */
 				$styleCancelado = "background-color: #FFEB3B;color:#000";
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 				$cuotasFaltantes = $nroCouta - buscarcantidadcuotapagados($cod_venta);
 			} else {
 				$cuotas = "CONTADO";
@@ -9063,7 +9063,7 @@ exit; */
 			}
 			$cuotasFaltantes = 0;
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 				$cuotasFaltantes = $nroCouta - buscarcantidadcuotapagados($cod_venta);
 			} else {
 				$cuotas = "CONTADO";
@@ -10629,7 +10629,7 @@ function buscar_ventas_clientes_trabajados($fechafiltro, $nroventa, $cliente, $t
 				$styleCancelado = "background-color: #FFEB3B;color:#000";
 			}
 			if ($TipoVenta == "CREDITO") {
-				$cuotas = $nroCouta . "/" . buscarcantidadcuotapagados($cod_venta);
+				$cuotas = buscarcantidadcuotapagados($cod_venta) . "/" . $nroCouta;
 			} else {
 				$cuotas = "CONTADO";
 			}

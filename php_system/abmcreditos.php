@@ -3936,7 +3936,7 @@ function BuscarDetalleVentaCredito($cod_venta){
 	$mysqli=conectar_al_servidor();	
 	 
 $sql= "Select  (select concat(nombre_persona,' ',apellido_persona) from persona where cod_clienteFK=cod_persona) as nombreCliente ,
- TipoVenta , puntoexpedicion , num_factura , fecha_venta , nombre_producto , cantidad_detalle , d.precio_producto, subtotal from venta
+ cod_venta, TipoVenta , puntoexpedicion , num_factura , fecha_venta , nombre_producto , cantidad_detalle , d.precio_producto, subtotal from venta
  inner join detalle_venta d on cod_venta=cod_ventaFK 
  inner join producto on cod_producto=cod_productoFK  where  cod_venta='".$cod_venta."'";
  
@@ -3977,7 +3977,9 @@ if ( ! $stmt->execute()) {
 		$precio_producto=utf8_encode($valor['precio_producto']);
 		$subtotal=utf8_encode($valor['subtotal']);
 		
-		if($puntoexpedicion!=""){
+		if($num_factura===""){
+			$NroVentaClienteImprimir = $valor['cod_venta'];
+		}else if($puntoexpedicion!=""){
 			$NroVentaClienteImprimir = $puntoexpedicion."-".$num_factura;
 		}else{
 			$NroVentaClienteImprimir =  $num_factura;
@@ -8475,17 +8477,19 @@ function buscarcreditosexpediente_imprimir($cod_venta)
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
-$sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,interes,dias,vt.pago as entrega,vt.cod_clienteFK,cr.diasatrasados,cr.totalinteres,
+$sql= "select cr.plazo,cr.fechapago,vt.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,cr.interes,cr.dias,vt.pago as entrega,vt.cod_clienteFK,cr.diasatrasados,cr.totalinteres,vt.TipoVenta,
+IFNULL((SELECT SUM(cc.descuento) FROM credito cc WHERE cc.cod_venta=vt.cod_venta),0) as descuentoVenta,
 IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 (SELECT ci_cliente FROM cliente WHERE cod_cliente=vt.cod_clienteFK) as ci_cliente,
 (SELECT direccion FROM persona WHERE cod_persona=vt.cod_clienteFK) as direccion,
 (SELECT telefono FROM persona WHERE cod_persona=vt.cod_clienteFK) as telefono,
 (SELECT nombre_persona FROM persona WHERE cod_persona=vt.idGaranteFk) as garante,
 (SELECT telefono FROM persona WHERE cod_persona=vt.idGaranteFk) as telefonoFarante,
+(SELECT concat(nombre_persona,' ',apellido_persona) FROM persona WHERE cod_persona=vt.cod_cobradorFK) as cobrador,
 (SELECT nombre FROM zona WHERE idzona = (SELECT idzonaFk FROM cliente WHERE cod_cliente=vt.cod_clienteFK)) as zona,
 (select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1) as fechapagado
- from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
- where vt.cod_venta='$cod_venta' ";
+ from venta vt left join credito cr on vt.cod_venta=cr.cod_venta and UPPER(TRIM(IFNULL(vt.TipoVenta,'')))<>'CONTADO'
+ where vt.cod_venta=? ";
 
  $pagina = "";  
 $interes = "0";  
@@ -8519,6 +8523,7 @@ $nombreClienteImprimir="";
 
 
 $stmt = $mysqli->prepare($sql);
+$stmt->bind_param('s',$cod_venta);
 if ( ! $stmt->execute()) {
 echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
 exit;
@@ -8535,21 +8540,9 @@ if ($valor>0)
 {
 while ($valor= mysqli_fetch_assoc($result))
 {  
-$idcredito = utf8_encode($valor['idcredito']);
-$plazo = utf8_encode($valor['plazo']);  
-$fechapago = utf8_encode($valor['fechapago']);          
 $cod_venta = utf8_encode($valor['cod_venta']);          
-$Monto = utf8_encode($valor['Monto']); 
-$Esado = utf8_encode($valor['Esado']);          
-$Nro_recibo = utf8_encode($valor['Nro_recibo']);
 $total_venta = utf8_encode($valor['total_venta']);
-$interes = utf8_encode($valor['interes']);
-$dias = utf8_encode($valor['dias']);
 $entrega = utf8_encode($valor['entrega']);
-$fechapagado = utf8_encode($valor['fechapagado']);
-$nroCancelado = utf8_encode($valor['nroCancelado']);
-$cod_clienteFK = utf8_encode($valor['cod_clienteFK']);
-$diasatrasados = utf8_encode($valor['diasatrasados']);
 
 $garante = utf8_encode($valor['garante']);
 $GaranteClienteImprimir = $garante;
@@ -8561,9 +8554,33 @@ $direccion = utf8_encode($valor['direccion']);
 $DireccionClienteImprimir = $direccion;
 $telefono = utf8_encode($valor['telefono']);
 $TelefonoClienteImprimir = $telefono;
-$totalinteres = utf8_encode($valor['totalinteres']);
 $telefonoFarante = utf8_encode($valor['telefonoFarante']);
 $TelefonoGaranteImprimir = $telefonoFarante;
+$CobradorClienteImprimir = utf8_encode($valor['cobrador']);
+
+// Los contados se informan desde la venta, incluso si no tienen cuotas ni pagos migrados.
+if(strtoupper(trim($valor['TipoVenta']))==='CONTADO'){
+	$totalPagado = (float)$total_venta;
+	$totalDescuento = (float)$valor['descuentoVenta'];
+	continue;
+}
+if($valor['idcredito']===null){
+	continue;
+}
+
+$idcredito = utf8_encode($valor['idcredito']);
+$plazo = utf8_encode($valor['plazo']);
+$fechapago = utf8_encode($valor['fechapago']);
+$Monto = utf8_encode($valor['Monto']);
+$Esado = utf8_encode($valor['Esado']);
+$Nro_recibo = utf8_encode($valor['Nro_recibo']);
+$interes = utf8_encode($valor['interes']);
+$dias = utf8_encode($valor['dias']);
+$fechapagado = utf8_encode($valor['fechapagado']);
+$nroCancelado = utf8_encode($valor['nroCancelado']);
+$cod_clienteFK = utf8_encode($valor['cod_clienteFK']);
+$diasatrasados = utf8_encode($valor['diasatrasados']);
+$totalinteres = utf8_encode($valor['totalinteres']);
 
 $datos=calcularintereses2($idcredito,0,0,"2","2","1","no");
 $descuento=$datos[0];
