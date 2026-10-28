@@ -2029,7 +2029,7 @@ $pagina2.="<table class='tableTicket' style='border: solid 1px #a1a1a1;'>
 <tr>
 <td style='width:20%'>".$Fecha."</td>
 <td style='width:20%'>".$fechapago."</td>
-<td style='width:40%'>".$tipo."--".$plazo."</td>
+<td style='width:40%'>".$tipo."  ".$plazo."</td>
 <td style='width:20%'>".number_format($Monto,'0',',','.')."</td>
 </tr>
 </table>";

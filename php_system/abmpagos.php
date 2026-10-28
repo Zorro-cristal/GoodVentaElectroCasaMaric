@@ -4517,15 +4517,15 @@ if($cantidad_letras<=2){
 $TipoPago=$montocredito - $pagoCuotas ;
 
 if($tipo=="Interes"){
-	$tipo="INTERES"."--".$plazo;
+	$tipo="INTERES  ".$plazo;
 	$totalInteres=$totalInteres  + $Monto;
 }
 if($tipo=="Pago Cuota"){
 	
 	if($TipoPago==0){
-		$tipo="PAGO DE CUOTA  --".$plazo ;
+		$tipo="PAGO DE CUOTA  ".$plazo ;
 	}else{
-		$tipo="CUOTA PARCIAL DE --".$plazo  ;
+		$tipo="CUOTA PARCIAL DE  ".$plazo  ;
 	}
 	$totalCuota=$totalCuota  + $Monto;		
 } 
@@ -4766,10 +4766,10 @@ $montocredito = utf8_encode($valor['montocredito']);
 
 
 if($tipo=="Interes"){
-	$tipo="INTERES"."--".$plazo;
+	$tipo="INTERES  ".$plazo;
 }
 if($tipo=="Pago Cuota"){
-	$tipo="PAGO DE CUOTA"."--".$plazo;
+	$tipo="PAGO DE CUOTA  ".$plazo;
 }
 
 if($tipo=="CARGO ADMINISTRATIVO"){
@@ -4898,15 +4898,15 @@ if($cantidad_letras<=2){
 $TipoPago=$montocredito - $pagoCuotas ;
 
 if($tipo=="Interes"){
-	$tipo="INTERES"."--".$plazo;
+	$tipo="INTERES  ".$plazo;
 	$totalInteres=$totalInteres  + $Monto;
 }
 if($tipo=="Pago Cuota"){
 	
 	if($TipoPago==0){
-		$tipo="PAGO DE CUOTA"."--".$plazo;
+		$tipo="PAGO DE CUOTA  ".$plazo;
 	}else{
-		$tipo="PAGO PARCIAL DE CUOTA"."--".$plazo;
+		$tipo="PAGO PARCIAL DE CUOTA  ".$plazo;
 	}
 	$totalCuota=$totalCuota  + $Monto;
 }
