@@ -5563,7 +5563,7 @@ $condicioncliente = construir_condicion_cliente_cuentas_cobrar($mysqli, $cliente
 $condicionbusquedageneral = construir_condicion_busqueda_general_cuentas_cobrar($mysqli, $buscar_general);
 
 
-	$sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,datediff(cr.fechapago,'".$fechahoy."') as diff,vt.tipo_comprobante,vt.puntoexpedicion,vt.cod_cobradorFK,vt.num_factura,vt.total_venta,vt.num_factura,vt.cod_clienteFK,
+	$sql= "select cr.plazo,MIN(cr.fechapago) as fechapago,cr.cod_venta,cr.Monto,cr.idcredito,datediff(MIN(cr.fechapago),'".$fechahoy."') as diff,vt.tipo_comprobante,vt.puntoexpedicion,vt.cod_cobradorFK,vt.num_factura,vt.total_venta,vt.num_factura,vt.cod_clienteFK,
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_venta_fk=vt.cod_venta),0) as totalPago,cr.totalinteres,cr.descuento,vt.TipoVenta,
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as creditopagado,
 IFNULL((select sum(cx.Monto-cx.descuento) from credito cx where cx.cod_venta=vt.cod_venta),0) as capitalTotalCredito,
@@ -5583,7 +5583,7 @@ IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK
  where (IFNULL((select sum(pg.Monto) from credito pg where pg.idcredito=cr.idcredito),0)- IFNULL((select sum(pg.descuento) from credito pg where pg.idcredito=cr.idcredito),0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)>0 and
  (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0 and
   IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0  
-".$condicionCodLocal.$condicionbusquedageneral.$condicioncliente.$condiciondocumento.$condiciontelefono.$condicionfechafiltro.$condicionFecha.$condicionVendedor."  group by cr.cod_venta order by  vt.cod_venta asc limit 100 ";
+".$condicionCodLocal.$condicionbusquedageneral.$condicioncliente.$condiciondocumento.$condiciontelefono.$condicionfechafiltro.$condicionFecha.$condicionVendedor."  group by cr.cod_venta order by MIN(cr.fechapago) asc, vt.cod_venta asc limit 100 ";
  
 
 // echo($sql);
@@ -5909,7 +5909,7 @@ $condicionbusquedageneral = construir_condicion_busqueda_general_cuentas_cobrar(
 
 
 
-	$sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,datediff(cr.fechapago,'".$fechahoy."') as diff,vt.tipo_comprobante,vt.puntoexpedicion,vt.cod_cobradorFK,vt.num_factura,vt.total_venta,vt.num_factura,vt.cod_clienteFK,
+	$sql= "select cr.plazo,MIN(cr.fechapago) as fechapago,cr.cod_venta,cr.Monto,cr.idcredito,datediff(MIN(cr.fechapago),'".$fechahoy."') as diff,vt.tipo_comprobante,vt.puntoexpedicion,vt.cod_cobradorFK,vt.num_factura,vt.total_venta,vt.num_factura,vt.cod_clienteFK,
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_venta_fk=vt.cod_venta),0) as totalPago,cr.totalinteres,cr.descuento,vt.TipoVenta,
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as creditopagado,
 IFNULL((select sum(cx.Monto-cx.descuento) from credito cx where cx.cod_venta=vt.cod_venta),0) as capitalTotalCredito,
@@ -5929,7 +5929,7 @@ IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK
  where (IFNULL((select sum(pg.Monto) from credito pg where pg.idcredito=cr.idcredito),0)- IFNULL((select sum(pg.descuento) from credito pg where pg.idcredito=cr.idcredito),0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)>0 and
  (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0 and
   IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0  
-".$condicionCodLocal.$condicionbusquedageneral.$condicioncliente.$condiciondocumento.$condiciontelefono.$condicionfechafiltro.$condicionFecha.$condicionVendedor."  group by cr.cod_venta order by  vt.cod_venta asc limit ".$registrocargado.", 100 ";
+".$condicionCodLocal.$condicionbusquedageneral.$condicioncliente.$condiciondocumento.$condiciontelefono.$condicionfechafiltro.$condicionFecha.$condicionVendedor."  group by cr.cod_venta order by MIN(cr.fechapago) asc, vt.cod_venta asc limit ".$registrocargado.", 100 ";
  
 
 

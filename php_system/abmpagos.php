@@ -4934,6 +4934,7 @@ if($plazo=="Contado"){
 }
 
 
+?
 
 $TipoPago=$montocredito - $pagoCuotas ;
 
