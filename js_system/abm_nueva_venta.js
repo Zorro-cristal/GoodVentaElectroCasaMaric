@@ -3494,7 +3494,6 @@ function verificarConfirmaciondepago(omitirControlDeposito) {
 	
 	let control = contarPagosConMontoPorNombre("tdDetallePagoCreditoOffline"); 
 
-	 controlInsercionPagos=true
 	if(control > 0){
 		
 		if(controlVerificarPagosCredito <= 0){
@@ -3510,6 +3509,7 @@ function verificarConfirmaciondepago(omitirControlDeposito) {
 	
 	
 	
+	controlInsercionPagos=true;
 	abmconfirmarpago(inptMontoCargoAdministrativo,MontoTarjeta,inptMontoAPagar,inptDescuentoAPagar, inptFechaPagoConfirmar, cobradorcredito, codCredito, inptInteresAPagar, MontoCobrado,inptNroReciboAPagar,imprimirOpcion);
 }
 
@@ -3845,7 +3845,6 @@ function verificarcargarpago() {
 	$("tr[name=tdDetallePagoCreditoParcialOffline]").each(function(i, elementohtml){
 	control=control+1;
 	});
-	 controldePagosParciales=true
 	
 	var imprimirOpcion = true;
 	if(document.getElementById('inptSeleccImprimirTicketParcial2').checked){
@@ -3933,7 +3932,6 @@ function verificarcargarpagoTipoPago(omitirControlDeposito) {
 		return;
 	}
 	
-	 controldePagosParciales=true
 	if(control > 0){
 		abmcargaropcionespagoparcial(inptMontoCargoAdministrativoCuotaPago,inptMontoTarjetaCargaPago,inptDescuentoCargaPago, inptFechaPagoCargarPago, cobradorcargarpagos, inputSelectFechaPago,inptNroReciboCargaPago,imprimirOpcion, 0);
 		return;
@@ -3948,7 +3946,15 @@ function verificarcargarpagoTipoPago(omitirControlDeposito) {
 
 
 function abmcargarpago(CargoAdministrativo,MontoTarjeta,Descuento,Monto, Fecha, cod_cobradorFK, controlfecha,nrofactura,imprimirOpcion) {
+	if(controldePagosParciales){
+		ver_vetana_informativa("PAGO EN PROCESO,NO PUEDE REALIZAR ESTA ACCIÓN");
+		return;
+	}
 if(controlacceso("INSERTARPAGOSCREDITO","accion")==false){return;}
+	function finalizarSolicitud(){
+		controldePagosParciales=false;
+		verCerrarEfectoCargando("");
+	}
 	verCerrarEfectoCargando("1")
 	var datos = new FormData();
 	obtener_datos_user();
@@ -3969,6 +3975,8 @@ if(controlacceso("INSERTARPAGOSCREDITO","accion")==false){return;}
 	datos.append("CargoAdministrativo", CargoAdministrativo)
 	datos.append("cod_ClienteFKMora", cod_ClienteFKMora)
 	datos.append("imprimirOpcion", imprimirOpcion)
+	controldePagosParciales=true;
+	try {
 	var OpAjax = $.ajax({
 		data: datos,
 		url: "/GoodVentaElectroCasaMaric/php_system/abmpagos.php",
@@ -3979,20 +3987,18 @@ if(controlacceso("INSERTARPAGOSCREDITO","accion")==false){return;}
 		 
 		
 		error: function (jqXHR, textstatus, errorThrowm) {
-			verCerrarEfectoCargando("")
+			finalizarSolicitud();
 			manejadordeerroresjquery(jqXHR.status,textstatus,"abmcargarpago")
-			controldePagosParciales=false
 			return false;
 		},
 		success: function (responseText) {
 			verCerrarEfectoCargando("")
 			Respuesta = responseText;
 			console.log(Respuesta)
-			controldePagosParciales=false
 			
+	try {
 				var datos = $.parseJSON(Respuesta);
 				Respuesta = datos["1"];
- 	try {
 				Respuesta=respuestaJqueryAjax(Respuesta)
 			   if (Respuesta == true) {
 
@@ -4056,7 +4062,6 @@ if(controlacceso("INSERTARPAGOSCREDITO","accion")==false){return;}
 	
 
  
-		controlInsercionPagos=false
 				
 					document.getElementById("inptDiasAtrazadoCargarPago").value = "";
 					document.getElementById("inptMontoCargaPago").value = "";
@@ -4069,13 +4074,19 @@ if(controlacceso("INSERTARPAGOSCREDITO","accion")==false){return;}
 				ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 					var titulo="Error: "+error+" \r\n Consola: "+responseText
 				GuardarArchivosLog(titulo)
+			} finally {
+				finalizarSolicitud();
 			}
 
 
-		}
+		},
+		complete: finalizarSolicitud
 	});
-
-
+	} catch (error) {
+		finalizarSolicitud();
+		ver_vetana_informativa("NO SE PUDO ENVIAR EL PAGO. REVISE LA CONEXION.");
+		GuardarArchivosLog("Error al enviar pago parcial: "+error);
+	}
 }
 /*RE-IMPRIMIR TICKET*/
 function vercerrarhistorialdepagorimprimir(d) {
@@ -8489,6 +8500,8 @@ function limpiarCamposCuentasAcobrarinforme(){
 }
 	document.getElementById("table_cuentas_a_cobrar_informe").innerHTML = "";
 	document.getElementById("inptBuscarCuentasAcobrarinforme").value = "";
+	document.getElementById("inptBuscarCuentasAcobrarinformeDesde").value = "";
+	rangoVencimientoCuentasInforme = null;
 	document.getElementById("inputSelectCobradorInfCuentasAcobrarinforme").value = "";
 	document.getElementById("inptlocalCuentasAcobrainforme").value = "";
 	document.getElementById("inptRegistroNroHistorialCuentaAcobrarinforme").value = "";
@@ -8498,6 +8511,7 @@ function limpiarCamposCuentasAcobrarinforme(){
 var registrocargadocuentascobrar="";
 var totalregistrocuentacobrar="";
 var controldebusquedadCuentaCobrar=false
+var rangoVencimientoCuentasInforme=null;
 function cancelarCuentaCobrar(){
 	controldebusquedadCuentaCobrar=false
 	document.getElementById("divProgressCuentaCobra").style.backgroundColor='#ff5722'
@@ -8506,6 +8520,7 @@ let MiCondicion="";
 function buscarcuentaacobrarinforme() {
 		if(controlacceso("VERINFORMECUENTAGENERAL","accion")==false){return;}
 	var fecha = document.getElementById("inptBuscarCuentasAcobrarinforme").value
+	var fecha_desde = document.getElementById("inptBuscarCuentasAcobrarinformeDesde").value
 	var cod_cobrador = document.getElementById("inputSelectCobradorInfCuentasAcobrarinforme").value
 	var cod_local = document.getElementById("inptlocalCuentasAcobrainforme").value
 	var cliente = document.getElementById("inptNombreClienteCuentasAcobrainforme").value
@@ -8520,7 +8535,11 @@ var datos_busqueda = document.getElementById("inptDatosCuentasAcobrarInforme").v
 		// }
 		
 		if (fecha == "") {
-			ver_vetana_informativa("FALTO INGRESAR LA FECHA")
+			ver_vetana_informativa("FALTO INGRESAR EL VENCIMIENTO HASTA")
+			return
+		}
+		if (fecha_desde != "" && fecha_desde > fecha) {
+			ver_vetana_informativa("EL VENCIMIENTO DESDE NO PUEDE SER MAYOR QUE EL VENCIMIENTO HASTA")
 			return
 		}
 		
@@ -8530,6 +8549,7 @@ var datos_busqueda = document.getElementById("inptDatosCuentasAcobrarInforme").v
 	return
 }
 controldebusquedadCuentaCobrar=true
+	rangoVencimientoCuentasInforme={desde:fecha_desde,hasta:fecha};
 	document.getElementById("table_cuentas_a_cobrar_informe").innerHTML = paginacargando
 	document.getElementById("inptRegistroNroHistorialCuentaAcobrarinforme").value = "..."
 	document.getElementById("inptRegistroNroHistorialTotalACobrarinforme").value = "..."
@@ -8541,6 +8561,7 @@ controldebusquedadCuentaCobrar=true
 		"passu": passuser,
 		"navegador": navegador,
 		"fecha": fecha,
+		"fecha_desde": fecha_desde,
 		"cod_cobrador": cod_cobrador,
 		"cod_local": cod_local,
 		"cliente": cliente,
@@ -8616,7 +8637,8 @@ function obtenerdatosagendarcliente(datos){
 }
 function buscarmascuentaacobrarinforme(c) {
 		if(controlacceso("VERINFORMECUENTAGENERAL","accion")==false){return;}
-	var fecha = document.getElementById("inptBuscarCuentasAcobrarinforme").value
+	var fecha = rangoVencimientoCuentasInforme ? rangoVencimientoCuentasInforme.hasta : document.getElementById("inptBuscarCuentasAcobrarinforme").value
+	var fecha_desde = rangoVencimientoCuentasInforme ? rangoVencimientoCuentasInforme.desde : document.getElementById("inptBuscarCuentasAcobrarinformeDesde").value
 	var cod_cobrador = document.getElementById("inputSelectCobradorInfCuentasAcobrarinforme").value
 	var cod_local = document.getElementById("inptlocalCuentasAcobrainforme").value
 	var cliente = document.getElementById("inptNombreClienteCuentasAcobrainforme").value
@@ -8625,7 +8647,11 @@ function buscarmascuentaacobrarinforme(c) {
 	var zona = document.getElementById("inptZonaCuentasAcobrainforme").value
 
 		if (fecha == "") {
-			ver_vetana_informativa("FALTO INGRESAR LA FECHA")
+			ver_vetana_informativa("FALTO INGRESAR EL VENCIMIENTO HASTA")
+			return
+		}
+		if (fecha_desde != "" && fecha_desde > fecha) {
+			ver_vetana_informativa("EL VENCIMIENTO DESDE NO PUEDE SER MAYOR QUE EL VENCIMIENTO HASTA")
 			return
 		}
 	if(c=="1"){
@@ -8649,6 +8675,7 @@ controldebusquedadCuentaCobrar=true
 		"cod_cobrador": cod_cobrador,
 		"cod_local": cod_local,
 		"fecha": fecha,
+		"fecha_desde": fecha_desde,
 		"cliente": cliente,
 		"totalNeto": totalNeto,
 		"zona": zona,

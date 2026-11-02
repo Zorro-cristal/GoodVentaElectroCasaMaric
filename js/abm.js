@@ -4854,7 +4854,7 @@ pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#
 +"<table class='tableTicketrecibo'>"
 +"<tr>"
 +"<td style='width:15%'></td>"
-+"<td style='width:85%;font-size:15px'> "+CuotasNro+" -- "+NroRecibo+"</td>"
++"<td style='width:85%;font-size:15px'> "+CuotasNro+"&nbsp;&nbsp;"+NroRecibo+"</td>"
 +"</tr>"
 +"</table>"
 
@@ -4889,7 +4889,7 @@ pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#
 +"<table class='tableTicketrecibo'>"
 +"<tr>"
 +"<td style='width:15%'></td>"
-+"<td style='width:85%;font-size:15px'> "+CuotasNro+" -- "+NroRecibo+"</td>"
++"<td style='width:85%;font-size:15px'> "+CuotasNro+"&nbsp;&nbsp;"+NroRecibo+"</td>"
 +"</tr>"
 +"</table>"
 

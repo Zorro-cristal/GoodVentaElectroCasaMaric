@@ -11108,6 +11108,10 @@ function imprimirticketventa(){
 CONTROL DE RESPUESTAJQUERE
 */
 function respuestaJqueryAjax(Respuesta){
+	if (Respuesta == "VENTA_NO_ENCONTRADA") {
+		ver_vetana_informativa("NO SE ENCONTRO LA VENTA. VOLVE A SELECCIONARLA ANTES DE CARGAR EL PAGO.")
+		return false;
+	}
 	if (Respuesta == "UI") {
     ir_a_login()
 	ver_vetana_informativa("USUARIO INCORRECTO VUELVA A INICIAR SESION...")

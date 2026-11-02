@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/cuotas_venta.php';
 
 $operacion = $_POST['funt'];
 $operacion = utf8_decode($operacion);
@@ -355,6 +356,7 @@ if($operacion=="cuentasacobrardetallado")
 
 $fecha=$_POST['fecha'];
 $fecha = utf8_decode($fecha);
+$fecha_desde=isset($_POST['fecha_desde']) ? utf8_decode($_POST['fecha_desde']) : '';
 $cod_cobrador=$_POST['cod_cobrador'];
 $cod_cobrador = utf8_decode($cod_cobrador);
 $cod_local=$_POST['cod_local'];
@@ -379,7 +381,7 @@ $controllocal=controldeaccesoacasas($user,"CAMBIARLOCAL"," u.accion='SI' ");
 		$cod_local=buscarlocaluser($user);
 	}
 }
-	cuentasacobrardetallado($tipo_cliente,$zona,$cliente,$fecha,$cod_cobrador,$cod_local,$array_cod_tipo_cliente,$datos);
+	cuentasacobrardetallado($tipo_cliente,$zona,$cliente,$fecha,$cod_cobrador,$cod_local,$array_cod_tipo_cliente,$datos,$fecha_desde);
 
 }
 
@@ -388,6 +390,7 @@ if($operacion=="mascuentasacobrardetallado")
 
 $fecha=$_POST['fecha'];
 $fecha = utf8_decode($fecha);
+$fecha_desde=isset($_POST['fecha_desde']) ? utf8_decode($_POST['fecha_desde']) : '';
 $cod_cobrador=$_POST['cod_cobrador'];
 $cod_cobrador = utf8_decode($cod_cobrador);
 $cod_local=$_POST['cod_local'];
@@ -418,7 +421,7 @@ $controllocal=controldeaccesoacasas($user,"CAMBIARLOCAL"," u.accion='SI' ");
 		$cod_local=buscarlocaluser($user);
 	}
 }
-	mascuentasacobrardetallado($tipo_cliente,$zona,$cliente,$totalNeto,$fecha,$cod_cobrador,$cod_local,$totalACobrar,$registrocargado,$array_cod_tipo_cliente,$datos);
+	mascuentasacobrardetallado($tipo_cliente,$zona,$cliente,$totalNeto,$fecha,$cod_cobrador,$cod_local,$totalACobrar,$registrocargado,$array_cod_tipo_cliente,$datos,$fecha_desde);
 
 }
 
@@ -795,7 +798,7 @@ if($fechaCredito!=""){
 	$CondicionfechaCredito=" and cr.fechapago<='".$fechaCredito."' ";
 }
 
-$sql= "select vt.cod_clienteFK,cr.plazo,cr.deudaInteres,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,
+$sql= "select cr.tipo,vt.cod_clienteFK,cr.plazo,cr.deudaInteres,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,
 datediff(cr.fechapago,'".$fechacalculo."') as diff,vt.total_venta,interes,dias,vt.pago as entrega,
 total,(totalinteres + deudaInteres) as totalinteres ,totaldeuda,cr.descuento,
 (SELECT ci_cliente FROM cliente WHERE cod_cliente=vt.cod_clienteFK) as ci_cliente,
@@ -871,7 +874,7 @@ $zona = utf8_encode($valor['zona']);
 $ZonaClienteImprimir = $zona;
 $idcredito = utf8_encode($valor['idcredito']);
 $deudaInteres = utf8_encode($valor['deudaInteres']);
-$plazo = utf8_encode($valor['plazo']);  
+$plazo = utf8_encode(plazoCreditoVisible($valor));
 $fechapago = utf8_encode($valor['fechapago']);          
 $cod_venta = utf8_encode($valor['cod_venta']);          
 $Monto = utf8_encode($valor['Monto']); 
@@ -3020,7 +3023,7 @@ $totalPago = "0";
 $Esado = "";          
 $Nro_recibo = "";
 $TipoPago ="";
-$nroCuota ="";
+$nroCuota =0;
 $dias ="10";
 $interes ="0.01";
 $descuento ="0";
@@ -3046,7 +3049,7 @@ $nroRegistro=$valor;
 $controlStyle="";
 if ($valor>0)
 {
-	$nroCuota=$valor;
+
 while ($valor= mysqli_fetch_assoc($result))
 {  
 
@@ -3064,7 +3067,8 @@ if($puntoexpedicion!=""){
 	$numFactura=$puntoexpedicion."-".$num_factura;
 }
 
-if($tipo!="ENTREGA"){
+if(creditoEsCuota($valor)){
+	$nroCuota++;
     
 $idcredito = utf8_encode($valor['idcredito']);     
 $plazo = utf8_encode($valor['plazo']);  
@@ -3078,8 +3082,8 @@ $dias = utf8_encode($valor['dias']);
 $descuento = utf8_encode($valor['descuento']);
 $interes = utf8_encode($valor['interes']);
 
-}else{
-	$entrega = utf8_encode($valor['Monto']);
+}elseif(creditoEsEntrega($valor)){
+	$entrega += (float)$valor['Monto'];
 }
 
 $nroCuotas=$nroCuotas+1;
@@ -3414,7 +3418,7 @@ $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
 $sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.TipoPago,dias,cr.descuento
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
- where vt.cod_venta='$buscar' order by  fechapago asc ";
+ where vt.cod_venta='$buscar' AND ".sqlCreditoEsCuota('cr')." order by  fechapago asc ";
  
 
 $idcredito = "";  
@@ -3480,7 +3484,9 @@ function buscarcreditos($buscar,$formato="")
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
-$sql= "select vt.cod_clienteFK,cr.plazo,cr.deudaInteres,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,cr.descuentoInteres,
+$sql= "select cr.tipo,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") AS cantidad_cuotas,
+vt.cod_clienteFK,cr.plazo,cr.deudaInteres,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,cr.descuentoInteres,
 datediff(cr.fechapago,'".$fechahoy."') as diff,vt.total_venta,interes,dias,vt.pago as entrega,
 total,(totalinteres + deudaInteres) as totalinteres ,totaldeuda,cr.descuento,
 (SELECT ci_cliente FROM cliente WHERE cod_cliente=vt.cod_clienteFK) as ci_cliente,
@@ -3497,7 +3503,7 @@ IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito an
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Interes'),0) as totalPagoInteres,
 IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='CARGO ADMINISTRATIVO'),0) as totalCA
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
- where vt.cod_venta='$buscar'"; 
+ where vt.cod_venta='$buscar' ORDER BY CAST(SUBSTRING_INDEX(TRIM(cr.plazo),'/',1) AS UNSIGNED),cr.fechapago,cr.idcredito";
 
 
 
@@ -3536,6 +3542,7 @@ $valor= mysqli_num_rows($result);
 $nroRegistro=$valor;
 $controlStyle="";
 $ContadorCuota=0;
+$numeroCuota=0;
 
 	$nombreClienteImprimir="";
 	$NroVentaClienteImprimir="";
@@ -3566,7 +3573,11 @@ $zona = utf8_encode($valor['zona']);
 $ZonaClienteImprimir = $zona;
 $idcredito = utf8_encode($valor['idcredito']);
 $deudaInteres = utf8_encode($valor['deudaInteres']);
-$plazo = utf8_encode($valor['plazo']);  
+$plazo = utf8_encode(plazoCreditoVisible($valor));
+if(creditoEsCuota($valor)){
+	$numeroCuota++;
+	$plazo=$numeroCuota.'/'.(int)$valor['cantidad_cuotas'];
+}
 $fechapago = utf8_encode($valor['fechapago']);          
 $cod_venta = utf8_encode($valor['cod_venta']);          
 $Monto = utf8_encode($valor['Monto']); 
@@ -3646,7 +3657,9 @@ if($nroCancelado==0){
 	$control=verificar_fecha_expiracion($fechapago);
 	if($control=="si"){
 	//CALCULAMOS EL NRO DE CUOTAS ATRAZADAS
-	$nrodecuotasatrazado=$nrodecuotasatrazado+1;
+	if(creditoEsCuota($valor)){
+		$nrodecuotasatrazado++;
+	}
 	//CONDICION PARA SABER SI HAY INTERESES EN %
 	if($interes!=0){
 			/*CALCULAMOS EL DIA DE GRACIA*/
@@ -4513,7 +4526,7 @@ function buscarcreditoshistorialventa($buscar,$formato="")
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
-$sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,interes,dias,vt.pago as entrega,
+$sql= "select cr.tipo,cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,interes,dias,vt.pago as entrega,
 IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 (select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1) as fechapagado
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -4548,7 +4561,7 @@ if ($valor>0)
 while ($valor= mysqli_fetch_assoc($result))
 {  
 $idcredito = utf8_encode($valor['idcredito']);
-$plazo = utf8_encode($valor['plazo']);  
+$plazo = utf8_encode(plazoCreditoVisible($valor));
 $fechapago = utf8_encode($valor['fechapago']);          
 $cod_venta = utf8_encode($valor['cod_venta']);          
 $Monto = utf8_encode($valor['Monto']); 
@@ -4644,7 +4657,7 @@ exit;
 
 
 
-function cuentasacobrardetallado($tipo_cliente,$zona,$cliente,$fecha,$cod_cobrador,$cod_local,$array_cod_tipo_cliente,$datos)
+function cuentasacobrardetallado($tipo_cliente,$zona,$cliente,$fecha,$cod_cobrador,$cod_local,$array_cod_tipo_cliente,$datos,$fecha_desde='')
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');
@@ -4677,6 +4690,10 @@ $condicioncliente=" ";
 }
 
 $condicionFiltro=" and cr.fechapago <= '$fecha'";
+if($fecha_desde!=""){
+	$fecha_desde=$mysqli->real_escape_string($fecha_desde);
+	$condicionFiltro.=" and cr.fechapago >= '$fecha_desde'";
+}
 
 $condicionIn= "";
 $contador = 0;
@@ -4758,8 +4775,6 @@ IFNULL((Select referencias from referenciascliente rf where rf.cod_clienteFk=vt.
 $MiCondicion="";
  
 $pagina = "";  
-$filas = array();
-$devolverArray = strtolower($formato)==="json";
 $totalPagado = "0";  
 $deuda = "0";  
 $stmt = $mysqli->prepare($sql);
@@ -4852,7 +4867,7 @@ echo json_encode($informacion);
 exit;
 }
 
-function mascuentasacobrardetallado($tipo_cliente,$zona,$cliente,$totalNeto,$fecha,$cod_cobrador,$cod_local,$totalACobrar,$registrocargado,$array_cod_tipo_cliente,$datos)
+function mascuentasacobrardetallado($tipo_cliente,$zona,$cliente,$totalNeto,$fecha,$cod_cobrador,$cod_local,$totalACobrar,$registrocargado,$array_cod_tipo_cliente,$datos,$fecha_desde='')
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
@@ -4879,6 +4894,10 @@ if($cod_cobrador!=""){
 
 
 $condicionFiltro=" and cr.fechapago <= '$fecha'";
+if($fecha_desde!=""){
+	$fecha_desde=$mysqli->real_escape_string($fecha_desde);
+	$condicionFiltro.=" and cr.fechapago >= '$fecha_desde'";
+}
 
 
 $condicioncliente=" ";
@@ -5557,7 +5576,7 @@ IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIM
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
 IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK),'SIN REGISTRO') as calificacion_cliente,
 (Select tipo_estado from cliente where cod_cliente=cod_clienteFK) as tipo_estado,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -5903,7 +5922,7 @@ IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIM
 (Select tipo_estado from cliente where cod_cliente=cod_clienteFK) as tipo_estado,
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
 IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK),'SIN REGISTRO') as calificacion_cliente,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -7135,7 +7154,7 @@ function cambiarplazos($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select idcredito  from credito where cod_venta='$buscar' and plazo!='ENTREGA' and  plazo!='Contado'  "; 
+$sql= "select idcredito  from credito where cod_venta='$buscar' and ".sqlCreditoEsCuota('credito')." ORDER BY fechapago,idcredito  ";
  
 $stmt = $mysqli->prepare($sql);
 if ( ! $stmt->execute()) {
@@ -7415,11 +7434,11 @@ function buscarcantidadcuotapagados($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select count(vt.num_factura) as cuotas
+$sql= "select count(*) as cuotas
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar'
  and  IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0)>= ((cr.Monto+totalinteres)-cr.descuento)
- and plazo!='ENTREGA'";
+ and ".sqlCreditoEsCuota('cr')."";
  
 
 
@@ -8034,7 +8053,7 @@ IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0
 IFNULL((Select lat from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIMIT 1),0) as lat,
 IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIMIT 1),0) as lot,
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -8242,7 +8261,7 @@ IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0
 IFNULL((Select lat from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIMIT 1),0) as lat,
 IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIMIT 1),0) as lot,
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -8477,7 +8496,7 @@ function buscarcreditosexpediente_imprimir($cod_venta)
 {
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
-$sql= "select cr.plazo,cr.fechapago,vt.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,cr.interes,cr.dias,vt.pago as entrega,vt.cod_clienteFK,cr.diasatrasados,cr.totalinteres,vt.TipoVenta,
+$sql= "select cr.tipo,cr.plazo,cr.fechapago,vt.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,vt.total_venta,cr.interes,cr.dias,vt.pago as entrega,vt.cod_clienteFK,cr.diasatrasados,cr.totalinteres,vt.TipoVenta,
 IFNULL((SELECT SUM(cc.descuento) FROM credito cc WHERE cc.cod_venta=vt.cod_venta),0) as descuentoVenta,
 IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 (SELECT ci_cliente FROM cliente WHERE cod_cliente=vt.cod_clienteFK) as ci_cliente,
@@ -8569,7 +8588,7 @@ if($valor['idcredito']===null){
 }
 
 $idcredito = utf8_encode($valor['idcredito']);
-$plazo = utf8_encode($valor['plazo']);
+$plazo = utf8_encode(plazoCreditoVisible($valor));
 $fechapago = utf8_encode($valor['fechapago']);
 $Monto = utf8_encode($valor['Monto']);
 $Esado = utf8_encode($valor['Esado']);
@@ -8763,7 +8782,7 @@ IFNULL((Select lat from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIM
 IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIMIT 1),0) as lot,
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
 (Select tipo_estado from cliente where cod_cliente=cod_clienteFK) as tipo_estado,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta

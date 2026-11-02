@@ -1376,6 +1376,19 @@ function verCerrarOpcionPagoCreditoParcial() {
 }
 function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento, Fecha, cod_cobradorFK, controlfecha,nrofactura,imprimirOpcion, desde){
 	
+	if((desde && controlInsercionPagos) || (!desde && controldePagosParciales)){
+		ver_vetana_informativa("PAGO EN PROCESO,NO PUEDE REALIZAR ESTA ACCIÓN");
+		return;
+	}
+	function finalizarSolicitud(){
+		if(desde){
+			controlInsercionPagos=false;
+		}else{
+			controldePagosParciales=false;
+		}
+		verCerrarEfectoCargando("");
+	}
+
 	verCerrarEfectoCargando("")
 	var datos = new FormData();
 	var control=1;
@@ -1427,7 +1440,6 @@ function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento
 	   });
 	 control=control-1;
 	if(control <= 0){
-		controldePagosParciales=false
 		ver_vetana_informativa("FALTO INGRESAR LOS PAGOS")
 		return;
 	}
@@ -1453,6 +1465,13 @@ function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento
 	datos.append("cod_ClienteFKMora", cod_ClienteFKMora)
 	datos.append("imprimirOpcion", imprimirOpcion)
 	
+	if(desde){
+		controlInsercionPagos=true;
+	}else{
+		controldePagosParciales=true;
+	}
+	verCerrarEfectoCargando("1");
+	try {
 	$.ajax({
 		data: datos,
 		url: "/GoodVentaElectroCasaMaric/php_system/abmpagos.php",
@@ -1461,7 +1480,8 @@ function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento
 		contentType: false,
 		processData: false,
 		error: function (jqXHR, textstatus, errorThrowm) {
-			verCerrarEfectoCargando("")
+			finalizarSolicitud();
+			manejadordeerroresjquery(jqXHR.status,textstatus,"abmcargaropcionespagoparcial");
 			return false;
 		},
 		success: function (responseText) {
@@ -1473,7 +1493,6 @@ function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento
 				Respuesta = datos["1"];
 				Respuesta=respuestaJqueryAjax(Respuesta)
 			   if (Respuesta == true) {
-				   controldePagosParciales=false
 				   if(desde){
 						 limpiarCamposAnhadirPagosCredito()
 						 limpiarDatosDepositoPagoGrilla("div_opciones_pago_credito")
@@ -1548,7 +1567,6 @@ function abmcargaropcionespagoparcial(CargoAdministrativo,MontoTarjeta,Descuento
 
 // ImprimirReciboDinero(plazoRecibo,pagado,nombrecliente,cicliente,nrofactura) 
 
-controlInsercionPagos=false
 				
 					document.getElementById("inptDiasAtrazadoCargarPago").value = "";
 					document.getElementById("inptMontoCargaPago").value = "";
@@ -1561,12 +1579,20 @@ controlInsercionPagos=false
 				ver_vetana_informativa("LO SENTIMOS HA OCURRIDO UN ERROR ")
 					var titulo="Error: "+error+" \r\n Consola: "+responseText
 				GuardarArchivosLog(titulo)
+			} finally {
+				finalizarSolicitud();
 			}
 
 
-		}
+		},
+		complete: finalizarSolicitud
 	
 	});
+	} catch (error) {
+		finalizarSolicitud();
+		ver_vetana_informativa("NO SE PUDO ENVIAR EL PAGO. REVISE LA CONEXION.");
+		GuardarArchivosLog("Error al enviar pago parcial: "+error);
+	}
 
 
 }

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/cuotas_venta.php';
 
 $operacion = $_POST['funt'];
 $operacion = utf8_decode($operacion);
@@ -1390,7 +1391,7 @@ $condicioncallcenter = "";
 	 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 	 (Select telefono from persona where cod_persona=cod_clienteFK) as telefonocliente,
 	  (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
-		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 			IFNULL((SELECT estado from detalle_callcenterventas cv where cv.cod_clienteFK = cod_clienteFK and cv.cod_ventaFK = cod_venta ORDER BY iddetalle_callcenterventas DESC LIMIT 1),'SIN ESTADO') as estado_callcenter,
 			".sqlCapitalCobradoVenta()." as totalpagado
@@ -1604,7 +1605,7 @@ function masVentasCompletadas($totalVenta, $nroventa, $fecha1, $fecha2, $cliente
 	 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 	 (Select telefono from persona where cod_persona=cod_clienteFK) as telefonocliente,
 	  (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
-		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 			IFNULL((SELECT estado from detalle_callcenterventas cv where cv.cod_clienteFK = cod_clienteFK and cv.cod_ventaFK = cod_venta ORDER BY iddetalle_callcenterventas DESC LIMIT 1),'SIN ESTADO') as estado_callcenter,
 			".sqlCapitalCobradoVenta()." as totalpagado
@@ -2741,7 +2742,7 @@ function solicitudAnulacionVenta($buscar,$local,$formato=''){
 		(Select accesocredito from cliente where cod_cliente=cod_clienteFK) as accesocredito,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(dtv.descuento) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK),0) as totaldescuentodetalles,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
@@ -2751,7 +2752,7 @@ function solicitudAnulacionVenta($buscar,$local,$formato=''){
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) as pagado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cliente on cod_cliente=cod_ClienteFK
 			inner join persona on cod_cliente=cod_persona  
@@ -3775,7 +3776,7 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select dias from credito where cod_venta=vt.cod_venta limit 1),0) as diasgracia,
 		IFNULL((Select interes from credito where cod_venta=vt.cod_venta limit 1),0) as intereses,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
@@ -3786,12 +3787,12 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
@@ -4206,7 +4207,7 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select dias from credito where cod_venta=vt.cod_venta limit 1),0) as diasgracia,
 		IFNULL((Select interes from credito where cod_venta=vt.cod_venta limit 1),0) as intereses,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
@@ -4217,12 +4218,12 @@ $condicionMontoMinimo = $montoMinimo > 0 ? " and vt.total_venta >= " . (float) $
 		codmoracliente as tipo_estado,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto, estadorefinanciado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
@@ -4561,14 +4562,14 @@ function buscarexpedientescancelados($cliente, $buscar)
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 			IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select motivo from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as motivo,
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
@@ -4719,14 +4720,14 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK) as clientenombre,
 		IFNULL((Select trim(concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,''))) from persona where cod_persona=cl.cod_usuario limit 1),'SIN REGISTRO') as usuarioanulo,
 		IFNULL((Select GROUP_CONCAT(CONCAT(dtv.cantidad_detalle,' x ',IFNULL(NULLIF(pr.nombre_producto,''),dtv.detalleproducto)) SEPARATOR '<br>') from detalle_venta dtv left join producto pr on dtv.cod_productoFK=pr.cod_producto where dtv.cod_ventaFK=vt.cod_venta),'') as productos,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA') as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 			(Select count(cod_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
 		".sqlCapitalCobradoVenta()." as totalpagado
@@ -4853,14 +4854,14 @@ function historialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $cli
 		(Select Calificacion from cliente where cod_cliente=vt.cod_clienteFK) as Calificacion,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA') as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 			(Select count(cod_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
 		".sqlCapitalCobradoVenta()." as totalpagado
@@ -4917,14 +4918,14 @@ function mashistorialventacancelado($filtrofecha, $fecha1, $fecha2, $nroventa, $
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK) as clientenombre,
 		IFNULL((Select trim(concat(IFNULL(nombre_persona,''),' ',IFNULL(apellido_persona,''))) from persona where cod_persona=cl.cod_usuario limit 1),'SIN REGISTRO') as usuarioanulo,
 		IFNULL((Select GROUP_CONCAT(CONCAT(dtv.cantidad_detalle,' x ',IFNULL(NULLIF(pr.nombre_producto,''),dtv.detalleproducto)) SEPARATOR '<br>') from detalle_venta dtv left join producto pr on dtv.cod_productoFK=pr.cod_producto where dtv.cod_ventaFK=vt.cod_venta),'') as productos,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA') as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 			(Select count(cod_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta) as nrodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		cl.montodevuelto,cl.motivo,cl.fecha as fechacancelacion,
 		".sqlCapitalCobradoVenta()." as totalpagado
@@ -5290,14 +5291,14 @@ function buscarexpedientes($buscar)
 		IFNULL((Select deudaactual from totalesdeudaventa where cod_venta=cod_ventaFk),0) as deudaactual,
 		(Select fechaactualizacion from totalesdeudaventa where cod_venta=cod_ventaFk) as fechaactualizacion,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select motivo from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as motivo,
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
@@ -5467,14 +5468,14 @@ function buscarexpedientesventasfinalizadas($buscar)
 		IFNULL((Select deudaactual from totalesdeudaventa where cod_venta=cod_ventaFk),0) as deudaactual,
 		(Select fechaactualizacion from totalesdeudaventa where cod_venta=cod_ventaFk) as fechaactualizacion,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select motivo from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as motivo,
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
@@ -5644,14 +5645,14 @@ function buscarexpedientesventaspendientes($buscar)
 		IFNULL((Select deudaactual from totalesdeudaventa where cod_venta=cod_ventaFk),0) as deudaactual,
 		(Select fechaactualizacion from totalesdeudaventa where cod_venta=cod_ventaFk) as fechaactualizacion,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select motivo from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as motivo,
 		IFNULL((Select fecha from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as fechacancelacion,
@@ -5806,11 +5807,11 @@ function buscarcantidadcuotapagados($buscar)
 {
 	$mysqli = conectar_al_servidor();
 
-	$sql = "select count(vt.num_factura) as cuotas
+	$sql = "select count(*) as cuotas
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar'
  and  ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0
- and plazo!='ENTREGA'";
+ and ".sqlCreditoEsCuota('cr')."";
 
 
 
@@ -5896,7 +5897,7 @@ function ganaciaventa($nroventa, $fecha1, $fecha2, $cliente, $nrodocumento, $fec
 	 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 	  (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		IFNULL((select sum(dtv1.comision) from detalle_venta dtv1  where vt.cod_venta=dtv1.cod_ventaFK),0) as comisionvendedor,
-		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		".sqlCapitalCobradoVenta()." as totalpagado,
@@ -5992,7 +5993,7 @@ function ganaciaventa($nroventa, $fecha1, $fecha2, $cliente, $nrodocumento, $fec
 	  (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		IFNULL((select sum(dtv1.comision) from detalle_venta dtv1  where vt.cod_venta=dtv1.cod_ventaFK),0) as comisionvendedor,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
-				(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+				(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		".sqlCapitalCobradoVenta()." as totalpagado,
 		IFNULL((select sum((pg2.comision*pg2.monto)/100) from pago pg2  where vt.cod_venta=pg2.cod_venta_fk),0) as comisioncobrador
@@ -6056,7 +6057,7 @@ function masganaciaventa($costoTotal, $VentaTotal, $nroventa, $fecha1, $fecha2, 
 	 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 	  (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		IFNULL((select sum(dtv1.comision) from detalle_venta dtv1  where vt.cod_venta=dtv1.cod_ventaFK),0) as comisionvendedor,
-		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		".sqlCapitalCobradoVenta()." as totalpagado,
@@ -6638,7 +6639,7 @@ function buscardatosventaticket($buscar)
 
 	$sql = "Select 
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta
 		from venta vt where vt.cod_venta=?";
 
 
@@ -6712,7 +6713,7 @@ function historialvistaventa($buscar, $filtro)
 		(Select accesocredito from cliente where cod_cliente=cod_clienteFK) as accesocredito,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(dtv.descuento) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK),0) as totaldescuentodetalles,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
@@ -6721,7 +6722,7 @@ function historialvistaventa($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " and (SELECT count(idcancelaciones) FROM cancelaciones c WHERE c.cod_venta = vt.cod_venta) = 0 order by fecha_venta desc limit 100 ";
 
@@ -6877,7 +6878,7 @@ function historialvistaventadocumentos($buscar, $filtro)
 		(Select accesocredito from cliente where cod_cliente=cod_clienteFK) as accesocredito,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(dtv.descuento) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK),0) as totaldescuentodetalles,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
@@ -6886,7 +6887,7 @@ function historialvistaventadocumentos($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " order by fecha_venta desc limit 100 ";
 
@@ -7027,7 +7028,7 @@ function historialvistaventadocumentoscliente($buscar, $filtro)
 		(Select accesocredito from cliente where cod_cliente=cod_clienteFK) as accesocredito,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(dtv.descuento) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK),0) as totaldescuentodetalles,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
@@ -7036,7 +7037,7 @@ function historialvistaventadocumentoscliente($buscar, $filtro)
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where " . $condicion . " order by fecha_venta desc limit 100 ";
 
@@ -7204,14 +7205,14 @@ function buscardatosVenta($buscar)
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocumento,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Cambio' group by cambios.cod_venta) as cantidadcambio,
 		(Select count(cant) from cambios where cambios.cod_venta=vt.cod_venta and motivo='Devolucion' ) as cantidaddevuelto,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where 
 		vt.cod_venta='$buscar' limit 1 ";
@@ -7564,7 +7565,7 @@ function historialFiltroMorosos($buscar, $filtro, $zona, $Local)
 		( select nombre from zona where idzona=(Select idzonaFk from cliente where cod_cliente=cod_clienteFK)) as zona,
 		(Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1) as nroCancelado,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		".sqlCapitalCobradoVenta()." as totalpagado ,
 		DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
@@ -8459,7 +8460,7 @@ function vistaventainformconf($cod_clienteFK, $cod_venta, $formato="")
 		(Select accesocredito from cliente where cod_cliente=cod_clienteFK) as accesocredito,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 		IFNULL((select sum(dtv.descuento) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK),0) as totaldescuentodetalles,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
@@ -8468,7 +8469,7 @@ function vistaventainformconf($cod_clienteFK, $cod_venta, $formato="")
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt where cod_clienteFK = '$cod_clienteFK' or idGaranteFk = '$cod_clienteFK' " . $condicioncodventa . "  order by fecha_venta desc limit 100 ";
 
@@ -8637,7 +8638,7 @@ function informeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$tipo
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		(Select fechapago from credito where cod_venta=vt.cod_venta limit 1) as fecha_pago,
 		IFNULL((Select dias from credito where cod_venta=vt.cod_venta limit 1),0) as diasgracia,
 		IFNULL((Select interes from credito where cod_venta=vt.cod_venta limit 1),0) as intereses,
@@ -8650,12 +8651,12 @@ function informeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$tipo
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		(IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
@@ -8906,7 +8907,7 @@ function masinformeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$r
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		(Select fechapago from credito where cod_venta=vt.cod_venta limit 1) as fecha_pago,
 		IFNULL((Select dias from credito where cod_venta=vt.cod_venta limit 1),0) as diasgracia,
 		IFNULL((Select interes from credito where cod_venta=vt.cod_venta limit 1),0) as intereses,
@@ -8919,12 +8920,12 @@ function masinformeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$r
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		(IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
@@ -10494,7 +10495,7 @@ function buscar_ventas_clientes_trabajados($fechafiltro, $nroventa, $cliente, $t
 		(Select ci_cliente from cliente where cod_cliente=idGaranteFk) as nrodogarante,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select dias from credito where cod_venta=vt.cod_venta limit 1),0) as diasgracia,
 		IFNULL((Select interes from credito where cod_venta=vt.cod_venta limit 1),0) as intereses,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garante,
@@ -10505,12 +10506,12 @@ function buscar_ventas_clientes_trabajados($fechafiltro, $nroventa, $cliente, $t
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
 		(Select count(cod_detalle) from detalle_venta where cod_ventaFK=cod_venta) as nrodetalle,
 		(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 		IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
 		(SELECT count(cod_venta) FROM clientes_trabajados ct WHERE vt.cod_venta = ct.cod_venta) as contador_cliente,
@@ -10968,7 +10969,7 @@ function ClienteParaInforconf($buscar,$filtro,$zona,$vista,$fecha,$formato=""){
 		 pr.telefono   as Telefono,concat(pr.nombre_persona,' ',pr.apellido_persona)  as clientenombre,
 		(Select rut_cliente from cliente where cod_cliente=cod_clienteFK) as cicliente, 
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as ruc,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		".sqlCapitalCobradoVenta()." as totalpagado ,
   IFNULL( ((select sum(cr.Monto) from credito cr where cr.cod_venta=vt.cod_venta) +(select sum(totalinteres) from credito c where c.cod_venta = vt.cod_venta and
@@ -12246,7 +12247,7 @@ function obtener_total_evaluacion_dia($anho,$mes,$dia,$local,$tipo)
  
 	$sql = "Select 
 		IFNULL((select sum(dtv1.comision) from detalle_venta dtv1  where vt.cod_venta=dtv1.cod_ventaFK),0) as comisionvendedor,
-		(select count(idcredito) from credito where cod_venta = vt.cod_venta) as plazo,
+		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
 				IFNULL((select sum(dtv2.subPrecioCompra*dtv2.cantidad_detalle) from detalle_venta dtv2  where vt.cod_venta=dtv2.cod_ventaFK),0) as costototal,
 			(Select Nombre from local l where l.cod_local=vt.cod_local) as nombrelocal,
 		".sqlCapitalCobradoVenta()." as totalpagado,

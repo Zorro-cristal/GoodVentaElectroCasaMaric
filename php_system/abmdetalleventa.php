@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/cuotas_venta.php';
 
 $operacion = $_POST['funt'];
 $operacion = utf8_decode($operacion);
@@ -1590,8 +1591,8 @@ IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0
 (Select ci_cliente from cliente where cod_cliente=vt.idGaranteFk) as nrodocgarante,
 (Select ci_cliente from cliente where cod_cliente=vt.cod_clienteFK) as nrodocliente,
 (Select rut_cliente from cliente where cod_cliente=vt.cod_clienteFK) as ruccliente,vt.TipoVenta,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-IFNULL((select count(cr.plazo) from  credito cr where vt.cod_venta=cr.cod_venta),1) as plazo,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
+IFNULL((SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq')."),1) as plazo,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra,dtv.descuento,
 (select descripcion from marcas where cod_marcas= pr.cod_marcasFK limit 1 ) as NombreMarca,
 IFNULL((Select monto_impuesto from impuesto ipt where ipt.cod_Impuesto=pr.cod_ImpuestoFK and ipt.Estado='Activo' limit 1),1) as impuesto
@@ -1898,7 +1899,7 @@ function buscarpagosDetallePago($CodVenta)
 $mysqli=conectar_al_servidor();
 
 
-$sql= "select  (select count(*) from credito c where vt.cod_venta=c.cod_venta ) as plazo,
+$sql= "select  (SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
   ifnull((SELECT c.Monto FROM credito c WHERE vt.cod_venta = c.cod_venta GROUP BY c.Monto ORDER BY COUNT(*) DESC LIMIT 1) ,0) as MontoCouta,
   ifnull((select sum(Monto) from pago p where vt.cod_venta=p.cod_venta_fk and Tipo='Pago Cuota'),0) as Entrega
   from venta vt 
@@ -2106,11 +2107,11 @@ function buscarcantidadcuotapagados($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select count(vt.num_factura) as cuotas
+$sql= "select count(*) as cuotas
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar'
  and  ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0
- and plazo!='ENTREGA'";
+ and ".sqlCreditoEsCuota('cr')."";
  
 
 
@@ -2158,7 +2159,7 @@ IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0
 (Select telefono from persona where cod_persona=vt.idGaranteFk) as Garantetelefono,
 (Select ci_cliente from cliente where cod_cliente=vt.cod_clienteFK) as nrodocliente,
 (Select rut_cliente from cliente where cod_cliente=vt.cod_clienteFK) as ruccliente,
-IFNULL((select count(cr.plazo) from  credito cr where vt.cod_venta=cr.cod_venta),1) as plazo,
+IFNULL((SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq')."),1) as plazo,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra,
 (select descripcion from marcas where cod_marcas= pr.cod_marcasFK limit 1 ) as NombreMarca,
 IFNULL((Select monto_impuesto from impuesto ipt where ipt.cod_Impuesto=pr.cod_ImpuestoFK and ipt.Estado='Activo' limit 1),1) as impuesto
@@ -2326,7 +2327,7 @@ IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0
 (Select telefono from persona where cod_persona=vt.idGaranteFk) as Garantetelefono,
 (Select ci_cliente from cliente where cod_cliente=vt.cod_clienteFK) as nrodocliente,
 (Select rut_cliente from cliente where cod_cliente=vt.cod_clienteFK) as ruccliente,
-IFNULL((select count(cr.plazo) from  credito cr where vt.cod_venta=cr.cod_venta),1) as plazo,
+IFNULL((SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq')."),1) as plazo,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra,
 IFNULL((Select monto_impuesto from impuesto ipt where ipt.cod_Impuesto=pr.cod_ImpuestoFK and ipt.Estado='Activo' limit 1),1) as impuesto
  from  producto pr inner join detalle_venta dtv on dtv.cod_productoFK=pr.cod_producto
@@ -2649,7 +2650,7 @@ while ($valor= mysqli_fetch_assoc($result))
 
 $tipo = utf8_encode($valor['tipo']); 
 $ultimaFechaPago = utf8_encode($valor['ultimaFechaPago']);   
-if($tipo!="ENTREGA"){
+if(creditoEsCuota($valor)){
 	$nroCuota++;
 if($fechapago==""){
     
@@ -2673,11 +2674,11 @@ if($MontoControl!=$nm){
 	$controlMonto=$controlMonto+1;
 }
  
-}else{
-	$entrega = utf8_encode($valor['Monto']);
+}elseif(creditoEsEntrega($valor)){
+	$entrega += (float)$valor['Monto'];
 }
 
-$nroCuotas=$nroCuotas+1;
+$nroCuotas=$nroCuota;
 }
 }
 
@@ -3311,7 +3312,7 @@ $sql= "select pr.cod_producto,pr.nombre_producto,dtv.cod_detalle,dtv.detalleprod
 IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra
  from  producto pr inner join detalle_venta dtv on dtv.cod_productoFK=pr.cod_producto

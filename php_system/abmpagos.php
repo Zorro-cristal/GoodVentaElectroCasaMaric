@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/cuotas_venta.php';
 require("conexion.php");
 include('quitarseparadormiles.php');
 include("verificar_navegador.php");
@@ -1514,6 +1515,8 @@ exit;
 }
 
 function cargarpagos($CargoAdministrativo,$MontoEfectivo,$MontoTarjeta,$MontDescuento,$Fecha,$cod_cobradorFK,$cod_venta,$controlfecha,$nrofactura,$codCaja,$codApertura,$codTipoPago,$controlTipoPago,$cod_ClienteFKMora,$imprimirOpcion,&$interesesPendientesRecibo=null){
+	// Validar la venta antes de registrar pagos o modificar cuotas.
+	$datoVenta=buscardatosventa($cod_venta);
 	$mysqli=conectar_al_servidor();
 	
 
@@ -1775,7 +1778,8 @@ if($imprimirOpcion){
 	$titulopago=buscarpagosTitulo($cod_venta,$nrofactura);
 }else{
 	$paginaticket=buscar_detalles_venta_ticket($cod_venta);
-	$titulopago=buscarpagosTituloCreditoDirecto($cod_venta,$nrofactura,$cod_creditoFK);	
+	// El pago parcial puede abarcar varias cuotas sin una cuota seleccionada.
+	$titulopago=buscarpagosTitulo($cod_venta,$nrofactura);
 }
 
 
@@ -2697,8 +2701,13 @@ $filasCuota=array();
 	   $condicioncobrador=" and (Select nombre_persona from persona where cod_persona=pg.cod_cobradorFK limit 1) like '%".$cobrador."%'";	
 	 }
 	 
-	 $condicioncobradorasig=" and ( select nombre_persona from persona inner join zona on cod_persona =cod_cobradorFK where idzona=
-	(select idzonaFk from cliente where cod_cliente=cod_clienteFK)) like '%".$cobradorasig."%'";
+	 $condicioncobradorasig="";
+	 $cobradorasig=trim($cobradorasig);
+	 if($cobradorasig!=""){
+	   // Sin filtro, incluir tambien clientes sin cobrador asignado en su zona.
+	   $condicioncobradorasig=" and ( select nombre_persona from persona inner join zona on cod_persona =cod_cobradorFK where idzona=
+	(select idzonaFk from cliente where cod_cliente=vt.cod_clienteFK)) like '%".$cobradorasig."%'";
+	 }
 	 
 	 $condicioncajaCobrador="";
 	 if($codCaja!=""){
@@ -3690,18 +3699,18 @@ if ( ! $stmt->execute()) {
 function buscardatosventa($codVenta){
 	$mysqli=conectar_al_servidor();
 	 
-		$sql= "Select fecha_venta,total_venta,cod_usuarioFK,cod_clienteFK,num_factura,puntoexpedicion,cod_cobradorFK,TipoVenta,TipoPago,Vendedor1,Vendedor2 ,cod_venta,comision,(select count(*) from credito cr where vt.cod_venta =cr.cod_venta ) as contadorCredito ,
+		$sql= "Select fecha_venta,total_venta,cod_usuarioFK,cod_clienteFK,num_factura,puntoexpedicion,cod_cobradorFK,TipoVenta,TipoPago,Vendedor1,Vendedor2 ,cod_venta,comision,(select count(*) from credito cr where vt.cod_venta=cr.cod_venta AND ".sqlCreditoEsCuota('cr').") as contadorCredito ,
 		(Select nombre from vendedor where idvendedor=Vendedor1) as nombrevendedor1,
 		(Select nombre from vendedor where idvendedor=Vendedor2) as nombrevendedor2,
 		(Select nombre_persona from persona where cod_persona=cod_usuarioFK) as usuarionombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as nrodocliente,
 		(Select nombre_persona from persona where cod_persona=cod_cobradorFK) as cobradornombre,
-		(Select count(fechapago) from credito where cod_venta=vt.cod_venta) as cantidadcuota,
+		(Select count(*) from credito cr where cr.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cr').") as cantidadcuota,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto
 		from venta vt where cod_venta=?  ";
 		
-		     $datosVenta;
+		     $datosVenta=array();
    
    
    $stmt = $mysqli->prepare($sql);
@@ -3760,6 +3769,11 @@ if ( ! $stmt->execute()) {
  }
  
  
+if(empty($datosVenta)){
+	$informacion=array("1" => "VENTA_NO_ENCONTRADA");
+	echo json_encode($informacion);
+	exit;
+}
 return $datosVenta;
 }
 
@@ -4210,6 +4224,9 @@ $cargoAdministrativoPendiente=0;
 
 function addPagosCreditoParcial($cod_ClienteFKMora,$CargoAdministrativo,$MontoTarjeta,$MontDescuento,$Fecha,$cod_cobradorFK,$cod_venta,$controlfecha,$nrofactura,$codCaja,$codApertura,$totalregistro,$imprimirOpcion){
 
+// Validar antes de procesar los medios de pago y sus egresos.
+buscardatosventa($cod_venta);
+
 if($nrofactura==""){
 	$nrofactura=buscarnrofactura();
 }
@@ -4449,12 +4466,45 @@ return $datos;
 
 
 
+function buscarPlazosCuotasRecibo($CodVenta)
+{
+	$mysqli=conectar_al_servidor();
+	$sql="SELECT idcredito,tipo,plazo,Monto,Esado FROM credito WHERE cod_venta=?
+		ORDER BY CAST(SUBSTRING_INDEX(TRIM(plazo),'/',1) AS UNSIGNED),fechapago,idcredito";
+	$stmt=$mysqli->prepare($sql);
+	$stmt->bind_param('s',$CodVenta);
+	if(!$stmt->execute()){
+		echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
+		exit;
+	}
+	$result=$stmt->get_result();
+	$creditos=array();
+	$totalCuotas=0;
+	while($credito=mysqli_fetch_assoc($result)){
+		$creditos[]=$credito;
+		if(creditoEsCuota($credito)){
+			$totalCuotas++;
+		}
+	}
+	$stmt->close();
+	mysqli_close($mysqli);
+
+	// Numerar el cronograma completo, aunque el recibo pague una sola cuota.
+	$plazos=array();
+	$numeroCuota=0;
+	foreach($creditos as $credito){
+		$plazos[$credito['idcredito']]=creditoEsCuota($credito)
+			? (++$numeroCuota).'/'.$totalCuotas : plazoCreditoVisible($credito);
+	}
+	return $plazos;
+}
+
 function buscarpagosTitulo($CodVenta,$NroFactura)
 {
 $mysqli=conectar_al_servidor();
 
 
-$sql= "select cr.fechapago,cr.plazo,(cr.Monto - cr.descuento) as montocredito,pg.idPago,pg.Fecha,pg.Monto,pg.nrofactura,pg.tipo,vt.TipoVenta,vt.total_venta,
+$sql= "select cr.idcredito,cr.fechapago,cr.plazo,(cr.Monto - cr.descuento) as montocredito,pg.idPago,pg.Fecha,pg.Monto,pg.nrofactura,pg.tipo,vt.TipoVenta,vt.total_venta,
 (SELECT nombre FROM tipopago where cod_tipoPago = pg.cod_tipoPagoFK) as tipopg,
 ifnull((select sum(Monto) from pago where Tipo='Pago Cuota' and  idcredito=cod_creditoFK),0) as pagoCuotas
  from pago pg inner join venta vt on vt.cod_venta=pg.cod_venta_fk
@@ -4490,11 +4540,12 @@ $totalAdministrativo=0;
 
 if ($valor>0)
 {
+$plazosCuotas=buscarPlazosCuotasRecibo($CodVenta);
 while ($valor= mysqli_fetch_assoc($result))
 {  
      
 $pagoCuotas = utf8_encode($valor['pagoCuotas']); 
-$plazo = utf8_encode($valor['plazo']);      
+$plazo = utf8_encode($plazosCuotas[$valor['idcredito']]);
 $tipo = utf8_encode($valor['tipo']);  
 $Monto = utf8_encode($valor['Monto']);  
 $Fecha = utf8_encode($valor['Fecha']); 
@@ -4507,12 +4558,6 @@ if($plazo=="Contado"){
 	$totalCuota=$totalCuota  + $Monto;
 }
 
-
-$cantidad_letras = strlen($plazo);
-if($cantidad_letras<=2){
-	$datoVenta=buscardatosventa($CodVenta);
-	$plazo= $plazo."/".$datoVenta[21];
-}
 
 $TipoPago=$montocredito - $pagoCuotas ;
 
@@ -4831,7 +4876,7 @@ function buscarpagosTituloCreditoDirecto($CodVenta,$NroFactura,$cod_creditoFK)
 $mysqli=conectar_al_servidor();
 
 
-$sql= "select cr.fechapago,cr.plazo,(cr.Monto - cr.descuento) as montocredito,pg.idPago,pg.Fecha,pg.Monto,pg.nrofactura,pg.tipo,vt.TipoVenta,vt.total_venta ,
+$sql= "select cr.idcredito,cr.fechapago,cr.plazo,(cr.Monto - cr.descuento) as montocredito,pg.idPago,pg.Fecha,pg.Monto,pg.nrofactura,pg.tipo,vt.TipoVenta,vt.total_venta ,
 (SELECT nombre FROM tipopago where cod_tipoPago = pg.cod_tipoPagoFK) as tipopg,
 ifnull((select sum(Monto) from pago p where Tipo='Pago Cuota' and  nrofactura='$NroFactura' and vt.cod_venta=p.cod_venta_fk),0) as pagoCuotas
  from pago pg inner join venta vt on vt.cod_venta=pg.cod_venta_fk
@@ -4867,10 +4912,11 @@ $totalAdministrativo=0;
 
 if ($valor>0)
 {
+$plazosCuotas=buscarPlazosCuotasRecibo($CodVenta);
 while ($valor= mysqli_fetch_assoc($result))
 {  
      
-$plazo = utf8_encode($valor['plazo']);      
+$plazo = utf8_encode($plazosCuotas[$valor['idcredito']]);
 $tipo = utf8_encode($valor['tipo']);  
 $Monto = utf8_encode($valor['Monto']);  
 $Fecha = utf8_encode($valor['Fecha']); 
@@ -4888,12 +4934,6 @@ if($plazo=="Contado"){
 }
 
 
-
-$cantidad_letras = strlen($plazo);
-if($cantidad_letras<=2){
-	$datoVenta=buscardatosventa($CodVenta);
-	$plazo= $plazo."/".$datoVenta[21];
-}
 
 $TipoPago=$montocredito - $pagoCuotas ;
 

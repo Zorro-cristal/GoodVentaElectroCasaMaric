@@ -78,7 +78,7 @@
 
 <script src="/GoodVentaElectroCasaMaric/js/jquery.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261026pagarelogo1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261030recibosinguiones2"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/barras_progreso_modernas.js?x=20260724v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/datosUsuario.js"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/inicio.js?x=20260725buscadormoderno1"></script>
@@ -102,13 +102,13 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261027cuentascobrarscroll1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261030estadopagoparcial1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_estado_cliente_callcenter.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_estado_cliente_callcenter_ventas.js?x=20260720v1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_motivo_en_egreso_ingreso.js?x=20260901stock1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_motivo_en_egreso_ingreso.js?x=20261030validarventapago1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente_principal.js?x=20260724vistaprevia1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_archivos_cliente.js?x=20260724vistaprevia1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_foto.js?x=20260731auxiliaradjuntosfrente1"></script>
@@ -118,7 +118,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_motivo_movimiento_stock.js?x=20260724sinproductosbaja1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sector_vendedor.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_tipo_pago.js?x=20260807busquedauditoriaproducto1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_estado_informe_cumpleanos.js?x=20260722botontransferencia3"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_estado_informe_cumpleanos.js?x=20261030estadopagoparcial1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_migrar_caja.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_solicitud.js?x=20260828solicitudventa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/solicitud_credito_productos_modal.js?x=20260721v2"></script>
@@ -16362,9 +16362,15 @@ title='Cerrar Ventana' onclick='verCerrarCuentasACobrarInforme()' />
 
 
 <td style='width:10%'>
-<p class='pTituloC' >Fecha Venc.</p>
+<p class='pTituloC' >Venc. desde</p>
 <input class='inputText' type='Date'
-id='inptBuscarCuentasAcobrarinforme' style='width:135px' />
+id='inptBuscarCuentasAcobrarinformeDesde' aria-label='Vencimiento desde' style='width:135px' />
+</td>
+
+<td style='width:10%'>
+<p class='pTituloC' >Venc. hasta</p>
+<input class='inputText' type='Date'
+id='inptBuscarCuentasAcobrarinforme' aria-label='Vencimiento hasta' style='width:135px' />
 </td>
 
 <td style='width:10%'>

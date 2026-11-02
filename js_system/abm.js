@@ -4003,7 +4003,8 @@ document.getElementById("tbTitulosImpresiones").innerHTML=document.getElementByI
 document.getElementById("tbDatosImpresiones").innerHTML=document.getElementById("table_cuentas_a_cobrar").innerHTML
 }
 if (ventana == "cuentasacobrardetalles") {
-		
+	var vencimientoDesdeInforme = rangoVencimientoCuentasInforme ? rangoVencimientoCuentasInforme.desde : document.getElementById("inptBuscarCuentasAcobrarinformeDesde").value;
+	var vencimientoHastaInforme = rangoVencimientoCuentasInforme ? rangoVencimientoCuentasInforme.hasta : document.getElementById("inptBuscarCuentasAcobrarinforme").value;
 		pagina =
 "<table class='TableRepor0' style='width:100%'>"
 +"<tr>"
@@ -4016,8 +4017,12 @@ if (ventana == "cuentasacobrardetalles") {
 +"<p class='pTituloC' >"+ $("select[id=inputSelectZonaInfCuentasAcobrarinforme]").children(":selected").text()+"</p>"
 +"</td>"
 +"<td style='width:20%;text-align:left'>"
-+"<p class='pTituloC'><b>Fecha</b> </p>"
-+"<p class='pTituloC' >"+ document.getElementById("inptBuscarCuentasAcobrarinforme").value+"</p>"
++"<p class='pTituloC'><b>Venc. desde</b></p>"
++"<p class='pTituloC' >"+ (vencimientoDesdeInforme || "Sin limite inicial")+"</p>"
++"</td>"
++"<td style='width:20%;text-align:left'>"
++"<p class='pTituloC'><b>Venc. hasta</b></p>"
++"<p class='pTituloC' >"+ vencimientoHastaInforme+"</p>"
 +"</td>"
 +"<td style='width:20%;text-align:left'>"
 +"<p class='pTituloC'><b>Fecha de Impresión</b></p>"
@@ -5457,7 +5462,7 @@ pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#
 +"<table class='tableTicketrecibo'>"
 +"<tr>"
 +"<td style='width:15%'></td>"
-+"<td style='width:85%;font-size:15px'> "+CuotasNro+" -- "+NroRecibo+"</td>"
++"<td style='width:85%;font-size:15px'> "+CuotasNro+"&nbsp;&nbsp;"+NroRecibo+"</td>"
 +"</tr>"
 +"</table>"
 
@@ -5492,7 +5497,7 @@ pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#
 +"<table class='tableTicketrecibo'>"
 +"<tr>"
 +"<td style='width:15%'></td>"
-+"<td style='width:85%;font-size:15px'> "+CuotasNro+" -- "+NroRecibo+"</td>"
++"<td style='width:85%;font-size:15px'> "+CuotasNro+"&nbsp;&nbsp;"+NroRecibo+"</td>"
 +"</tr>"
 +"</table>"
 
@@ -5551,13 +5556,13 @@ function ReImprimirDivTickeFacturaPago( Fecha, Cajero, CuotasNro, Pagado, DiasAt
     <div class="ticket-subheader">
       <div class="company-info">
         <div class="left">
-          <b>RUC:</b> ${rucEmpresaTicket || "-"}<br>
-          <b>Dirección:</b> ${direccionEmpresaTicket || "-"}<br>
-          <b>Ciudad:</b> ${ciudadEmpresaTicket || "-"}
+          <b>RUC:</b> ${rucEmpresaTicket || ""}<br>
+          <b>Dirección:</b> ${direccionEmpresaTicket || ""}<br>
+          <b>Ciudad:</b> ${ciudadEmpresaTicket || ""}
         </div>
         <div class="right">
-          <b>Tel:</b> ${telefonoEmpresaTicket || "-"}<br>
-          <b>Tipo venta:</b> ${tipoventa || "-"}<br>
+          <b>Tel:</b> ${telefonoEmpresaTicket || ""}<br>
+          <b>Tipo venta:</b> ${tipoventa || ""}<br>
           <b>Días atrasado:</b> ${DiasAtrazado} día(s)
         </div>
       </div>
