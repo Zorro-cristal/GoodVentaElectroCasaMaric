@@ -1523,10 +1523,10 @@ function cargarpagos($CargoAdministrativo,$MontoEfectivo,$MontoTarjeta,$MontDesc
 	$sql= "Select Monto,idcredito,cr.fechapago,total,plazo,(totalinteres + cr.deudaInteres) as totalinteres,cr.descuento,vt.num_factura,vt.puntoexpedicion,cr.interes,vt.cod_clienteFK,
 	(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK) as clientenombre,
 	(Select ci_cliente from cliente where cod_cliente=vt.cod_clienteFK) as nrodocliente,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) as totalPago,descuentoInteres,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and tipo='Interes'),0) as totalPagoInteres
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) as totalPago,descuentoInteres,
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and tipo='Interes'),0) as totalPagoInteres
 	from credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
-	where cr.cod_venta='$cod_venta' and IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)order by cr.idcredito asc";
+	where cr.cod_venta='$cod_venta' and IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)order by cr.idcredito asc";
 	
 
 	
@@ -2085,7 +2085,7 @@ function buscartotalpago($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select IFNULL(sum(Monto),0) as totalpago from pago where cod_creditoFK='$buscar'";/*Sentencia para buscar registros*/
+$sql= "select IFNULL(sum(Monto),0) as totalpago from vw_regularizacion_pagos_saldo where cod_creditoFK='$buscar'";/*Sentencia para buscar registros*/
 $totalpago = 0;   
 $stmt = $mysqli->prepare($sql);/*Se prepara la sentencia sql con el objeto prepare*/
 /*Función para ejecutar sentencias sql*/
@@ -2163,7 +2163,7 @@ function buscartotalpagob($buscar)
 $mysqli=conectar_al_servidor();
 
 $sql= "select sum(pg.Monto) as totalpago,vt.pago as totalEntrega
- from pago pg inner join venta vt  on vt.cod_venta=pg.cod_venta_fk 
+ from vw_regularizacion_pagos_saldo pg inner join venta vt  on vt.cod_venta=pg.cod_venta_fk 
  where pg.cod_venta_fk='$buscar'";/*Sentencia para buscar registros*/
 
 $totalpago = 0;   
@@ -3796,7 +3796,7 @@ if($Condicon=="3"){
 }
 
 $sql= "select pg.Tipo, pg.cod_creditoFK,pg.cod_venta_fk ,sum(pg.Monto) as Monto
- from  pago pg 
+ from  vw_regularizacion_pagos_saldo pg 
  where pg.cod_creditoFK='$buscar' ".$Condicon;
 
 
@@ -3954,9 +3954,9 @@ function buscardatosdelcredito($codcredito)
 $mysqli=conectar_al_servidor();
 
 $sql= "select cr.Monto,cr.descuento,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as totalPagoCredito,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Interes'),0) as totalPagoInteres
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as totalPagoCredito,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Interes'),0) as totalPagoInteres
  from  credito cr  where cr.idcredito='$codcredito' ";
  
 
@@ -4334,7 +4334,7 @@ function obtenerInteresesPendientesCreditoVenta($cod_venta)
 	$mysqli=conectar_al_servidor();
 	$sql="Select cr.idcredito,(cr.totalinteres + cr.deudaInteres) as totalinteres,cr.descuentoInteres
 	from credito cr
-	where cr.cod_venta=? and IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)
+	where cr.cod_venta=? and IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)
 	order by cr.idcredito asc";
 	$stmt=$mysqli->prepare($sql);
 	$ss='s';
@@ -4506,7 +4506,7 @@ $mysqli=conectar_al_servidor();
 
 $sql= "select cr.idcredito,cr.fechapago,cr.plazo,(cr.Monto - cr.descuento) as montocredito,pg.idPago,pg.Fecha,pg.Monto,pg.nrofactura,pg.tipo,vt.TipoVenta,vt.total_venta,
 (SELECT nombre FROM tipopago where cod_tipoPago = pg.cod_tipoPagoFK) as tipopg,
-ifnull((select sum(Monto) from pago where Tipo='Pago Cuota' and  idcredito=cod_creditoFK),0) as pagoCuotas
+ifnull((select sum(Monto) from vw_regularizacion_pagos_saldo where Tipo='Pago Cuota' and  idcredito=cod_creditoFK),0) as pagoCuotas
  from pago pg inner join venta vt on vt.cod_venta=pg.cod_venta_fk
  inner join credito cr on cr.idcredito=pg.cod_creditoFK
  where pg.cod_venta_fk='$CodVenta' and pg.nrofactura='$NroFactura' order by pg.idPago  ";

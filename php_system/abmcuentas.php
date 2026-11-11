@@ -157,7 +157,7 @@ if($lat=="" || $lot==""){
 if($buscarpor=="cliente"){
 	
 	$sql= "select cl.lat,cl.lot,pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,cl.ci_cliente,vt.cod_venta,(vt.total_venta-vt.descuento) as total,pago,vt.descuento,vt.total_venta,vt.descuento,
-(select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
+(select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
 (select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and (".sqlCuotaCapitalPendiente('cr1').">0 OR IFNULL(cr1.deudaInteres,0)>0) order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona
  inner join venta vt on vt.cod_clienteFK=cl.cod_cliente
@@ -170,7 +170,7 @@ if($buscarpor=="cliente"){
 $stmt->bind_param($s,$buscar);/*Se cargar los paramentros a la sentencia preparada*/
 }else{
 		$sql= "select cl.lat,cl.lot,pr.cod_persona,concat(nombre_persona,' ',apellido_persona) as nombre_persona,cl.ci_cliente,vt.cod_venta,(vt.total_venta-vt.descuento) as total,pago,vt.descuento,vt.total_venta,vt.descuento,
-(select sum(pg.Monto) from pago pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
+(select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg inner join credito cr on pg.cod_creditoFK=cr.idcredito where vt.cod_venta=cr.cod_venta) as totalpagado,
 (select fechapago from  credito cr1 where vt.cod_venta=cr1.cod_venta and (".sqlCuotaCapitalPendiente('cr1').">0 OR IFNULL(cr1.deudaInteres,0)>0) order by cr1.fechapago asc limit 1 ) as fechaPago ".$sqlcoordenads."
  from  persona pr inner join  cliente cl on cl.cod_cliente=pr.cod_persona
  inner join venta vt on vt.cod_clienteFK=cl.cod_cliente
@@ -262,7 +262,7 @@ function buscardetalle($buscar)
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
 $sql= "select cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,cr.Nro_recibo,datediff(cr.fechapago,'".$fechahoy."') as diff,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar' ";/*Sentencia para buscar registros*/
  
@@ -361,7 +361,7 @@ function buscarDiasAtra($buscar)
 $mysqli=conectar_al_servidor();
 $fechahoy=date('Y-m-d');	
 $sql= "select datediff(cr.fechapago,'".$fechahoy."') as diff from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
- where vt.cod_venta='$buscar' and cr.Monto>IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) order by cr.fechapago asc limit 1";/*Sentencia para buscar registros*/
+ where vt.cod_venta='$buscar' and cr.Monto>IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0) order by cr.fechapago asc limit 1";/*Sentencia para buscar registros*/
  
 
 
@@ -409,7 +409,7 @@ function buscartotalpago($buscar)
 {
 $mysqli=conectar_al_servidor();
 
-$sql= "select (select sum(Monto) from pago pg where pg.cod_creditoFK=cr.idcredito) as totalPago
+$sql= "select (select sum(Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito) as totalPago
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar' ";
  echo $sql;

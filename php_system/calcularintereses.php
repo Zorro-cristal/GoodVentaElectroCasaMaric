@@ -4,6 +4,9 @@
 function calcularintereses2($buscar,$fecha1,$fecha2,$filtro1,$filtro2,$filtro3,$actualizar)
 {
 $mysqli=conectar_al_servidor();
+$buscar=$mysqli->real_escape_string((string)$buscar);
+$fecha1=$mysqli->real_escape_string((string)$fecha1);
+$fecha2=$mysqli->real_escape_string((string)$fecha2);
 $fechahoy=date('Y-m-d');	
 $condicion="";
 
@@ -16,37 +19,57 @@ $condicion=" and cr.fechapago<='$fechahoy'";
 $condicionpago="";
 if($filtro2=="1"){
 	//condicion para saber si esta pagado
-$condicionpago=" and ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0 and cr.deudaInteres<=0";
+$condicionpago=" and ((cr.Monto-cr.descuento)-IFNULL(pg.totalPagoCredito,0))<=0 and cr.deudaInteres<=0";
 }
 if($filtro2=="3"){
-$condicionpago=" and (((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))>0 or cr.deudaInteres>0)";
+$condicionpago=" and (((cr.Monto-cr.descuento)-IFNULL(pg.totalPagoCredito,0))>0 or cr.deudaInteres>0)";
 }
 $condicioncodigo="";
+$alcancePagos="";
+$alcanceRegularizaciones="";
 if($filtro3=="1"){
 $condicioncodigo=" and cr.idcredito='$buscar'";
+$alcancePagos=" where p.cod_creditoFK='$buscar'";
+$alcanceRegularizaciones=" and rh.idcredito='$buscar'";
 }
 if($filtro3=="2"){
 $condicioncodigo=" and vt.cod_venta='$buscar'";
+// El vinculo a la cuota es el que determina el saldo, incluso si un pago
+// historico tiene un cod_venta_fk diferente al de su credito.
+$alcancePagos=" inner join credito cp on cp.idcredito=p.cod_creditoFK and cp.cod_venta='$buscar'";
+$alcanceRegularizaciones=" and rh.idcredito in (select cp.idcredito from credito cp where cp.cod_venta='$buscar')";
 }
 	
+// MySQL 5.6 materializa la vista UNION completa en cada subconsulta correlacionada.
+// Filtrar ambas fuentes antes de agrupar evita releer todos los pagos por cuota.
+$pagosPorCuota="select ab.cod_creditoFK,sum(ab.Monto) as totalPago,
+sum(case when ab.Tipo='Pago Cuota' then ab.Monto else 0 end) as totalPagoCredito,
+sum(case when ab.Tipo='Interes' then ab.Monto else 0 end) as totalPagoInteres,
+max(case when ab.Monto<>0 then ab.Fecha end) as FechaUltimoPago,
+case when count(case when ab.Monto<>0 and ab.Fecha is null then 1 end)>0 then null
+else min(case when ab.Monto<>0 then ab.Fecha end) end as FechaPagoCredito
+from (
+ select p.cod_creditoFK,p.Monto,p.Tipo,p.Fecha from pago p".$alcancePagos."
+ union all
+ select rh.idcredito,rh.importe,'Pago Cuota',rh.fecha_historica
+ from regularizacion_historica_cuota rh
+ where rh.anulada_en is null and rh.clave_activa=rh.clave_regularizacion
+ and rh.credito_activo=rh.idcredito and rh.venta_activa=rh.cod_venta and rh.importe>0".$alcanceRegularizaciones."
+) ab group by ab.cod_creditoFK";
+
 $sql= "select vt.cod_clienteFK,vt.TipoVenta,vt.puntoexpedicion,cr.plazo,cr.fechapago,cr.cod_venta,cr.Monto,cr.idcredito,cr.Esado,
-cr.Nro_recibo,datediff(cr.fechapago,
-(select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1)) as diff,
+cr.Nro_recibo,
 vt.total_venta,interes,dias,vt.pago as entrega,cr.deudaInteres,
 total,(totalinteres + deudaInteres) as totalinteres,totaldeuda,vt.num_factura,cr.descuento,
-(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK) as clientenombre,
-IFNULL((select (pg.Fecha) from pago pg where pg.cod_creditoFK=cr.idcredito and Monto!='0' order by pg.Fecha desc limit 1),0) as FechaUltimoPago,
-IFNULL((select (pg.Fecha) from pago pg where pg.cod_creditoFK=cr.idcredito  and Monto!='0' order by pg.Fecha asc limit 1),0) as FechaPagoCredito,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as totalPagoCredito,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Interes'),0) as totalPagoInteres,
-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_venta_fk=cr.cod_venta),0) as totalPagoVenta,
-IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado,
-(Select count(fechapago) from credito where cod_venta=vt.cod_venta and plazo!='ENTREGA' ) as nroCouta,
-(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documentocliente,
-(select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1) as fechapagado,
-(select count(pg.Fecha) from pago pg where pg.cod_creditoFK=cr.idcredito ) as cantidad
- from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta where (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0
+IFNULL(pg.FechaUltimoPago,0) as FechaUltimoPago,
+IFNULL(pg.FechaPagoCredito,0) as FechaPagoCredito,
+IFNULL(pg.totalPago,0) as totalPago,
+IFNULL(pg.totalPagoCredito,0) as totalPagoCredito,
+IFNULL(pg.totalPagoInteres,0) as totalPagoInteres,
+IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as nroCancelado
+ from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
+ left join (".$pagosPorCuota.") pg on pg.cod_creditoFK=cr.idcredito
+ where (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0
     ".$condicioncodigo.$condicionpago.$condicion."  order by cr.idcredito asc";
 	
 	// echo $sql;
@@ -101,7 +124,6 @@ $Monto = utf8_encode($valor['Monto']);
 $totalPago = utf8_encode($valor['totalPago']); 
 $Esado = utf8_encode($valor['Esado']);          
 $Nro_recibo = utf8_encode($valor['Nro_recibo']);
-$diff = utf8_encode($valor['diff']);
 $total_venta = utf8_encode($valor['total_venta']);
 $interes = utf8_encode($valor['interes']);
 $dias = utf8_encode($valor['dias']);
@@ -109,17 +131,11 @@ $total = utf8_encode($valor['total']);
 $tinteres = utf8_encode($valor['totalinteres']);
 $totaldeuda = utf8_encode($valor['totaldeuda']);
 $entrega = utf8_encode($valor['entrega']);
-$fechapagado = utf8_encode($valor['fechapagado']);
-$cantidad = utf8_encode($valor['cantidad']);
 $num_factura = utf8_encode($valor['num_factura']);
 $descuento = utf8_encode($valor['descuento']);
 $nroCancelado = utf8_encode($valor['nroCancelado']);
 $puntoexpedicion = utf8_encode($valor['puntoexpedicion']);
-$clientenombre = utf8_encode($valor['clientenombre']);
-$documentocliente = utf8_encode($valor['documentocliente']);
-$nroCouta = utf8_encode($valor['nroCouta']);
 $TipoVenta = utf8_encode($valor['TipoVenta']);
-$totalPagoVenta = utf8_encode($valor['totalPagoVenta']);
 $totalPagoCredito = utf8_encode($valor['totalPagoCredito']);//TOTAL PAGADO EN CUOTA
 $totalPagoInteres = utf8_encode($valor['totalPagoInteres']);//TOTAL PAGADO EN INTERESES
 $cod_clienteFK = utf8_encode($valor['cod_clienteFK']);

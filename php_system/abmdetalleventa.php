@@ -1579,7 +1579,7 @@ $formato=isset($_POST['formato']) ? utf8_decode($_POST['formato']) : '';
 
 $sql= "select dtv.descripcion ,pr.tipo_producto,vt.fecha_venta,vt.idGaranteFk,
 pr.cod_producto,pr.cod_barra,pr.nombre_producto,dtv.cod_detalle,vt.total_venta,IFNULL(dtv.comision,0) as comision,dtv.estado,detalleproducto,vt.num_factura,vt.puntoexpedicion,concat(vt.puntoexpedicion,'-',vt.num_factura) as fac,
-IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 (Select direccion from persona where cod_persona=cod_clienteFK) as clientedireccion,
 (Select concat(direccion,'-',email) from persona where  cod_persona=cod_clienteFK) as zonaCliente,
@@ -1901,7 +1901,7 @@ $mysqli=conectar_al_servidor();
 
 $sql= "select  (SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as plazo,
   ifnull((SELECT c.Monto FROM credito c WHERE vt.cod_venta = c.cod_venta GROUP BY c.Monto ORDER BY COUNT(*) DESC LIMIT 1) ,0) as MontoCouta,
-  ifnull((select sum(Monto) from pago p where vt.cod_venta=p.cod_venta_fk and Tipo='Pago Cuota'),0) as Entrega
+  ifnull((select sum(Monto) from vw_regularizacion_pagos_saldo p where vt.cod_venta=p.cod_venta_fk and Tipo='Pago Cuota'),0) as Entrega
   from venta vt 
  where vt.cod_venta='$CodVenta'    ";
  
@@ -2110,7 +2110,7 @@ $mysqli=conectar_al_servidor();
 $sql= "select count(*) as cuotas
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar'
- and  ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0
+ and  ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0
  and ".sqlCreditoEsCuota('cr')."";
  
 
@@ -2150,7 +2150,7 @@ function  productosCompradoscliente($buscar,$formato='')
 $mysqli=conectar_al_servidor();
 
 $sql= "select pr.cod_producto,pr.nombre_producto,dtv.cod_detalle,vt.total_venta,IFNULL(dtv.comision,0) as comision,dtv.estado,detalleproducto,vt.num_factura,vt.puntoexpedicion,
-IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 (Select direccion from persona where cod_persona=cod_clienteFK) as clientedireccion,
 (Select nombre from zona where idzona=(Select idzonaFk from cliente where cod_cliente=vt.cod_clienteFK limit 1) limit 1) as zonaCliente,
@@ -2318,7 +2318,7 @@ $mysqli=conectar_al_servidor();
 $formato=isset($_POST['formato']) ? utf8_decode($_POST['formato']) : '';
 
 $sql= "select vt.fecha_venta,pr.cod_producto,pr.nombre_producto,dtv.cod_detalle,vt.total_venta,IFNULL(dtv.comision,0) as comision,dtv.estado,detalleproducto,vt.num_factura,vt.puntoexpedicion,
-IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 (Select direccion from persona where cod_persona=cod_clienteFK) as clientedireccion,
 (Select nombre from zona where idzona=(Select idzonaFk from cliente where cod_cliente=vt.cod_clienteFK limit 1) limit 1) as zonaCliente,
@@ -3309,7 +3309,7 @@ $condicionCodLocal=" and vt.cod_local='$cod_local' ";
 			$condicionCodLocal=" "; 
 		 }
 $sql= "select pr.cod_producto,pr.nombre_producto,dtv.cod_detalle,dtv.detalleproducto,vt.total_venta,dtv.comision,vt.puntoexpedicion,vt.num_factura,vt.fecha_venta,vt.TipoPago,dtv.estado,IFNULL(dtv.descuento,0) as descuento,
-IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 (Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,
 (SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as cantidadcuota,
@@ -3417,7 +3417,7 @@ $mysqli=conectar_al_servidor();
 $formato=isset($_POST['formato']) ? utf8_decode($_POST['formato']) : '';
 
 $sql= "select vt.puntoexpedicion,vt.num_factura,pr.cod_producto,pr.nombre_producto,dtv.descuento,dtv.cod_detalle,vt.total_venta,IFNULL(dtv.comision,0) as comision,dtv.estado,dtv.detalleproducto,
-IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
+IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) as totalpagado,
 dtv.cantidad_detalle,dtv.cod_productoFK,dtv.precio_producto,dtv.cod_ventaFK,dtv.subtotal,dtv.subPrecioCompra,
 (select descripcion from marcas where cod_marcas= pr.cod_marcasFK limit 1 ) as NombreMarca
  from  producto pr inner join detalle_venta dtv on dtv.cod_productoFK=pr.cod_producto
@@ -4258,7 +4258,7 @@ function refinanciarencambio($cod_venta,$totalActual,$metodopago){
 	
 	$mysqli=conectar_al_servidor();
 	$sql= "Select idcredito,Monto,descuento,fechapago,dias,interes,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
 	from credito cr
 	where cr.cod_venta='$cod_venta' ";
 	
@@ -4300,9 +4300,9 @@ exit;
 		$sobranteTotales=$sobranteTotales*-1;
 		   
    $sql= "Select idcredito,Monto,descuento,fechapago,dias,interes,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0) as totalPago
 	from credito cr	where cr.cod_venta='$cod_venta'  
-	and (IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito),0)+descuento)<Monto order by fechapago desc ";
+	and (IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito),0)+descuento)<Monto order by fechapago desc ";
 	
 
 $stmt = $mysqli->prepare($sql);

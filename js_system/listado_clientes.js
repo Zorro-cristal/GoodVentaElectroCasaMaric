@@ -5,7 +5,8 @@
     var ordenListadoClientes = {campo: 'nombre_completo', direccion: 1};
     var columnasListadoClientes = [
         {campo:'cod_persona', titulo:'#', ancho:'5%'}, {campo:'ci_cliente', titulo:'NRO DOC.', ancho:'10%'},
-        {campo:'nombre_completo', titulo:'CLIENTE', ancho:'16%'}, {campo:'zona', titulo:'ZONA', ancho:'9%'},
+        {campo:'nombre_completo', titulo:'CLIENTE', ancho:'16%'}, {campo:'direccion', titulo:'DIRECCIÓN', ancho:'16%'},
+        {campo:'zona', titulo:'ZONA', ancho:'9%'},
         {campo:'telefono', titulo:'TELEF.', ancho:'9%'}, {campo:'accesocredito', titulo:'CREDITO', ancho:'8%'},
         {campo:'tipoMora', titulo:'CALIFICACION', ancho:'8%'}, {campo:'tipo_cliente', titulo:'TIPO', ancho:'7%'},
         {campo:'tipo_persona_equifax', titulo:'PERS. EQUIFAX', ancho:'9%'}, {campo:'profesion', titulo:'PROFESION', ancho:'11%'},

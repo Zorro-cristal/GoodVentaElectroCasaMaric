@@ -127,7 +127,7 @@ function bpObtenerOperaciones($mysqli, $periodo, $tipoArchivo)
             INNER JOIN credito cr ON cr.cod_venta=v.cod_venta
             LEFT JOIN (
                 SELECT cod_creditoFK,SUM(Monto) pagado
-                FROM pago
+                FROM vw_regularizacion_pagos_saldo
                 WHERE Tipo='Pago Cuota' AND (anulado IS NULL OR anulado<>'SI') AND Fecha <= '$fin'
                 GROUP BY cod_creditoFK
             ) pg ON pg.cod_creditoFK=cr.idcredito

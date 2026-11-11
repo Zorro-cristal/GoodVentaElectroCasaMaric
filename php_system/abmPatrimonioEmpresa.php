@@ -496,8 +496,8 @@ function obtener_creditos_sin_pago_balance($mysqli, $fecha_corte)
 	$sql = "SELECT cr.idcredito,cr.plazo,cr.fechapago,cr.cod_venta,
 	IFNULL(cr.Monto,0) as monto_credito,
 	IFNULL(cr.descuento,0) as descuento,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as total_pagado_cuota,
-	(IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as saldo_pendiente,
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as total_pagado_cuota,
+	(IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as saldo_pendiente,
 	DATEDIFF(?,cr.fechapago) as dias_atraso,
 	vt.num_factura,vt.puntoexpedicion,vt.tipo_comprobante,
 	IFNULL((Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK),'') as cliente,
@@ -508,7 +508,7 @@ function obtener_creditos_sin_pago_balance($mysqli, $fecha_corte)
 	INNER JOIN venta vt ON vt.cod_venta=cr.cod_venta
 	WHERE cr.fechapago <= ?
 	AND cr.fechapago >= DATE_SUB(?, INTERVAL 1 YEAR)
-	AND ((IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)) > 0
+	AND ((IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)) > 0
 	AND (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0
 	AND IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0
 	ORDER BY cr.fechapago ASC, cr.cod_venta ASC, cr.idcredito ASC";
@@ -565,8 +565,8 @@ function obtener_creditos_por_vencer_sin_pago_balance($mysqli, $fecha_corte)
 	$sql = "SELECT cr.idcredito,cr.plazo,cr.fechapago,cr.cod_venta,
 	IFNULL(cr.Monto,0) as monto_credito,
 	IFNULL(cr.descuento,0) as descuento,
-	IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as total_pagado_cuota,
-	(IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as saldo_pendiente,
+	IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as total_pagado_cuota,
+	(IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as saldo_pendiente,
 	DATEDIFF(cr.fechapago,?) as dias_para_vencer,
 	vt.num_factura,vt.puntoexpedicion,vt.tipo_comprobante,
 	IFNULL((Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=vt.cod_clienteFK),'') as cliente,
@@ -576,7 +576,7 @@ function obtener_creditos_por_vencer_sin_pago_balance($mysqli, $fecha_corte)
 	FROM credito cr
 	INNER JOIN venta vt ON vt.cod_venta=cr.cod_venta
 	WHERE cr.fechapago > ?
-	AND ((IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)) > 0
+	AND ((IFNULL(cr.Monto,0)-IFNULL(cr.descuento,0))-IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0)) > 0
 	AND (select count(dtv.estado) from detalle_venta dtv where vt.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0
 	AND IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0
 	ORDER BY cr.fechapago ASC, cr.cod_venta ASC, cr.idcredito ASC";

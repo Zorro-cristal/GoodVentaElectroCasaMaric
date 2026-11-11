@@ -4329,6 +4329,10 @@ function buscarhistorialventa() {
 }
 controldebusquedadHistorialVenta=true
 document.getElementById("tbProcessHistorialVenta").style.display="none"
+	var desplazamientoHistorial = document.getElementById("TableScroollHistorialVenta2")
+	if(desplazamientoHistorial){
+		desplazamientoHistorial.scrollTop = 0
+	}
 	limpiarSeleccionHistorialVenta()
 	if(listado){
 		listado.establecerRegistros([], false)
@@ -7810,13 +7814,14 @@ function crearFilaCuentaACobrar(registro, indice) {
 	fila.appendChild(crearCeldaCuentaACobrar(registro.telefono, "", "8%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.nro_factura, "", "7%", false));
 
-	var celdaProductos = crearCeldaCuentaACobrar("", "", "17%", false);
+	var celdaProductos = crearCeldaCuentaACobrar("", "", "13%", false);
 	agregarProductosCuentaACobrar(celdaProductos, registro.productos);
 	fila.appendChild(celdaProductos);
 
 	fila.appendChild(crearCeldaCuentaACobrar(registro.cobrador, "td_datos_5", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.total_venta, "td_datos_12", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.fecha_mostrada, "", "7%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.cuotas, "", "6%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.fecha_pago, "td_datos_3", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.cuotas, "td_datos_19", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.monto_cuota, "td_datos_6", "", true));
@@ -7837,7 +7842,7 @@ function crearFilaCuentaACobrar(registro, indice) {
 	fila.appendChild(crearCeldaCuentaACobrar(registro.tipo_comprobante, "td_datos_15", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.punto_expedicion, "td_datos_16", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.subtotal_pago, "td_datos_21", "", true));
-	fila.appendChild(crearCeldaCuentaACobrar(registro.vendedor, "td_datos_23", "8%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.vendedor, "td_datos_23", "6%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.lat, "td_datos_24", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.lot, "td_datos_25", "", true));
 

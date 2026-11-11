@@ -2751,7 +2751,7 @@ function solicitudAnulacionVenta($buscar,$local,$formato=''){
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago desc limit 1) as fechaultimopago,
 		IFNULL((Select sum(precio_producto*cantidad_detalle) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalventadetalle,
-		IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) as pagado,
+		IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) as pagado,
 		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
 		".sqlCapitalCobradoVenta()." as totalpagado
 		from venta vt inner join cliente on cod_cliente=cod_ClienteFK
@@ -3717,8 +3717,10 @@ function historialventa($garante, $fecha1, $fecha2, $fechafiltro, $nroventa, $do
 		$condiciondocumento = "and (Select ci_cliente from cliente where cod_cliente=cod_clienteFK limit 1)='" . $documento . "'";
 	}
 	$condicioncliente = "";
+	$cliente = trim(preg_replace('/\s+/', ' ', $cliente));
 	if ($cliente != "") {
-		$condicioncliente = "and (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK limit 1) like '%" . $cliente . "%'";
+		$clienteBusqueda = $mysqli->real_escape_string($cliente);
+		$condicioncliente = "and (Select concat(trim(nombre_persona),' ',trim(apellido_persona)) from persona where cod_persona=vt.cod_clienteFK limit 1) like '%" . $clienteBusqueda . "%'";
 	}
 	$condiciontelef = "";
 	if ($telefono != "") {
@@ -4150,8 +4152,10 @@ function mashistorialventa($garante, $fecha1, $fecha2, $fechafiltro, $nroventa, 
 		$condiciondocumento = "and (Select ci_cliente from cliente where cod_cliente=cod_clienteFK limit 1)='" . $documento . "'";
 	}
 	$condicioncliente = "";
+	$cliente = trim(preg_replace('/\s+/', ' ', $cliente));
 	if ($cliente != "") {
-		$condicioncliente = "and (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK limit 1) like '%" . $cliente . "%'";
+		$clienteBusqueda = $mysqli->real_escape_string($cliente);
+		$condicioncliente = "and (Select concat(trim(nombre_persona),' ',trim(apellido_persona)) from persona where cod_persona=vt.cod_clienteFK limit 1) like '%" . $clienteBusqueda . "%'";
 	}
 	$condiciontelef = "";
 	if ($telefono != "") {
@@ -5096,7 +5100,7 @@ where
 vt.cod_clienteFK!='10' and pg.Fecha < date_format(date_add(NOW(), INTERVAL -2 MONTH), '%Y/%m/%d') and  
 (select sum(Monto-descuento) from credito where cod_venta=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ))-
-(select sum(Monto) from pago where cod_venta_fk=
+(select sum(Monto) from vw_regularizacion_pagos_saldo where cod_venta_fk=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ) and Tipo='Pago Cuota')=0  " . $condicionzona . $condiciondocumento . $condicioncliente . $condicionnrotele . $condicionVendedor . $condicionlocal . "
 group by vt.cod_clienteFK  limit 50";
 
@@ -5151,7 +5155,7 @@ where
 vt.cod_clienteFK!='10' and pg.Fecha < date_format(date_add(NOW(), INTERVAL -2 MONTH), '%Y/%m/%d') and  
 (select sum(Monto-descuento) from credito where cod_venta=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ))-
-(select sum(Monto) from pago where cod_venta_fk=
+(select sum(Monto) from vw_regularizacion_pagos_saldo where cod_venta_fk=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ) and Tipo='Pago Cuota')=0
  " . $condicionzona . $condiciondocumento . $condicioncliente . $condicionnrotele . $condicionVendedor . $condicionlocal . "
 group by vt.cod_clienteFK ";
@@ -5214,7 +5218,7 @@ where
 vt.cod_clienteFK!='10' and pg.Fecha < date_format(date_add(NOW(), INTERVAL -2 MONTH), '%Y/%m/%d') and  
 (select sum(Monto-descuento) from credito where cod_venta=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ))-
-(select sum(Monto) from pago where cod_venta_fk=
+(select sum(Monto) from vw_regularizacion_pagos_saldo where cod_venta_fk=
 (Select cod_venta from venta v where v.cod_clienteFK=vt.cod_clienteFK order by fecha_venta desc limit 1 ) and Tipo='Pago Cuota')=0 
  " . $condicionzona . $condiciondocumento . $condicioncliente . $condicionnrotele . $condicionVendedor . $condicionlocal . "
 group by vt.cod_clienteFK order by fecha_venta desc limit " . $registrocargado . ", 50";
@@ -5810,7 +5814,7 @@ function buscarcantidadcuotapagados($buscar)
 	$sql = "select count(*) as cuotas
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
  where vt.cod_venta='$buscar'
- and  ((cr.Monto-cr.descuento)-IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0))<=0
+ and  ((cr.Monto-cr.descuento)-".sqlCapitalPagadoSaldo('cr.idcredito').")<=0
  and ".sqlCreditoEsCuota('cr')."";
 
 
@@ -6512,7 +6516,7 @@ function buscartotalpagob($buscar)
 	$mysqli = conectar_al_servidor();
 
 	$sql = "select sum(pg.Monto) as totalpago
- from pago pg 
+ from vw_regularizacion_pagos_saldo pg 
  where pg.cod_venta_fk='$buscar'";/*Sentencia para buscar registros*/
 
 	$totalpago = 0;
@@ -7325,7 +7329,7 @@ function buscarCuentasCanceladas($buscar, $formato = "")
 	$filas = array();
 	$devolverArray = strtolower($formato) === "json";
 
-	$sql = "Select vt.cod_clienteFK,vt.cod_venta,vt.puntoexpedicion,vt.num_factura,vt.fecha_venta,datediff(cr.fechapago,(select pg.Fecha from pago pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1)) as diff
+	$sql = "Select vt.cod_clienteFK,vt.cod_venta,vt.puntoexpedicion,vt.num_factura,vt.fecha_venta,datediff(cr.fechapago,(select pg.Fecha from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito order by pg.Fecha desc limit 1)) as diff
 		from venta vt left join credito cr on vt.cod_venta=cr.cod_venta where vt.cod_clienteFK ='" . $buscar . "'  and
 		".sqlVentaPagada()."
         and IFNULL((Select count(fecha) from cancelaciones where cod_venta=vt.cod_venta limit 1),0)=0		
@@ -7510,32 +7514,32 @@ function historialFiltroMorosos($buscar, $filtro, $zona, $Local)
 	$paginaGarante = "";
 	$fechahoy = date('Y-m-d');
 
-	$condicionCuenta = " and IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) <
+	$condicionCuenta = " and IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota'),0) <
 	(select sum(cr.Monto) from credito cr where cr.cod_venta=vt.cod_venta)-(select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta)";
 
 	$CondiciónFiltro = "";
 	if ($filtro == "1") {
 		$CondiciónFiltro = " and DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1))>=30 and  DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) < 60";
 	}
 	if ($filtro == "2") {
 		$CondiciónFiltro = " and DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1))>=60 and  DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) < 90 ";
 	}
 	if ($filtro == "3") {
 		$CondiciónFiltro = " and DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1))>=90";
 	}
 	if ($filtro == "4") {
 		$CondiciónFiltro = "  and  (select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)<= '" . $fechahoy . "' ";
 	}
 
@@ -7552,11 +7556,11 @@ function historialFiltroMorosos($buscar, $filtro, $zona, $Local)
 	$sql = "Select vt.puntoexpedicion,vt.num_factura,vt.tipo_comprobante,fecha_venta,(select sum(Monto) from credito c where  vt.cod_venta=c.cod_venta)as total_venta,vt.cod_venta,
 		  (Select sms from cliente where cod_cliente=cod_clienteFK) as sms,
 		 (select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1) as FechapagoDeuda,
-		 (select plazo from credito c  where vt.cod_venta=c.cod_venta and (Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota')!=(c.Monto - c.descuento) order by idcredito asc limit 1) as plazo,
+		 (select plazo from credito c  where vt.cod_venta=c.cod_venta and (Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota')!=(c.Monto - c.descuento) order by idcredito asc limit 1) as plazo,
 		 IFNULL((select sum(deudaInteres) from credito c  where vt.cod_venta=c.cod_venta),0) as deudaInteres,
-		 (select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and (Select count(*) from pago where cod_creditoFK = idcredito)=0 order by idcredito asc limit 1) as FechapagoDeuda2,
+		 (select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and (Select count(*) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito)=0 order by idcredito asc limit 1) as FechapagoDeuda2,
 		(Select telefono from persona where cod_persona=cod_clienteFK) as Telefono,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) as clientenombre,
 		(Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=idGaranteFk) as Garantenombre,idGaranteFk,	
@@ -7569,7 +7573,7 @@ function historialFiltroMorosos($buscar, $filtro, $zona, $Local)
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		".sqlCapitalCobradoVenta()." as totalpagado ,
 		DATEDIFF('" . $fechahoy . "',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) as dias
 		from  venta vt where (select count(*) from cancelaciones c where vt.cod_venta=c.cod_venta)=0 and  (Select concat(nombre_persona,' ',apellido_persona) from persona where cod_persona=cod_clienteFK) like '%" . $buscar . "%' " . $CondiciónFiltro . $condicionZona . $condicionCuenta . $condicionLocal . " order by dias desc";
 
@@ -8098,7 +8102,7 @@ function buscarClienteFielDetalle($cod_ventaFK,$condiciontipoventa, $condiciondi
  WHERE c.cod_venta = vt.cod_venta
    AND EXISTS (
        SELECT 1 
-       FROM pago p
+       FROM vw_regularizacion_pagos_saldo p
        WHERE p.cod_creditoFK = c.idcredito 
          AND p.Tipo = 'Pago Cuota'
    )
@@ -8112,7 +8116,7 @@ function buscarClienteFielDetalle($cod_ventaFK,$condiciontipoventa, $condiciondi
     AND c.plazo != 'Entrega'
     AND NOT EXISTS (
       SELECT 1
-      FROM pago p
+      FROM vw_regularizacion_pagos_saldo p
       WHERE p.cod_creditoFK = c.idcredito
         AND p.Tipo = 'Pago Cuota'
     )
@@ -8657,7 +8661,7 @@ function informeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$tipo
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
 		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
-		(IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
+		(IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
@@ -8926,7 +8930,7 @@ function masinformeDeudaCliente($fecha1,$fecha2,$nroventa,$documento,$cliente,$r
 		IFNULL((Select montodevuelto from cancelaciones where cod_venta=vt.cod_venta limit 1),0) as montodevuelto,
 		IFNULL((Select Monto from credito where cod_venta=vt.cod_venta  limit 1),0) as Monto,estadorefinanciado,
 		(SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
-		(IFNULL((select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
+		(IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk),0) + IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0)) as control_estado,
 				IFNULL((Select sum(descuento) from detalle_venta where cod_ventaFK=vt.cod_venta limit 1),0) as totalDescuentodetalle,
 		(Select fechapago from credito where cod_venta=vt.cod_venta order by fechapago asc limit 1) as fechaprimerpago,vt.fecha_insert,vt.fecha_edit,
 (Select nombre_persona from persona pra where pra.cod_persona=cod_user_insert )as insertadopor,
@@ -9896,11 +9900,11 @@ $condiciontipo=" and c.cod_tipomora in ($condicionIn)";
  
  $CondicionVentaCod_tipoVenta="";
  // $fechahoy=date('Y-m-d');	
-	$sql = "select (cr.Monto - cr.descuento) as total ,  IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as pagado
+	$sql = "select (cr.Monto - cr.descuento) as total ,  IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and pg.tipo='Pago Cuota'),0) as pagado
  from  credito cr inner join venta v on cr.cod_venta = v.cod_venta
  inner join cliente c on c.cod_cliente = v.cod_clienteFK
  inner join zona z on z.idzona = c.idzonaFk
- where ( cr.Monto - cr.descuento ) - IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and
+ where ( cr.Monto - cr.descuento ) - IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and
  pg.tipo='Pago Cuota'),0)>0 and
  (select count(dtv.estado) from detalle_venta dtv where cr.cod_venta=dtv.cod_ventaFK and dtv.estado='Garantia')=0 and
   IFNULL((Select count(fecha) from cancelaciones c where cr.cod_venta=c.cod_venta limit 1),0)=0  and  cr.fechapago='$fecha' ".$condicionlocal.$condiciontipo.$condicioncobradorFK.$CondicionVentaCod_tipoVenta." ";
@@ -10926,24 +10930,24 @@ function ClienteParaInforconf($buscar,$filtro,$zona,$vista,$fecha,$formato=""){
 	 $CondicionInforcomf=" and (Select count(*) from informconf  where Estado='Activo' and cod_clienteFK=cod_cliente)=0";
 	 	
 	$condicionCuenta=" and IFNULL( ((select sum(cr.Monto) from credito cr where cr.cod_venta=vt.cod_venta) +(select sum(totalinteres) from credito c where c.cod_venta = vt.cod_venta and
- ifnull((select sum(Monto) from pago p where p.cod_creditoFK = c.idcredito and Tipo='Pago Cuota'),0)<c.Monto) )-((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta) + (select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota')),0) > 50000"; 
+ ifnull((select sum(Monto) from vw_regularizacion_pagos_saldo p where p.cod_creditoFK = c.idcredito and Tipo='Pago Cuota'),0)<c.Monto) )-((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta) + (select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota')),0) > 50000"; 
 		 
 		$CondiciónFiltro="";
 		if($filtro=="1"){
 			$CondiciónFiltro=" and DATEDIFF('".$fechahoy."',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) between 90 and 120";
 		}
 		
 		if($filtro=="2"){
 			$CondiciónFiltro=" and DATEDIFF('".$fechahoy."',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1)) between 121 and 150 ";
 		}
 		
 		if($filtro=="3"){
 			$CondiciónFiltro=" and DATEDIFF('".$fechahoy."',(select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1))>=90";
 		}
 		 
@@ -10962,10 +10966,10 @@ function ClienteParaInforconf($buscar,$filtro,$zona,$vista,$fecha,$formato=""){
 		 $sql= "Select cod_clienteFK,vt.puntoexpedicion,vt.num_factura,vt.tipo_comprobante,DATE_FORMAT(fecha_venta, '%d/%m/%Y') as fecha_venta,
 		 (select sum(Monto) from credito c where vt.cod_venta=c.cod_venta)as total_venta,vt.cod_venta,
 		 DATE_FORMAT((select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and
-		IFNULL((Select sum(Monto) from pago where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
+		IFNULL((Select sum(Monto) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito and Tipo='Pago Cuota'),0)<(c.Monto - c.descuento) 
 		order by idcredito asc limit 1), '%d/%m/%Y') as FechapagoDeuda,
-		ifnull(DATE_FORMAT((select Fecha from pago p  where vt.cod_venta=p.cod_venta_fk order by idPago desc limit 1), '%d/%m/%Y'),'') as FechaUltimoPago,
-		DATE_FORMAT((select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and (Select count(*) from pago where cod_creditoFK = idcredito)=0 order by idcredito asc limit 1), '%d/%m/%Y') as FechapagoDeuda2,
+		ifnull(DATE_FORMAT((select Fecha from vw_regularizacion_pagos_saldo p  where vt.cod_venta=p.cod_venta_fk order by Fecha desc, hora desc, idPago desc limit 1), '%d/%m/%Y'),'') as FechaUltimoPago,
+		DATE_FORMAT((select (c.fechapago) from credito c  where vt.cod_venta=c.cod_venta and (Select count(*) from vw_regularizacion_pagos_saldo where cod_creditoFK = idcredito)=0 order by idcredito asc limit 1), '%d/%m/%Y') as FechapagoDeuda2,
 		 pr.telefono   as Telefono,concat(pr.nombre_persona,' ',pr.apellido_persona)  as clientenombre,
 		(Select rut_cliente from cliente where cod_cliente=cod_clienteFK) as cicliente, 
 		(Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as ruc,
@@ -10973,7 +10977,7 @@ function ClienteParaInforconf($buscar,$filtro,$zona,$vista,$fecha,$formato=""){
 		IFNULL((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta),0) as totaldescuento,
 		".sqlCapitalCobradoVenta()." as totalpagado ,
   IFNULL( ((select sum(cr.Monto) from credito cr where cr.cod_venta=vt.cod_venta) +(select sum(totalinteres) from credito c where c.cod_venta = vt.cod_venta and
- ifnull((select sum(Monto) from pago p where p.cod_creditoFK = c.idcredito and Tipo='Pago Cuota'),0)<c.Monto) )-((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta) + (select sum(pg.Monto) from pago pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota')),0) as deu		
+ ifnull((select sum(Monto) from vw_regularizacion_pagos_saldo p where p.cod_creditoFK = c.idcredito and Tipo='Pago Cuota'),0)<c.Monto) )-((select sum(cr.descuento) from credito cr where cr.cod_venta=vt.cod_venta) + (select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg  where vt.cod_venta=pg.cod_venta_fk and Tipo='Pago Cuota')),0) as deu		
 		from  venta vt inner join cliente cl on cod_cliente=cod_ClienteFK
 		inner join persona pr on cod_cliente=cod_persona where (select count(*) from cancelaciones c where vt.cod_venta=c.cod_venta)=0 and   concat(pr.nombre_persona,' ',pr.apellido_persona)  like '%".$buscar."%'  ".$condicionfecha.$CondicionInforcomf.$CondiciónFiltro.$condicionZona.$condicionCuenta." group by vt.cod_venta asc order by cod_venta desc";
 	 

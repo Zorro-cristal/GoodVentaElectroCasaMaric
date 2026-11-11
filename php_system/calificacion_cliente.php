@@ -67,9 +67,9 @@ function CalcularVenta($cod_cliente)
             c.fechapago AS FechaVencimiento,
             (
                 SELECT p.Fecha 
-                FROM pago p 
+                FROM vw_regularizacion_pagos_saldo p 
                 WHERE c.idcredito = p.cod_creditoFK
-                ORDER BY p.idPago DESC 
+                ORDER BY p.Fecha DESC, p.hora DESC, p.idPago DESC 
                 LIMIT 1
             ) AS FechaPago
         FROM venta vt

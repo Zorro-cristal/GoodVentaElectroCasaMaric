@@ -1472,7 +1472,7 @@ $mysqli=conectar_al_servidor();
 
 		$sql= "select  Monto  , ifnull(cr.descuento,0) as descuento,
 		ifnull((select sum(Monto) 
-		from pago p 
+		from vw_regularizacion_pagos_saldo p 
 		where cr.idcredito=p.cod_creditoFK and (p.cod_tareaCobadorFK!= '".$cod_controlcobrador."' OR p.cod_tareaCobadorFK IS NULL) and Tipo='Pago Cuota' ),0) as cobrado  
 		
 		from  credito cr 
@@ -1736,7 +1736,7 @@ function buscarListaClientes($cod_TareasCobrador, $condicion, $Zona, $fecha1, $f
                     WHERE pg.cod_venta_fk=vt.cod_venta AND Tipo='Pago Cuota' AND cod_tareaCobadorFK= '".$cod_TareasCobrador."'),0) AS pagado,
 
             IFNULL((SELECT SUM(p.Monto)
-                    FROM pago p
+                    FROM vw_regularizacion_pagos_saldo p
                     INNER JOIN credito c ON p.cod_creditoFK=c.idcredito
 					inner join  detalle_tarea_cobrador d on c.idcredito=d.cod_creditoFK 
                     WHERE p.cod_venta_fk=vt.cod_venta AND p.Tipo='Pago Cuota'
@@ -1751,7 +1751,7 @@ function buscarListaClientes($cod_TareasCobrador, $condicion, $Zona, $fecha1, $f
                      WHERE d.cod_controlcobradorFK= '".$cod_TareasCobrador."' AND v.cod_clienteFK=vt.cod_clienteFK AND v.cod_venta=vt.cod_venta)
                     -
                     IFNULL((SELECT SUM(pg.Monto) 
-                            FROM pago pg
+                            FROM vw_regularizacion_pagos_saldo pg
                             INNER JOIN credito c ON cod_creditoFK=idcredito
 							inner join  detalle_tarea_cobrador d on c.idcredito=d.cod_creditoFK 
                             WHERE pg.cod_venta_fk=vt.cod_venta AND pg.Tipo='Pago Cuota'

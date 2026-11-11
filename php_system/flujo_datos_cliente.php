@@ -115,7 +115,7 @@ function buscarDetalleMovimientoFlujo($cod_cliente,$tipo,$codigo)
 		             TRIM(CONCAT_WS(' ',pc.nombre_persona,pc.apellido_persona)) AS cliente,
 		             COALESCE(NULLIF(c.ci_cliente,''),c.rut_cliente) AS documento,pc.telefono,
 		             TRIM(CONCAT_WS(' ',pu.nombre_persona,pu.apellido_persona)) AS responsable,
-		             IFNULL((SELECT SUM(pg.Monto) FROM pago pg
+		             IFNULL((SELECT SUM(pg.Monto) FROM vw_regularizacion_pagos_saldo pg
 		                     WHERE pg.cod_venta_fk=v.cod_venta AND pg.Tipo='Pago Cuota'
 		                       AND COALESCE(pg.anulado,0)<>1),0) AS total_pagado
 		      FROM venta v
@@ -362,7 +362,7 @@ function buscarFlujoCliente($cod_cliente,$tipo,$fecha_desde,$fecha_hasta,$offset
 	                         CONCAT('Venta #',cr.cod_venta)),
 	               CONCAT('CREDITO #',cr.idcredito),
 	               (cr.Monto-cr.descuento)-IFNULL((
-	                   SELECT SUM(pc.Monto) FROM pago pc
+	                   SELECT SUM(pc.Monto) FROM vw_regularizacion_pagos_saldo pc
 	                   WHERE pc.cod_creditoFK=cr.idcredito
 	                     AND pc.Tipo='Pago Cuota' AND COALESCE(pc.anulado,0)<>1
 	               ),0),
@@ -377,7 +377,7 @@ function buscarFlujoCliente($cod_cliente,$tipo,$fecha_desde,$fecha_hasta,$offset
 	          AND COALESCE(cr.anulado,0)<>1
 	          AND COALESCE(v.anulado,0)<>1
 	          AND (cr.Monto-cr.descuento)-IFNULL((
-	               SELECT SUM(pc.Monto) FROM pago pc
+	               SELECT SUM(pc.Monto) FROM vw_regularizacion_pagos_saldo pc
 	               WHERE pc.cod_creditoFK=cr.idcredito
 	                 AND pc.Tipo='Pago Cuota' AND COALESCE(pc.anulado,0)<>1
 	          ),0)>0

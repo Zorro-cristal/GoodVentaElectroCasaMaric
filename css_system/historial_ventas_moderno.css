@@ -51,7 +51,7 @@
 #divHistorialVenta #tbTituloImpreHistorialVenta .td_registro{height:42px;padding:4px 6px !important;cursor:pointer;user-select:none}
 #divHistorialVenta #tbTituloImpreHistorialVenta .td_registro:hover{background:#245f7d !important}
 #divHistorialVenta #TableScroollHistorialVenta2{display:block;flex:1 1 auto;width:100% !important;height:0 !important;min-height:0;overflow:auto !important;border:1px solid #dfe6ef;background:#fff;overscroll-behavior:contain;scrollbar-gutter:stable}
-#divHistorialVenta #table_historial_venta{display:block;flex:none;width:2400px !important;min-width:2400px;min-height:100%;height:auto !important;overflow:visible !important}
+#divHistorialVenta #table_historial_venta{display:block;flex:none;width:2400px !important;min-width:2400px;min-height:0 !important;height:auto !important;overflow:visible !important}
 #divHistorialVenta #table_historial_venta > table,#divHistorialVenta #table_historial_venta div > table{width:2400px !important;min-width:2400px;table-layout:fixed;border-collapse:collapse}
 #divHistorialVenta #table_historial_venta td{padding:7px 6px;border-color:#e4eaf1 !important;color:#344054;font-size:11px;text-align:center;vertical-align:middle}
 #divHistorialVenta #table_historial_venta table:hover td{background:#f0f7fb}

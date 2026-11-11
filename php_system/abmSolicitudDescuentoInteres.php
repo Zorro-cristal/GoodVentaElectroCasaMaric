@@ -403,7 +403,7 @@ while ($valor= mysqli_fetch_assoc($result))
 			
 			$sql= "Select (totalinteres + cr.deudaInteres) as totalinteres,cr.idcredito,cr.plazo,IFNULL(descuentoInteres,0) as descuentoInteres
 					from credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
-					where cr.cod_venta='$cod_ventaFK' and IFNULL((select sum(pg.Monto) from pago pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)  order by cr.idcredito asc";
+					where cr.cod_venta='$cod_ventaFK' and IFNULL((select sum(pg.Monto) from vw_regularizacion_pagos_saldo pg where pg.cod_creditoFK=cr.idcredito and tipo='Pago Cuota'),0) < (cr.Monto-cr.descuento)  order by cr.idcredito asc";
 
 			
 	
