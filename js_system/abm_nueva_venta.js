@@ -7791,7 +7791,7 @@ function crearFilaCuentaACobrar(registro, indice) {
 	fila.appendChild(crearCeldaCuentaACobrar(registro.num_factura, "td_datos_2", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.plazo, "", "", true));
 
-	var celdaCliente = crearCeldaCuentaACobrar("", "td_datos_26", "16%", false);
+	var celdaCliente = crearCeldaCuentaACobrar("", "td_datos_26", "12%", false);
 	if (registro.estado_cliente) {
 		var estadoCliente = document.createElement("p");
 		estadoCliente.style.color = "#d10000";
@@ -7810,17 +7810,18 @@ function crearFilaCuentaACobrar(registro, indice) {
 	agregarProgresoCreditoCuentaACobrar(celdaCliente, registro.porcentaje_pagado_credito);
 	fila.appendChild(celdaCliente);
 
-	fila.appendChild(crearCeldaCuentaACobrar(registro.documento, "", "7%", false));
-	fila.appendChild(crearCeldaCuentaACobrar(registro.telefono, "", "8%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.documento, "", "6%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.telefono, "", "6%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.direccion, "", "12%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.nro_factura, "", "7%", false));
 
-	var celdaProductos = crearCeldaCuentaACobrar("", "", "13%", false);
+	var celdaProductos = crearCeldaCuentaACobrar("", "", "9%", false);
 	agregarProductosCuentaACobrar(celdaProductos, registro.productos);
 	fila.appendChild(celdaProductos);
 
 	fila.appendChild(crearCeldaCuentaACobrar(registro.cobrador, "td_datos_5", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.total_venta, "td_datos_12", "", true));
-	fila.appendChild(crearCeldaCuentaACobrar(registro.fecha_mostrada, "", "7%", false));
+	fila.appendChild(crearCeldaCuentaACobrar(registro.fecha_mostrada, "", "6%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.cuotas, "", "6%", false));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.fecha_pago, "td_datos_3", "", true));
 	fila.appendChild(crearCeldaCuentaACobrar(registro.cuotas, "td_datos_19", "", true));

@@ -31,7 +31,7 @@ body {
 .contrato-encabezado {
   position: relative;
   min-height: 25mm;
-  padding: 4mm 43mm 2mm 0;
+  padding: 4mm 54mm 2mm 0;
   border-bottom: 1.2mm solid #ff6b00;
 }
 
@@ -51,10 +51,9 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 39mm;
+  width: 50mm;
   height: 23mm;
-  object-fit: cover;
-  object-position: center 52%;
+  object-fit: contain;
 }
 
 .contrato-referencia {

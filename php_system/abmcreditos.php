@@ -5577,6 +5577,7 @@ IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIM
 IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK),'SIN REGISTRO') as calificacion_cliente,
 (Select tipo_estado from cliente where cod_cliente=cod_clienteFK) as tipo_estado,
 (SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
+(Select direccion from persona where cod_persona=vt.cod_clienteFK) as direccion,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -5631,6 +5632,7 @@ $cod_cobradorFK = utf8_encode($valor['cod_cobradorFK']);
 $total_venta = utf8_encode($valor['total_venta']);
 $num_factura = utf8_encode($valor['num_factura']);
 $nombrelocal = utf8_encode($valor['nombrelocal']);
+$direccion = utf8_encode(isset($valor['direccion']) ? $valor['direccion'] : '');
 $telefono = utf8_encode($valor['telefono']);
 $descuento = utf8_encode($valor['descuento']);
 $tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
@@ -5732,6 +5734,7 @@ $filas[] = array(
 	"calificacion_cliente" => $calificacion_cliente === '' ? 'SIN REGISTRO' : $calificacion_cliente,
 	"documento" => $documento,
 	"telefono" => $telefono,
+	"direccion" => $direccion,
 	"nro_factura" => $nrof,
 	"productos" => isset($Detalle_VentaProducto[4]) ? $Detalle_VentaProducto[4] : array(),
 	"cobrador" => $cobradornombre,
@@ -5774,6 +5777,7 @@ $pagina.="
 <td id='td_datos_26' style='width:10%;' >".$p_tipo.$clientenombre."</td>
 <td id='' style='width:5%;' >".$documento."</td>
 <td id='' style='width:5%;' >".$telefono."</td>
+<td style='width:12%;'>".htmlspecialchars($direccion, ENT_QUOTES, 'UTF-8')."</td>
 <td id='' style='width:5%;' >".$nrof."</td>
 <td id='' style='width:10%; ' >".$Detalle_VentaProducto[0]."</td>
 <td id='td_datos_5' style='display:none' >".$cobradornombre."</td>
@@ -5925,6 +5929,7 @@ IFNULL((Select lot from ubicaciones u where u.cod_clienteFk=vt.cod_clienteFK LIM
 (Select ci_cliente from cliente where cod_cliente=cod_clienteFK) as documento,
 IFNULL((Select calificacion_cliente from cliente where cod_cliente=cod_clienteFK),'SIN REGISTRO') as calificacion_cliente,
 (SELECT COUNT(*) FROM credito cq WHERE cq.cod_venta=vt.cod_venta AND ".sqlCreditoEsCuota('cq').") as nroCouta,
+(Select direccion from persona where cod_persona=vt.cod_clienteFK) as direccion,
 (Select telefono from persona where cod_persona=vt.cod_clienteFK) as telefono,
 		(Select nombre_persona from persona where cod_persona=vt.cod_cobradorFK) as cobradornombre
  from  credito cr inner join venta vt on vt.cod_venta=cr.cod_venta
@@ -5977,6 +5982,7 @@ $cod_cobradorFK = utf8_encode($valor['cod_cobradorFK']);
 $total_venta = utf8_encode($valor['total_venta']);
 $num_factura = utf8_encode($valor['num_factura']);
 $nombrelocal = utf8_encode($valor['nombrelocal']);
+$direccion = utf8_encode(isset($valor['direccion']) ? $valor['direccion'] : '');
 $telefono = utf8_encode($valor['telefono']);
 $descuento = utf8_encode($valor['descuento']);
 $tipo_comprobante = utf8_encode($valor['tipo_comprobante']);
@@ -6039,6 +6045,7 @@ $filas[] = array(
 	"calificacion_cliente" => $calificacion_cliente === '' ? 'SIN REGISTRO' : $calificacion_cliente,
 	"documento" => $documento,
 	"telefono" => $telefono,
+	"direccion" => $direccion,
 	"nro_factura" => $nrof,
 	"productos" => isset($Detalle_VentaProducto[4]) ? $Detalle_VentaProducto[4] : array(),
 	"cobrador" => $cobradornombre,
@@ -6081,6 +6088,7 @@ $pagina.="
 <td id='td_datos_26' style='width:10%;' >".$p_tipo.$clientenombre."</td>
 <td id='' style='width:5%;' >".$documento."</td>
 <td id='' style='width:5%;' >".$telefono."</td>
+<td style='width:12%;'>".htmlspecialchars($direccion, ENT_QUOTES, 'UTF-8')."</td>
 <td id='' style='width:5%;' >".$nrof."</td>
 <td id='' style='width:10%; ' >".$Detalle_VentaProducto[0]."</td>
 <td id='td_datos_5' style='display:none' >".$cobradornombre."</td>

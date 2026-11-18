@@ -20,8 +20,19 @@
 			var tipo=localStorage.getItem("tipo");
 			document.getElementById("divimpr").innerHTML=pagina
 			if(tipo=="factura" || tipo=='ticket'){
-			
-			  window.print();
+				var imagenes = document.getElementById("divimpr").querySelectorAll("img");
+				Promise.all(Array.prototype.map.call(imagenes, function(imagen){
+					return new Promise(function(resolve){
+						if(imagen.complete){
+							resolve();
+							return;
+						}
+						imagen.addEventListener("load", resolve, {once:true});
+						imagen.addEventListener("error", resolve, {once:true});
+					});
+				})).then(function(){
+					window.print();
+				});
           
 			}
 

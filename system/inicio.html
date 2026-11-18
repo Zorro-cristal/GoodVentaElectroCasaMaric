@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/equifax_base_positiva.css?x=20260720v1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/tema_asiscap_moderno.css?x=20260720v4" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/listado_clientes.css?x=20260729scrollclientes1" />
-<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/historial_ventas_moderno.css?x=20260729montominimoexcel1" />
+<link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/historial_ventas_moderno.css?x=20261103scrollhistorial1" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/historial_compras_moderno.css?x=20260723v4" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/abm_tablas_modernas.css?x=20261027cuentascobrarscroll2" />
 <link rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/formularios_titulos_modernos.css?x=20260721orden2" />
@@ -78,7 +78,7 @@
 
 <script src="/GoodVentaElectroCasaMaric/js/jquery.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261030recibosinguiones2"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm.js?x=20261118tituloimagen1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/barras_progreso_modernas.js?x=20260724v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/datosUsuario.js"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/inicio.js?x=20260725buscadormoderno1"></script>
@@ -102,7 +102,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_casa.js?x=20260902empresa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_clientes.js?x=20260819modalborradorclientesalir1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_imagenes_cliente.js?x=20260723ubicacionfrente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261030estadopagoparcial1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/abm_nueva_venta.js?x=20261117direccion1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_sueldos.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_gasto.js?x=20260807busquedagastoindependiente1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_arreglo_ingreso.js?x=20260720v1"></script>
@@ -162,7 +162,7 @@
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_descripcion_banco_ingreso_egreso_juan.js?x=20261026informeventa1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_profesion.js?x=20260720v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/abm_formulario_estandar.js?x=20260807busquedageneralindependiente1"></script>
-<script src="/GoodVentaElectroCasaMaric/js_system/listado_clientes.js?x=20260731datoslaborales1"></script>
+<script src="/GoodVentaElectroCasaMaric/js_system/listado_clientes.js?x=20261111direccion1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/listado_productos.js?x=20260729altoExactoFooter1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/informe_ubicaciones_clientes.js?x=20260723v1"></script>
 <script src="/GoodVentaElectroCasaMaric/js_system/catalogo_productos_moderno.js?x=20260723catalogocajas3"></script>
@@ -16132,20 +16132,22 @@ id='TableScroollCuentasACobrar1'>
 id='tdTituloImpreCuenta'>
 <tbody>
 <tr>
-<td class="td_registro" style="width:16%;">CLIENTE</td>
-<td class="td_registro" style="width:7%;">DOCUMENTO</td>
-<td class="td_registro" style="width:8%;">TELEF.</td>
+<td class="td_registro" style="width:12%;">CLIENTE</td>
+<td class="td_registro" style="width:6%;">DOCUMENTO</td>
+<td class="td_registro" style="width:6%;">TELEF.</td>
+<td class="td_registro" style="width:12%;">DIRECCI&Oacute;N</td>
 <td class="td_registro" style="width:7%;">NRO VENTA</td>
-<td class="td_registro" style="width:17%;">PRODUCTO</td>
-<td class="td_registro" style="width:7%;">FECHA VENC.
+<td class="td_registro" style="width:9%;">PRODUCTO</td>
+<td class="td_registro" style="width:6%;">FECHA VENC.
 </td>
+<td class="td_registro" style="width:6%;" title="Cantidad de cuotas pagadas / cantidad total de cuotas">CUOTAS</td>
 <td class="td_registro" style="width:4%;">C/A</td>
 <td class="td_registro" style="width:4%;">D/A</td>
 <td class="td_registro" style="width:8%;">A COBRAR</td>
 <td class="td_registro" style="width:8%;">TOTAL DEUDA
 </td>
 <td class="td_registro" style="width:6%;">LOCAL</td>
-<td class="td_registro" style="width:8%;">VENDEDOR</td>
+<td class="td_registro" style="width:6%;">VENDEDOR</td>
 </tr>
 </tbody>
 </table>
@@ -52306,7 +52308,7 @@ onclick='finalizarventanasminizados()' />
 <center>
 <div id='DivImprimirExtr'>
  
-<img src='/GoodVentaElectroCasaMaric/iconos/logo.png' style='width:170px'>
+<img src='/GoodVentaElectroCasaMaric/iconos/casa_maric_tittle.jpeg' alt='Casa Maric' style='width:220px;max-width:100%;height:auto'>
  
 <br>
 <h1 class='pTituloD' style='font-size:25px' >INFORME DE CUENTA CLIENTE</h1><br>
@@ -52470,7 +52472,7 @@ style='width:88%'></div>
 <article class='contrato-maric'>
   <header class='contrato-encabezado'>
     <h1>CONTRATO DE COMPRA VENTA DE PRODUCTOS</h1>
-    <img src='/GoodVentaElectroCasaMaric/iconos/iconoEmpresa.JPG' alt='Casa Maric'>
+    <img src='/GoodVentaElectroCasaMaric/iconos/casa_maric_tittle.jpeg' alt='Casa Maric'>
   </header>
 
   <p class='contrato-referencia'>Factura N° <strong id='ContratoNumeroFactura'></strong> &middot; Fecha <strong id='ContratoFechaEmision'></strong></p>

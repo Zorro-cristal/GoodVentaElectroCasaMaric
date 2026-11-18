@@ -8,7 +8,7 @@
   <meta name="msapplicaction-navbutton-color" content="#000" />
    <meta  name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimun-scalable=1,maximun-scalable=1" />
     <title>Contrato de compra venta</title>
-	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/contrato.css?x=20261014contrato2" />
+	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/contrato.css?x=20261118tituloimagen1" />
 
 
 	<script>
@@ -19,8 +19,19 @@
 			var tipo=localStorage.getItem("tipo");
 			document.getElementById("divimpr").innerHTML=pagina
 			if(tipo=="factura" || tipo=='ticket' || tipo=='contrato'){
-			
-			  window.print();
+				var imagenes = document.getElementById("divimpr").querySelectorAll("img");
+				Promise.all(Array.prototype.map.call(imagenes, function(imagen){
+					return new Promise(function(resolve){
+						if(imagen.complete){
+							resolve();
+							return;
+						}
+						imagen.addEventListener("load", resolve, {once:true});
+						imagen.addEventListener("error", resolve, {once:true});
+					});
+				})).then(function(){
+					window.print();
+				});
           
 			}
 

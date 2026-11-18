@@ -1462,7 +1462,7 @@ var fecha = new Date(datosVenta.vencimiento);
 	+"<section class='pagare-maric'>"
 	+"<header class='pagare-encabezado'>"
 	+"<div class='pagare-marca'><img src='/GoodVentaElectroCasaMaric/iconos/logo.png' alt='Logo de "+nombreEmpresaPagare+"'></div>"
-	+"<div class='pagare-empresa'><h2>"+nombreEmpresaPagare+"</h2><h3>DE WALTER FABIÁN SÁNCHEZ RUIZ</h3>"
+	+"<div class='pagare-empresa'><h2>"+obtenerTituloEmpresaImpresionHtml()+"</h2><h3>DE WALTER FABIÁN SÁNCHEZ RUIZ</h3>"
 	+"<p>Comercio al por mayor de mercaderías n.c.p. o a cambio de una retribución o por contrato<br>Comercio al por menor de electrodomésticos y accesorios &middot; Equipos de telecomunicaciones<br>Comercio de motocicletas y de sus piezas y accesorios</p>"
 	+"<p><b>"+contactoEmpresaPagare+"</b></p></div>"
 	+"<table class='pagare-datos'><tr><td>Guaraníes:</td><td class='pagare-casilla'>"+importeFormateadoPagare+"</td></tr><tr><td>Vence:</td><td class='pagare-casilla'>"+fechaVencimientoPagare+"</td></tr><tr><td>Factura N°:</td><td class='pagare-casilla'>"+escaparHtmlPagare(numeroFacturaPagare)+"</td></tr></table>"
@@ -1540,6 +1540,10 @@ function obtenerNombreEmpresaImpresionHtml(){
 	return escaparHtmlPagare(obtenerNombreEmpresaImpresion());
 }
 
+function obtenerTituloEmpresaImpresionHtml(){
+	return "<img src='/GoodVentaElectroCasaMaric/iconos/casa_maric_tittle.jpeg' alt='"+obtenerNombreEmpresaImpresionHtml()+"' style='display:block;width:220px;max-width:100%;height:auto;margin:0 auto;object-fit:contain;'>";
+}
+
 function obtenerRucEmpresaImpresionHtml(){
 	return escaparHtmlPagare(obtenerRucEmpresaImpresion());
 }
@@ -1579,8 +1583,8 @@ function obtenerDatosEmpresaTicketHtml(){
 	return lineas.join("<br>");
 }
 
-function obtenerCabeceraTicketEmpresaImpresion(){
-	return "<p class='pTituloTicket1' >"+obtenerNombreEmpresaImpresionHtml()+"</p>"
+function obtenerCabeceraTicketEmpresaImpresion(conImagenTitulo){
+	return "<p class='pTituloTicket1' >"+(conImagenTitulo ? obtenerTituloEmpresaImpresionHtml() : obtenerNombreEmpresaImpresionHtml())+"</p>"
 		+"<p class='pTituloTicket2'>"+obtenerDatosEmpresaTicketHtml()+"</p>";
 }
 
@@ -1980,7 +1984,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 	pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion()
++obtenerCabeceraTicketEmpresaImpresion(true)
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -2098,7 +2102,7 @@ function imprimirDivTickeFacturaPago(NombreCliente,CiCliente,NroRecibo,tipoventa
 			pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion()
++obtenerCabeceraTicketEmpresaImpresion(true)
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
@@ -3208,7 +3212,7 @@ function imprimirDivticket(idCodVenta){
 	pagina="<!DOCTYPE html><html><head><style type='text/css'>"+stylos+" </style> 	</head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion()
++obtenerCabeceraTicketEmpresaImpresion(true)
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -3340,7 +3344,7 @@ if(TipoVenta!="CREDITO"  ){
 	pagina="<style type='text/css'>"+stylos+" </style><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion()
++obtenerCabeceraTicketEmpresaImpresion(true)
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<table class='tableTicket'>"
 +"<tr>"
@@ -5541,7 +5545,7 @@ function ReImprimirDivTickeFacturaPago( Fecha, Cajero, CuotasNro, Pagado, DiasAt
             <img src="/GoodVentaElectroCasaMaric/iconos/logo.png" alt="Logo de ${nombreEmpresaTicket}">
           </div>
           <div class="title">
-            <h1>${nombreEmpresaTicket}</h1>
+            <h1>${obtenerTituloEmpresaImpresionHtml()}</h1>
             <p>Recibo de Dinero</p>
           </div>
         </div>
@@ -5723,7 +5727,7 @@ function ReImprimirDivTickeFacturaPagoTicket(Fecha,Cajero,CuotasNro,Pagado,DiasA
 pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
 +"<center>"
 +"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion()
++obtenerCabeceraTicketEmpresaImpresion(true)
 +"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
 +"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
 +"<table class='tableTicket'>"
