@@ -5722,135 +5722,94 @@ function formatearNumero(totalCobroPagado) {
 
 
 
-function ReImprimirDivTickeFacturaPagoTicket(Fecha,Cajero,CuotasNro,Pagado,DiasAtrazado,NombreCliente,CiCliente,NroRecibo,tipoventa,totalInteres,deudaActual,totalpagado,totaldescuento,TotalVenta,InteresActual,deudaActualsininteres,detalleventaticket){
-	
-pagina="<!DOCTYPE html><html><head></head><body><div   style='background-color:#fff;'>"
-+"<center>"
-+"<div class='divTicket' >"
-+obtenerCabeceraTicketEmpresaImpresion(true)
-+"<div class='divSeparadorTicket' style='margin-bottom:5px'></div>"
-+"<p class='pTituloTicket1' style='font-size:12px;' ><b>Recibo de Dinero</b></p>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:80px'><b>Numero :</b></td>"
-+"<td style=''>"+NroRecibo+"</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:60px'><b>Cliente:</b></td>"
-+"<td style=''>"+NombreCliente+"</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:85px'><b>RUC o C.I.:</b></td>"
-+"<td style=''>"+CiCliente+"</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:60px'><b>Fecha:</b></td>"
-+"<td style=''>"+Fecha+"</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:100px'><b>D. Atrasado</b></td>"
-+"<td style=''>"+DiasAtrazado+" Día(s)</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:80px'><b>Pagado:</b></td>"
-+"<td style=''>"+Pagado+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:50px'><b>Cuota N.:</b></td>"
-+"<td style=''>"+CuotasNro+"</td>"
-+"</tr>"
-+"</table>"
-+"<p class='pTituloTicket1' style='font-size:12px;' ><b>En Concepto de:</b></p>"
-+"<div class='divSeparadorTicket' style='margin-top:5px;margin-bottom:5px' ></div>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:25%'><b>Cant.</b></td>"
-+"<td style='width:25%'><b>Producto</b></td>"
-+"<td style='width:25%'><b>Costo</b></td>"
-+"<td style='width:25%'><b>Total</b></td>"
-+"</tr>"
-+"</table>"
-+detalleventaticket
-+"<div class='divSeparadorTicket' style='margin-top:5px;margin-bottom:5px' ></div>"
-+"<table class='tableTicket' style='display:none'>"
-+"<tr>"
-+"<td style='width:110px'><b>Sub-total:</b></td>"
-+"<td style=''>"+TotalVenta+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket' style='display:none'>"
-+"<tr>"
-+"<td style='width:110px'><b>Total Descuento:</b></td>"
-+"<td style=''>"+totaldescuento+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket' style='display:none'>"
-+"<tr>"
-+"<td style='width:110px'><b>Interes Pagados:</b></td>"
-+"<td style=''>"+totalInteres+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket' style='display:none'>"
-+"<tr>"
-+"<td style='width:110px'><b>Total Pagado:</b></td>"
-+"<td style=''>"+totalpagado+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<div style='display:none'>"
-+"<div class='divSeparadorTicket' style='margin-top:5px;margin-bottom:5px' ></div>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:110px'><b>Intereses Pendientes:</b></td>"
-+"<td style=''>"+InteresActual+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:110px'><b>Total Sin Intereses:</b></td>"
-+"<td style=''>"+deudaActualsininteres+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"</div>"
-+"<table class='tableTicket' style='display:none'>"
-+"<tr>"
-+"<td style='width:110px'><b>Saldo :</b></td>"
-+"<td style=''>"+deudaActual+" Gs.</td>"
-+"</tr>"
-+"</table>"
-+"<div class='divSeparadorTicket' style='margin-top:5px;margin-bottom:5px;display:none' ></div>"
-+"<table class='tableTicket'>"
-+"<tr>"
-+"<td style='width:60px'><b>Cajero :</b></td>"
-+"<td style=''>"+Cajero+"</td>"
-+"</tr>"
-+"</table>"
-+"</div>"
-+"</center>"
-"</div></body></html>"
-
-	
-var ficha=pagina;
-document.getElementById("DivImprimir").innerHTML=ficha;
-   var documento= document.getElementById("DivImprimir").innerHTML;
-     localStorage.setItem("reporte", documento);
-	   localStorage.setItem("tipo", "ticket");
-	 window.open("/GoodVentaElectroCasaMaric/system/reportTicket.html");
-	 document.getElementById("DivImprimir").innerHTML = "";
- 
+// Adaptar los detalles HTML de pagos normales, parciales y reimpresiones
+// sin depender de los anchos ni de las tablas anidadas de cada respuesta.
+function obtenerFilasVisiblesTicket58(html){
+    var contenedor = document.createElement("div");
+    contenedor.innerHTML = html == null ? "" : String(html);
+    Array.prototype.forEach.call(contenedor.querySelectorAll("*"), function(elemento){
+        if(elemento.hidden || elemento.style.display === "none"){
+            elemento.remove();
+        }
+    });
+    var filas = [];
+    Array.prototype.forEach.call(contenedor.querySelectorAll("tr"), function(fila){
+        // Las filas interiores se leen por separado, sin duplicar su contenido.
+        if(fila.querySelector("table")){ return; }
+        var celdas = Array.prototype.map.call(fila.cells, function(celda){
+            return celda.textContent.replace(/\s+/g, " ").trim();
+        });
+        if(celdas.some(function(texto){ return texto !== ""; })){
+            filas.push(celdas);
+        }
+    });
+    if(!filas.length && contenedor.textContent.trim()){
+        filas.push([contenedor.textContent.replace(/\s+/g, " ").trim()]);
+    }
+    return filas;
 }
 
+function obtenerDatoTicket58(etiqueta, valor){
+    if(valor == null || String(valor).trim() === ""){ return ""; }
+    return "<p class='ticket-dato'><b>"+escaparHtmlPagare(etiqueta)+":</b> <span>"
+        +escaparHtmlPagare(valor)+"</span></p>";
+}
+
+function obtenerPagosTicket58(html){
+    return obtenerFilasVisiblesTicket58(html).map(function(fila){
+        // El total ya aparece en Pagado; algunas respuestas incluyen otra fila TOTAL.
+        if(fila.length === 2 && !fila[0] && /^TOTAL\s*:/i.test(fila[1])){ return ""; }
+        var detalle = "";
+        if(fila.length === 3){
+            detalle = "<p><b>"+escaparHtmlPagare(fila[1])+"</b></p>"
+                +obtenerDatoTicket58("Cuota", fila[0]);
+        }else if(fila.length === 4 || fila.length === 5){
+            var offset = fila.length - 4;
+            detalle = "<p><b>"+escaparHtmlPagare(fila[offset+1])+"</b></p>"
+                +(offset ? obtenerDatoTicket58("Fecha pago", fila[0]) : "")
+                +obtenerDatoTicket58("Vencimiento", fila[offset])
+                +obtenerDatoTicket58("Medio", fila[offset+2]);
+        }else{
+            return "<div class='ticket-pago'>"+obtenerDatoTicket58("Cuota", fila.join(" / "))+"</div>";
+        }
+        return "<div class='ticket-pago'>"+detalle
+            +"<p class='ticket-importe'>Importe: "+escaparHtmlPagare(fila[fila.length-1])+" Gs.</p></div>";
+    }).join("");
+}
+
+function obtenerProductosTicket58(html){
+    return obtenerFilasVisiblesTicket58(html).map(function(fila){
+        if(/^(cant\.?|cantidad)$/i.test(fila[0]) && /producto/i.test(fila[1] || "")){ return ""; }
+        var nombre = fila.length > 1 ? fila[1] : fila[0];
+        var detalle = fila.length > 1 ? obtenerDatoTicket58("Cantidad", fila[0]) : "";
+        // Mantener los importes solo cuando la respuesta los trae visibles.
+        if(fila.length > 2){ detalle += obtenerDatoTicket58("Costo", fila[2]); }
+        if(fila.length > 3){ detalle += obtenerDatoTicket58("Total", fila[3]); }
+        return "<div class='ticket-producto'><p>"+escaparHtmlPagare(nombre)+"</p>"+detalle+"</div>";
+    }).join("");
+}
+
+function ReImprimirDivTickeFacturaPagoTicket(Fecha,Cajero,CuotasNro,Pagado,DiasAtrazado,NombreCliente,CiCliente,NroRecibo,tipoventa,totalInteres,deudaActual,totalpagado,totaldescuento,TotalVenta,InteresActual,deudaActualsininteres,detalleventaticket){
+    var pagina = "<div class='divTicket recibo-ticket-58'>"
+        +obtenerCabeceraTicketEmpresaImpresion(true)
+        +"<div class='divSeparadorTicket'></div>"
+        +"<h1 class='ticket-titulo'>Recibo de Dinero</h1>"
+        +obtenerDatoTicket58("Numero", NroRecibo)
+        +obtenerDatoTicket58("Cliente", NombreCliente)
+        +obtenerDatoTicket58("RUC o C.I.", CiCliente)
+        +obtenerDatoTicket58("Fecha", Fecha)
+        +obtenerDatoTicket58("D. atrasado", DiasAtrazado+" Dia(s)")
+        +obtenerDatoTicket58("Pagado", Pagado+" Gs.")
+        +"<div class='divSeparadorTicket'></div>"
+        +obtenerPagosTicket58(CuotasNro)
+        +"<h2 class='ticket-titulo'>En concepto de:</h2>"
+        +obtenerProductosTicket58(detalleventaticket)
+        +"<div class='ticket-cajero'>"+obtenerDatoTicket58("Cajero", Cajero)+"</div>"
+        +"</div>";
+    localStorage.setItem("reporte", pagina);
+    localStorage.setItem("tipo", "ticket");
+    window.open("/GoodVentaElectroCasaMaric/system/reportTicket.html");
+}
 
 
 var TotalPagado = "";

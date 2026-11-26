@@ -1,5 +1,6 @@
 
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -9,16 +10,37 @@
   <meta name="msapplicaction-navbutton-color" content="#000" />
    <meta  name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimun-scalable=1,maximun-scalable=1" />
     <title>IMPRIMIR</title>
-	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/reportTicket.css?x=0000" />
+	<link  rel="stylesheet" href="/GoodVentaElectroCasaMaric/css_system/reportTicket.css?x=20261124revision58" />
+	<script src="/GoodVentaElectroCasaMaric/js_system/impresion_ticket58.js?x=20261124revision58"></script>
 
 
 	<script>
+		function ajustarPaginaTicket58(){
+			if(!document.body.classList.contains("ticket-termico-58")){ return; }
+			// CSS no admite size:58mm auto. Medir el contenido ya cargado
+			// evita cortar recibos largos o desperdiciar una hoja de altura fija.
+			var alto = Math.ceil(document.querySelector("form").getBoundingClientRect().height * 25.4 / 96) + 2;
+			var estilo = document.getElementById("pagina-ticket-58");
+			if(!estilo){
+				estilo = document.createElement("style");
+				estilo.id = "pagina-ticket-58";
+				document.head.appendChild(estilo);
+			}
+			estilo.textContent = "@page ticket58 { size:58mm "+Math.max(30, alto)+"mm; margin:0; }";
+		}
+		window.addEventListener("beforeprint", ajustarPaginaTicket58);
+
 	 window.onload=function()
 
 		{
 			var pagina=localStorage.getItem("reporte");
 			var tipo=localStorage.getItem("tipo");
 			document.getElementById("divimpr").innerHTML=pagina
+			if(document.querySelector("#divimpr .divTicket")){
+				document.documentElement.classList.add("ticket-termico-58");
+				document.body.classList.add("ticket-termico-58");
+			}
+			if(typeof configurarFormatoTicket58 === "function"){ configurarFormatoTicket58(); }
 			if(tipo=="factura" || tipo=='ticket'){
 				var imagenes = document.getElementById("divimpr").querySelectorAll("img");
 				Promise.all(Array.prototype.map.call(imagenes, function(imagen){
@@ -31,6 +53,11 @@
 						imagen.addEventListener("error", resolve, {once:true});
 					});
 				})).then(function(){
+					if(typeof prepararLogoTicket58 === "function"){ return prepararLogoTicket58(); }
+				}).then(function(){
+					return document.fonts ? document.fonts.ready : Promise.resolve();
+				}).then(function(){
+					ajustarPaginaTicket58();
 					window.print();
 				});
           

@@ -88,73 +88,63 @@ buscarmas($Fechafijo,$Fecha1,$Fecha2,$Nombre,$Usuario,$Cod_productoFK,$registroc
 
 
 }
-function descontarStock($Cod_productoFK,$Cantidad,$cod_localFK){
-	
-	$mysqli=conectar_al_servidor();
-	
-	$consulta1="update  producto set stock_producto=(stock_producto - ? ) where cod_producto=? and cod_localFK = ?";
-$stmt1 = $mysqli->prepare($consulta1);
-$ss='sss';
-$stmt1->bind_param($ss,$Cantidad,$Cod_productoFK,$cod_localFK);
-
-
-if (!$stmt1->execute()) {
-	
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
-exit;
-
-}
-
- mysqli_close($mysqli);
-$informacion =array("1" => "exito");
-echo json_encode($informacion);	
-exit;
-	
-	
-	
+function descontarStock($mysqli,$Cod_productoFK,$Cantidad,$cod_localFK)
+{
+	$consulta1="UPDATE producto SET stock_producto=(stock_producto - ?) WHERE cod_producto=? AND cod_localFK=?";
+	$stmt1=$mysqli->prepare($consulta1);
+	if (!$stmt1) {
+		throw new Exception('No se pudo preparar el descuento de stock: '.$mysqli->error);
+	}
+	if (!$stmt1->bind_param('sss',$Cantidad,$Cod_productoFK,$cod_localFK) || !$stmt1->execute()) {
+		throw new Exception('No se pudo descontar el stock: '.$stmt1->error);
+	}
+	if ($stmt1->affected_rows != 1) {
+		throw new Exception('No se actualizo el producto en el local indicado.');
+	}
+	$stmt1->close();
 }
 
 function abm($Cantidad,$Motivo,$Cod_usuarioFK,$Cod_productoFK,$cod_localFK,$operacion)
 {
-	
-	
-if($Cantidad==""  || $Motivo==""  ){
-$informacion =array("1" => "camposvacio");
-echo json_encode($informacion);	
-exit;
-}
+	if ($Cantidad=="" || $Motivo=="") {
+		echo json_encode(array("1" => "camposvacio"));
+		exit;
+	}
 
+	$mysqli=conectar_al_servidor();
+	try {
+		if ($operacion!="nuevo") {
+			throw new Exception('Operacion de baja no valida.');
+		}
+		if (!$mysqli->begin_transaction()) {
+			throw new Exception('No se pudo iniciar la baja: '.$mysqli->error);
+		}
 
-$mysqli=conectar_al_servidor();
+		// El local pertenece a producto; debaja no tiene una columna cod_localFK.
+		$consulta1="INSERT INTO debaja (Cantidad,Motivo,Cod_usuarioFK,Cod_productoFK) VALUES (?,?,?,?)";
+		$stmt1=$mysqli->prepare($consulta1);
+		if (!$stmt1) {
+			throw new Exception('No se pudo preparar la baja: '.$mysqli->error);
+		}
+		if (!$stmt1->bind_param('ssss',$Cantidad,$Motivo,$Cod_usuarioFK,$Cod_productoFK) || !$stmt1->execute()) {
+			throw new Exception('No se pudo registrar la baja: '.$stmt1->error);
+		}
+		$stmt1->close();
 
-if($operacion=="nuevo")
-{
-
-
-$consulta1="Insert into debaja (Cantidad,Motivo,Cod_usuarioFK,Cod_productoFK,cod_localFK)
-values(?,?,?,?,?)";
-$stmt1 = $mysqli->prepare($consulta1);
-$ss='sssss';
-$stmt1->bind_param($ss,$Cantidad,$Motivo,$Cod_usuarioFK,$Cod_productoFK,$cod_localFK);
-
-
-}
-
-
-
-if (!$stmt1->execute()) {
-	
-echo trigger_error('The query execution failed; MySQL said ('.$stmt->errno.') '.$stmt->error, E_USER_ERROR);
-exit;
-
-}
-
- mysqli_close($mysqli);
-$informacion =array("1" => "exito");
-descontarStock($Cod_productoFK,$Cantidad,$cod_localFK);
-echo json_encode($informacion);	
-exit;
-	
+		// Confirmar historial y stock juntos, usando la misma conexion.
+		descontarStock($mysqli,$Cod_productoFK,$Cantidad,$cod_localFK);
+		if (!$mysqli->commit()) {
+			throw new Exception('No se pudo confirmar la baja: '.$mysqli->error);
+		}
+		$informacion=array("1" => "exito");
+	} catch (Exception $error) {
+		$mysqli->rollback();
+		error_log('abmDebaja: '.$error->getMessage());
+		$informacion=array("1" => "error", "2" => "No se pudo registrar la baja. Verifica el producto, el local y el usuario e intenta nuevamente.");
+	}
+	mysqli_close($mysqli);
+	echo json_encode($informacion);
+	exit;
 }
 
 

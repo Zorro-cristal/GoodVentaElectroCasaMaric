@@ -139,7 +139,7 @@ body {
   text-align: center;
 }
 
-.facturaContado { left: calc(var(--factura-inicio-cliente-x) + 129mm); }
+.facturaContado { left: calc(var(--factura-inicio-cliente-x) + 137mm); }
 /* Original y duplicado usan la misma columna para la marca de credito. */
 .facturaCopia1 .facturaCredito,
 .facturaCopia2 .facturaCredito { left: calc(var(--factura-inicio-cliente-x) + 167mm); }

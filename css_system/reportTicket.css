@@ -1,32 +1,72 @@
-.divTicket {width:235px}
+.divTicket {width:48mm;max-width:100%;margin:0 auto;color:#000;background:#fff;}
 .pTituloTicket1{font-size: 17px;font-family: Arial;margin: 0px;}
 .pTituloTicket2{font-size: 12px;font-family: arial;line-height: 16px;margin: 0px;}
-.tableTicket {width:95%;font-family:arial;font-size: 11px;/* margin-top:2px; */line-height: 11px;}
-.divSeparadorTicket {width:95%;	height:1px;background-color:#cccc}
+.tableTicket {width:95%;font-family:Arial,sans-serif;font-size:11px;line-height:11px;}
+.divSeparadorTicket {width:95%;height:1px;background-color:#cccc;}
+.divTicket .tableTicket {width:100%;line-height:1.3;}
+.divTicket .divSeparadorTicket {width:100%;height:0;border-top:1px dashed #000;margin:2mm 0;}
 
-  @page { 
-    margin-top: 0.5cm; 
-    margin-bottom: 0.5cm;
-    margin-left: 0.5cm;
-    margin-right: 0.5cm;
+/* El formato grande conserva 5 mm; la pagina termica tiene sus propios margenes. */
+@page {margin:5mm;}
+/* El rollo mide 58 mm; se reservan 5 mm por lado para el area no imprimible. */
+@page ticket58 {
+  size:58mm 200mm;
+  margin:0;
 }
-	@media screen {
-  @page { 
-   margin-top: 0.5cm; 
-    margin-bottom: 0.5cm;
-    margin-left: 0.5cm;
-    margin-right: 0.5cm;
+html.ticket-termico-58,
+body.ticket-termico-58 {
+  width:58mm;
+  margin:0;
+  padding:0;
+  background:#fff;
 }
+body.ticket-termico-58 {page:ticket58;}
+.ticket-termico-58 form {margin:0;padding:2mm 0;}
+.ticket-termico-58 .imgFondoapp {display:none;}
+.ticket-termico-58 #divimpr {width:58mm;margin:0;padding:0;}
+.ticket-termico-58 .divTicket {
+  width:48mm !important;
+  font:11px/1.3 Arial,Helvetica,sans-serif;
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+.divTicket * {box-sizing:border-box;}
+.divTicket img {max-width:100%;height:auto;}
+.divTicket .pTituloTicket1,
+.divTicket .pTituloTicket2 {text-align:center;line-height:1.3;overflow-wrap:anywhere;}
+.divTicket .pTituloTicket1 {font-size:14px;}
+.divTicket .pTituloTicket2 {font-size:11px;}
+.divTicket table {max-width:100%;table-layout:fixed;}
+.divTicket td {vertical-align:top;overflow-wrap:anywhere;}
+.divTicket .ticket-titulo {margin:2mm 0;font-size:12px;text-align:center;}
+.ticket-dato {display:flex;align-items:flex-start;gap:1mm;margin:0 0 1mm;}
+.ticket-dato b {flex:0 0 19mm;}
+.ticket-dato span {flex:1;min-width:0;}
+.ticket-pago,
+.ticket-producto {padding:1.5mm 0;border-bottom:1px dotted #000;break-inside:avoid;}
+.ticket-pago p,
+.ticket-producto p {margin:0 0 1mm;}
+.ticket-pago .ticket-importe {text-align:right;font-weight:bold;}
+.ticket-producto:last-child {border-bottom:0;}
+.ticket-cajero {margin-top:2mm;}
+.recibo-ticket-58 .ticket-logo-58 {margin-bottom:2mm;text-align:center;}
+.recibo-ticket-58 .ticket-logo-58 img {display:block;margin:0 auto;}
+.recibo-ticket-58 .ticket-texto-58 {
+  display:block;
+  margin:0;
+  padding:0;
+  color:#000;
+  font:10px/12px "Courier New",Courier,monospace;
+  white-space:pre;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-align:left;
 }
 
 @media print {
-  @page { 
-   margin-top: 0.5cm; 
-    margin-bottom: 0.5cm;
-    margin-left: 0.5cm;
-    margin-right: 0.5cm;
+  .ticket-termico-58 .divTicket {print-color-adjust:exact;-webkit-print-color-adjust:exact;}
 }
-}
+
 
 
       /* ====== Ticket Pro (print friendly) ====== */

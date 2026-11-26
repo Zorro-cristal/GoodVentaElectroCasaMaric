@@ -159,6 +159,14 @@ function abmProductobaja(cantidad, motivo , idAbmProducto, accion) {
 			try {
 				var datos = $.parseJSON(Respuesta);
 				Respuesta = datos["1"];
+				if (Respuesta == "error") {
+					ver_vetana_informativa(datos["2"] || "NO SE PUDO REGISTRAR LA BAJA")
+					return false;
+				}
+				if (Respuesta == "camposvacio") {
+					ver_vetana_informativa("FALTO INGRESAR UNA CANTIDAD O UN MOTIVO")
+					return false;
+				}
 				 Respuesta=respuestaJqueryAjax(Respuesta)
 				if (Respuesta == true) {
 					limpiarcamposProductobaja()
